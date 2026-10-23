@@ -1,0 +1,694 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0756 — Online Public Sync</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
+/* ATLAS View Dark UI v0702 */
+:root{color-scheme:dark;--base:#08090c;--panel:#101217;--edge:#262a32;--muted:#9097a5;--accent:#a9b6c6}
+html,body{background:var(--base);color:#e6e7ec;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;font-size:13px}
+header{height:46px;background:#0d0f13;border-bottom:1px solid var(--edge);padding:0 16px;gap:10px}
+header strong{font-size:15px;letter-spacing:.8px}header strong span{color:#adb7c8!important;font-size:15px!important}
+header>span{font-size:10px;color:#747d8d}#liveLabel{font-size:10px;color:#697385}
+.layout{height:calc(100% - 46px);grid-template-columns:218px minmax(0,1fr)}
+aside{padding:13px 12px;background:var(--panel);border-right:1px solid var(--edge);scrollbar-color:#333945 transparent;scrollbar-width:thin}
+#map{background:#0a1117}
+button,select{background:#1b1e25;color:#e3e6ec;border:1px solid #343944;border-radius:6px;padding:7px 9px;min-height:32px;font-size:12px}
+button:hover,select:hover{background:#292d36;border-color:#626a78}
+button{margin:3px 0}button.primary{background:#2a3542;border-color:#4a5868}button.primary:hover{background:#344457}
+h3{color:#989fae;font-size:10px;letter-spacing:1px;font-weight:650;margin:16px 0 8px;text-transform:uppercase}
+h3:first-child{margin-top:2px}label{color:#c0c4ce;font-size:12px;margin:8px 0;cursor:pointer;display:flex;align-items:center;gap:7px}
+label input{accent-color:#778da4}input[type=checkbox]{margin:0}
+.status{margin:6px 0 8px;padding:6px 8px;border:1px solid #272d36;background:#151920;color:#919ba8;font-size:10px;line-height:1.4;border-radius:5px}
+.entry{border-bottom:1px solid #272c35;padding:7px 6px;font-size:12px}.entry:hover{background:#202631}
+.maphead{top:10px;right:10px;padding:6px 9px;border-radius:5px;background:#0b0d12d9;border:1px solid #2a303b;font-size:10px;color:#a8b2be}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#171a20;color:#e4e8f0}
+.legend{margin-top:15px;border-top:1px solid #292d35;padding-top:11px;color:#9fa7b3;font-size:11px}
+.legend summary{cursor:pointer;user-select:none}.legend-row{display:flex;align-items:center;gap:8px;margin:8px 0}.legend-row i{display:inline-block;width:10px;height:10px;border-radius:2px}
+.atlas-custom-label{background:#0b0e14df;border:1px solid #6d8595;border-radius:5px;color:#f3f6fa;white-space:nowrap;box-shadow:0 2px 7px #0009;padding:4px 8px;font:600 12px system-ui;transform:translate(-50%,-50%);display:inline-block}.atlas-label-icon{background:transparent;border:none}.atlas-label-cross{cursor:crosshair!important}.atlas-name-state{font-size:11px;color:#93a1b0;margin-top:4px}
+@media(max-width:710px){header{height:43px}.layout{height:calc(100% - 43px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:210px;padding:8px 12px}}
+
+/* V0721 visual shell: glass / dark modern. Map logic and persistence untouched. */
+:root{--glass:#101d2bdc;--glass-edge:#9bbbd138;--glass-accent:#66d9d0;--glass-text:#ebf5fa}
+html,body{height:100%;overflow:hidden;background:#08131d}
+header{position:fixed;z-index:1100;top:14px;left:16px;right:16px;height:53px;border-radius:15px;background:var(--glass);border:1px solid var(--glass-edge);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 8px 30px #0005;padding:0 16px;color:var(--glass-text)}
+header strong{font-size:17px;letter-spacing:1.2px}header>span{font-size:11px;color:#9aafbd}#liveLabel{font-size:11px;color:#70d7c8;max-width:35vw;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#glassMenuToggle{width:auto;margin:0;border-radius:9px;padding:8px 11px;background:#193848bd;border-color:#54818c66;color:#c6f7f0;min-height:33px}
+.layout{position:fixed;inset:0;height:100%;display:block}
+.layout>div:last-child{position:absolute!important;inset:0!important;min-width:0}
+#map{position:absolute;inset:0;height:100%;width:100%;background:#102634}
+aside{position:fixed;z-index:1050;top:81px;left:16px;bottom:104px;width:290px;max-height:calc(100dvh - 190px);overflow:auto;background:var(--glass);border:1px solid var(--glass-edge);border-radius:16px;box-shadow:0 16px 48px #0008;padding:18px 15px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);scrollbar-width:thin;scrollbar-color:#56818d transparent;transition:transform .22s ease,opacity .22s ease}
+body.glass-sidebar-hidden aside{transform:translateX(calc(-100% - 26px));opacity:0;pointer-events:none}
+aside h3{font-size:10px;letter-spacing:1.45px;color:#7fd7d0;border-bottom:1px solid #ffffff17;padding-bottom:7px;margin-top:19px}
+aside h3:first-child{margin-top:0}
+button,select{border-radius:9px;border:1px solid #779aaf42;background:#23394ccb;color:#e6f4fb;transition:background .15s ease,border-color .15s ease}
+button:hover,select:hover{background:#2c5262;border-color:#69c9c0}
+button.primary{background:#167a77b9;border-color:#45b9ac70}
+button.primary:hover{background:#218f88}
+label{color:#d5e8ef}label input{accent-color:#56c8c0}
+.status{border-color:#69b4af35;background:#183b46aa;color:#bae4e4;border-radius:9px;padding:10px}
+.entry{border-color:#ffffff16}.entry:hover{background:#2b505b9c}
+.maphead{top:83px;right:16px;border-radius:10px;background:#101d2bd0;border:1px solid var(--glass-edge);padding:8px 13px;font-size:11px;color:#c9e6ea;backdrop-filter:blur(12px)}
+.leaflet-top.leaflet-left{top:74px}.leaflet-control-zoom a{background:#132c3ee8!important;color:#ecffff!important;border-color:#4b89936b!important}
+#glassTimeline{position:fixed;z-index:1080;bottom:17px;left:50%;transform:translateX(-50%);width:min(760px,calc(100vw - 36px));display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--glass);border:1px solid var(--glass-edge);border-radius:16px;box-shadow:0 10px 40px #0009;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#glassTimeline .timeline-caption{color:#9cd7d2;font-size:11px;font-weight:750;white-space:nowrap;letter-spacing:.5px}
+#glassTimeline #date{flex:1;min-width:0;margin:0;max-width:none}
+#glassTimeline #play,#glassTimeline #stop{width:auto;white-space:nowrap;margin:0;padding:8px 10px}
+#glassFloatingHint{position:fixed;right:16px;bottom:25px;z-index:780;color:#c6e0ea8c;font-size:10px;pointer-events:none}
+@media(max-width:800px){header{top:8px;left:8px;right:8px;height:49px;padding:0 10px;gap:8px}header>span{display:none}#liveLabel{font-size:9px;max-width:26vw}aside{top:65px;left:8px;bottom:92px;width:min(300px,calc(100vw - 16px));max-height:calc(100dvh - 165px)}#glassTimeline{bottom:8px;width:calc(100vw - 16px);padding:8px;gap:5px}#glassTimeline .timeline-caption{display:none}#glassTimeline #play,#glassTimeline #stop{font-size:11px;padding:8px 6px}.maphead{top:68px;right:9px}.leaflet-top.leaflet-left{top:65px}}
+
+/* V0723: Frosted glass themes. UI only; map tiles, country data and paint remain untouched. */
+:root{
+ --ui-panel:rgba(10,14,20,.70);--ui-panel-heavy:rgba(13,17,23,.80);
+ --ui-outline:rgba(255,255,255,.21);--ui-text:#f5f7fa;--ui-muted:#c1c7d0;
+ --ui-control:rgba(25,30,38,.66);--ui-control-hover:rgba(57,65,78,.85);
+ --ui-accent:#d3e7f2;--ui-status:rgba(22,27,34,.65);--ui-shadow:0 12px 42px rgba(0,0,0,.34);
+}
+body.atlas-light{
+ color-scheme:light;
+ --ui-panel:rgba(255,255,255,.68);--ui-panel-heavy:rgba(247,250,253,.82);
+ --ui-outline:rgba(42,66,87,.26);--ui-text:#192a39;--ui-muted:#4d6474;
+ --ui-control:rgba(243,248,252,.70);--ui-control-hover:rgba(224,235,243,.95);
+ --ui-accent:#24647e;--ui-status:rgba(233,242,249,.75);--ui-shadow:0 12px 42px rgba(16,52,78,.20);
+}
+header,aside,#glassTimeline,.maphead{
+ background:var(--ui-panel)!important;color:var(--ui-text)!important;
+ border:1px solid var(--ui-outline)!important;box-shadow:var(--ui-shadow)!important;
+ backdrop-filter:blur(23px) saturate(150%)!important;-webkit-backdrop-filter:blur(23px) saturate(150%)!important;
+}
+header strong,header strong span,header>span,aside h3,aside label,aside .hint,.maphead,
+#glassTimeline .timeline-caption,.note,.legend,aside .entry{color:var(--ui-text)!important}
+header>span,.hint,.note,.legend,#liveLabel{color:var(--ui-muted)!important}
+aside h3{border-bottom:1px solid var(--ui-outline)!important}
+button,select,#glassMenuToggle,button.primary{
+ background:var(--ui-control)!important;color:var(--ui-text)!important;
+ border:1px solid var(--ui-outline)!important;
+}
+button:hover,select:hover,#glassMenuToggle:hover,button.primary:hover{background:var(--ui-control-hover)!important}
+.status{background:var(--ui-status)!important;color:var(--ui-text)!important;border:1px solid var(--ui-outline)!important}
+.entry{border-color:var(--ui-outline)!important}.entry:hover{background:var(--ui-control-hover)!important}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--ui-panel-heavy)!important;color:var(--ui-text)!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+body.atlas-light .leaflet-control-zoom a{background:#f6f9fce8!important;color:#19394d!important;border-color:#8ea6b8!important}
+#themeSwitcher723{display:flex;gap:4px;align-items:center;background:var(--ui-control);border:1px solid var(--ui-outline);border-radius:11px;padding:3px;flex-shrink:0}
+#themeSwitcher723 button{width:auto;min-height:30px;padding:6px 11px;margin:0;border:0!important;background:transparent!important;white-space:nowrap;font-size:11px;font-weight:650}
+#themeSwitcher723 button[aria-pressed="true"]{background:var(--ui-control-hover)!important;box-shadow:inset 0 0 0 1px var(--ui-outline)}
+@media(max-width:630px){#themeSwitcher723 button{padding:6px 7px;font-size:10px}header strong{font-size:13px}#themeSwitcher723{margin-left:auto}#liveLabel{display:none}}
+@media(prefers-reduced-transparency:reduce){header,aside,#glassTimeline,.maphead{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--ui-panel-heavy)!important}}
+
+/* V0724: consistent black checkboxes with white ticks in both UI themes. */
+aside input[type="checkbox"]{
+  appearance:none!important;-webkit-appearance:none!important;
+  position:relative;display:inline-grid;place-items:center;flex:none;
+  width:15px;height:15px;min-width:15px;margin:0;
+  border:1px solid #d4d8df!important;border-radius:3px;
+  background:#08090b!important;box-shadow:0 1px 3px #0004;
+  cursor:pointer;vertical-align:middle;
+}
+aside input[type="checkbox"]:checked::after{
+  content:"";width:8px;height:5px;
+  border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:translateY(-1px) rotate(-45deg);
+}
+aside input[type="checkbox"]:focus-visible{outline:2px solid #78cfff;outline-offset:2px}
+aside input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
+
+/* V0726: central settings + restrained motion */
+body.atlas-no-glass725 header,body.atlas-no-glass725 aside,body.atlas-no-glass725 #glassTimeline,body.atlas-no-glass725 .maphead,body.atlas-no-glass725 .view-settings-card725{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--ui-panel-heavy)!important}
+#viewSettingsToggle725{width:auto;min-height:32px;white-space:nowrap;margin:0;padding:7px 12px}
+#viewSettings725[hidden]{display:none!important}
+#viewSettings725{position:fixed;inset:0;z-index:2100;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.44);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.view-settings-card725{width:min(530px,100%);max-height:min(82dvh,730px);overflow:auto;border:1px solid var(--ui-outline);border-radius:18px;padding:20px 22px;background:var(--ui-panel-heavy);color:var(--ui-text);box-shadow:0 25px 90px #0008;backdrop-filter:blur(28px) saturate(155%);-webkit-backdrop-filter:blur(28px) saturate(155%);animation:atlasScale725 .23s ease-out}
+.view-settings-top725{display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:-20px;background:var(--ui-panel-heavy);padding:8px 0 13px;z-index:1;backdrop-filter:blur(22px)}
+.view-settings-top725 h2{font-size:18px;margin:0}.view-settings-top725 button{width:auto;margin:0;padding:7px 13px}
+.view-settings-section725{padding:10px 0 14px;border-top:1px solid var(--ui-outline)}
+.view-settings-section725 h3{margin:7px 0 10px;color:var(--ui-text)!important;font-size:11px;letter-spacing:1.2px}
+.view-settings-section725 label{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--ui-text)!important;padding:5px 0;margin:4px 0}
+.view-settings-section725 input[type=checkbox]{appearance:none;-webkit-appearance:none;background:#07090c;border:1px solid #d5d9e1;border-radius:4px;width:17px;height:17px;min-width:17px;display:inline-grid;place-items:center;cursor:pointer}
+.view-settings-section725 input[type=checkbox]:checked::after{content:'';width:8px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px)}
+.view-settings-section725 input[type=checkbox]:focus-visible{outline:2px solid #9ddefb;outline-offset:3px}
+.view-settings-section725 .settings-note725{color:var(--ui-muted);font-size:11px;line-height:1.6;margin-top:7px}
+#settingsActions725 button{width:auto;margin-right:6px}#settingsLayers725 h3:first-child{margin-top:0}
+body:not(.atlas-reduced-motion725) aside{transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .3s ease}
+body:not(.atlas-reduced-motion725) .view-settings-card725 button{transition:background .2s ease,transform .2s ease}
+body:not(.atlas-reduced-motion725) .view-settings-card725 button:active{transform:scale(.97)}
+body.atlas-reduced-motion725 *,body.atlas-reduced-motion725 *::before,body.atlas-reduced-motion725 *::after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+@keyframes atlasScale725{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.view-settings-card725{animation:none!important}}
+@media(max-width:700px){#viewSettingsToggle725{padding:6px 8px;font-size:11px}.view-settings-card725{padding:13px 15px}.view-settings-top725{top:-13px}}
+
+/* ATLAS V0728 Interactive Glass additions */
+body header,body aside,body #glassTimeline,body .view-settings-card725,body #atlasCountryCard727,body #atlasSearch727{backdrop-filter:blur(var(--glass-blur727))!important;-webkit-backdrop-filter:blur(var(--glass-blur727))!important}
+
+:root{--glass-alpha727:.76;--glass-blur727:16px;--glass-speed727:260ms}
+#atlasTools727{position:fixed;right:17px;top:105px;z-index:1190;display:flex;flex-direction:column;gap:7px;pointer-events:auto}
+#atlasTools727 button{width:42px;height:42px;padding:0;margin:0;border-radius:12px;background:var(--ui-panel-heavy,#141c29);border:1px solid var(--ui-outline,#566271);color:var(--ui-text,#fff);box-shadow:0 5px 20px #0005;backdrop-filter:blur(var(--glass-blur727));font-size:18px}
+#atlasCountryCard727{position:fixed;right:72px;top:105px;width:min(330px,calc(100vw - 110px));max-height:calc(100dvh - 220px);overflow:auto;z-index:1188;border:1px solid var(--ui-outline,#566271);border-radius:19px;padding:17px;background:var(--ui-panel-heavy,#151d2a);color:var(--ui-text,#fff);box-shadow:0 14px 40px #0008;backdrop-filter:blur(var(--glass-blur727));animation:atlasCard727 var(--glass-speed727) both}
+#atlasCountryCard727[hidden],#atlasSearch727[hidden]{display:none!important}
+#atlasCountryCard727 .card-title727{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:780;margin-bottom:10px}
+#atlasCountryCard727 .card-title727 img{width:57px;height:39px;object-fit:contain;border-radius:5px;background:#52607033}
+#atlasCountryCard727 .card-action727{display:flex;gap:6px}#atlasCountryCard727 .card-action727 button{font-size:12px}
+#atlasCountryCard727 .card-close727{position:absolute;right:9px;top:9px;width:27px;padding:3px;margin:0}
+#atlasCountryCard727 .card-description727{font-size:12px;line-height:1.6;opacity:.83;white-space:pre-wrap;max-height:160px;overflow:auto}
+#atlasCountryCard727 .card-regions727{font-size:11px;max-height:110px;overflow:auto;opacity:.82;line-height:1.7}
+#atlasSearch727{position:fixed;right:72px;top:105px;z-index:1191;width:min(300px,calc(100vw - 110px));border:1px solid var(--ui-outline,#566271);border-radius:14px;padding:12px;background:var(--ui-panel-heavy,#151d2a);backdrop-filter:blur(var(--glass-blur727))}
+#atlasSearch727 input{width:100%;padding:9px;border-radius:8px;background:#19212a;color:#fff;border:1px solid #7d858f}
+#atlasSearchResults727{max-height:230px;overflow:auto}#atlasSearchResults727 button{font-size:12px;margin:3px 0;text-align:left}
+#glassTimeline{gap:8px!important}#atlasDateRange727{flex:1;min-width:85px;max-width:320px;accent-color:#e4eaef}#atlasDateCaption727{font-size:11px;white-space:nowrap;opacity:.85}
+#glassTimeline select{max-width:140px!important}
+#settingsActions725 input[type=range],#atlasVisualSettings727 input[type=range]{width:100%;accent-color:#bec6d0}
+#atlasVisualSettings727 .viz-setting727{margin-top:9px;font-size:12px}
+body.atlas-presentation727 header,body.atlas-presentation727 aside,body.atlas-presentation727 #glassTimeline,body.atlas-presentation727 .maphead,body.atlas-presentation727 #atlasCountryCard727,body.atlas-presentation727 #atlasSearch727{display:none!important}
+body.atlas-presentation727 #atlasTools727{top:14px}body.atlas-presentation727 #atlasTools727 button:not(#atlasPresentation727){display:none}
+body.atlas-presentation727 .layout,body.atlas-presentation727 .layout>div{height:100dvh!important;top:0!important}
+body.atlas-presentation727 #map{height:100dvh!important}
+@keyframes atlasCard727{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){#atlasCountryCard727{animation:none}}
+@media(max-width:650px){#atlasTools727{right:8px;top:75px}#atlasTools727 button{height:35px;width:35px;font-size:15px}#atlasCountryCard727,#atlasSearch727{right:51px;top:75px}#atlasDateRange727{max-width:110px}}
+
+body.atlas-preset-midnight731{--ui-control:rgba(19,28,42,.94);--ui-control-hover:rgba(65,82,108,.85)}
+body.atlas-preset-ocean731{--ui-control:rgba(13,62,68,.89);--ui-control-hover:rgba(30,112,114,.83)}
+body.atlas-preset-graphite731{--ui-control:rgba(37,37,37,.92);--ui-control-hover:rgba(78,78,78,.83)}
+/* V0731: accessible, lightweight interface upgrades; geometry is unchanged. */
+#atlasClanFind731{width:100%;margin:8px 0 7px!important;box-sizing:border-box}
+#countries .entry{display:flex;align-items:center;gap:8px;cursor:pointer;min-height:36px;border-radius:8px;padding:6px!important;transition:background .18s,transform .18s}
+#countries .entry:hover,#countries .entry:focus-visible{background:var(--ui-control-hover,rgba(255,255,255,.15));transform:translateX(2px)}
+#countries .entry[hidden]{display:none!important}
+#countries .entry img{width:29px;height:20px;object-fit:cover;border-radius:3px;border:1px solid #ffffff8a;flex-shrink:0}
+#countries .entry .atlas-name731{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+#countries .entry .atlas-dot731{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+#atlasCardTabs731{display:flex;gap:5px;margin:8px 0}
+#atlasCardTabs731 button{padding:7px 8px;font-size:11px;flex:1;margin:0}
+#atlasCardTabs731 button[aria-selected="true"]{outline:1px solid var(--ui-text,#fff);background:var(--ui-control-hover,#4b6375)}
+#atlasCardContents731{max-height:210px;overflow:auto;white-space:pre-wrap;line-height:1.6;font-size:12px}
+#atlasToastArea731{position:fixed;z-index:5100;right:14px;bottom:90px;display:grid;gap:8px;pointer-events:none;max-width:min(350px,calc(100vw - 28px))}
+.atlasToast731{background:var(--ui-panel,rgba(20,30,42,.92));color:var(--ui-text,#fff);border:1px solid var(--ui-outline,#8a9da6);border-radius:10px;padding:10px 13px;backdrop-filter:blur(14px);box-shadow:0 5px 18px #0005;animation:atlasToastIn731 .25s ease}
+@keyframes atlasToastIn731{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#atlasCinematic731{position:fixed;z-index:1200;pointer-events:none;top:90px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:13px;background:#10161eb0;border:1px solid #ffffff45;backdrop-filter:blur(15px);color:#fff;font-size:15px;font-weight:800;letter-spacing:1.5px;text-shadow:0 2px 4px #000;display:none}
+body.atlas-cinematic731 #atlasCinematic731{display:block}
+body.atlas-cinematic731 header,body.atlas-cinematic731 aside,body.atlas-cinematic731 #atlasTools727,body.atlas-cinematic731 #glassTimeline,body.atlas-cinematic731 .maphead{display:none!important}
+body.atlas-cinematic731 #map{height:100dvh!important}
+#atlasCinematicExit731{position:fixed;z-index:1300;right:14px;top:14px;display:none;background:#151c26e0;border:1px solid #ffffff6b;border-radius:10px;color:white;width:auto;padding:10px}
+body.atlas-cinematic731 #atlasCinematicExit731{display:block}
+.atlas-row731{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0}
+.atlas-row731 select,.atlas-row731 button{width:auto;margin:0}
+body.atlas-reduced-motion725 #countries .entry,body.atlas-reduced-motion725 .atlasToast731{animation:none;transition:none}
+
+/* ATLAS View V0739: independent map display modes */
+#dualMode739{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:5px 0 13px}
+#dualMode739 button{font-size:11px;min-width:0;padding:10px 4px;border:1px solid var(--ui-border,#567);background:rgba(70,80,95,.25);color:inherit;border-radius:8px;cursor:pointer}
+#dualMode739 button.active{background:rgba(85,165,170,.32);border-color:#8de3e3;font-weight:750}
+
+/* V0740 Military Appearance: display-only preferences */
+#atlasMilitarySettings740 .mil-range740{margin:13px 0;color:var(--ui-text);font-size:12px}
+#atlasMilitarySettings740 .mil-range740>div{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px}
+#atlasMilitarySettings740 input[type=range]{width:100%;accent-color:#e4e7ed}
+#atlasMilitaryLegend740{border:1px solid var(--ui-outline);background:var(--ui-panel-heavy);border-radius:11px;padding:9px 11px;margin-top:10px;color:var(--ui-text)}
+#atlasMilitaryLegend740 .legend-row{color:var(--ui-text)}
+#atlasMilitaryLegend740[hidden]{display:none!important}
+
+/* V0741: view-only military information card */
+#atlasArmyCard741{position:fixed;z-index:1350;right:18px;bottom:84px;width:min(345px,calc(100vw - 36px));max-height:min(68vh,540px);overflow:auto;padding:18px;border:1px solid var(--ui-outline,rgba(255,255,255,.25));border-radius:17px;background:var(--ui-panel-heavy,rgba(22,31,43,.9));color:var(--ui-text,#fff);box-shadow:0 16px 45px rgba(0,0,0,.4);backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px)}
+#atlasArmyCard741[hidden]{display:none!important}
+#atlasArmyCard741 .army-head741{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-right:26px;font-size:17px;font-weight:800}
+#atlasArmyCard741 .army-dot741{width:15px;height:15px;border-radius:5px;display:inline-block;flex:none}
+#atlasArmyCard741 .army-row741{display:flex;gap:8px;justify-content:space-between;padding:7px 0;border-top:1px solid rgba(150,165,180,.2);font-size:12px}
+#atlasArmyCard741 .army-row741 span{color:var(--ui-muted,#abbac7)}
+#atlasArmyCard741 .army-row741 b{text-align:right;overflow-wrap:anywhere}
+#atlasArmyClose741{position:absolute;right:10px;top:10px;width:29px;height:29px;min-width:0;padding:0;border-radius:8px}
+@media(max-width:650px){#atlasArmyCard741{bottom:72px;right:10px;width:min(335px,calc(100vw - 20px))}}
+</style></head><body>
+<header><button type="button" id="glassMenuToggle" aria-label="Открыть или скрыть меню" aria-expanded="true">☰ Меню</button><strong>ATLAS <span style="color:#5dcdbe;font-size:18px">VIEW</span></strong><span>0.8 BETA · V0741 · Military Information</span><span id="liveLabel" style="margin-left:auto">LOCAL</span><div id="themeSwitcher723" role="group" aria-label="Тема интерфейса"><button type="button" data-theme="dark" aria-pressed="true">☾ Тёмная</button><button type="button" data-theme="light" aria-pressed="false">☀ Светлая</button></div><button type="button" id="viewSettingsToggle725" aria-haspopup="dialog" aria-controls="viewSettings725">⚙ Настройки</button></header>
+<div class="layout"><aside><h3>Проект</h3><button class="primary" id="sync">Обновить из Editor</button><button id="load">Открыть файл</button><button id="atlasPublish732" title="Создать HTML с встроенной картой для отправки зрителям">📤 Опубликовать карту (HTML)</button><input hidden type="file" id="file" accept=".atlas,.json,application/json"><div class="status" id="status">Загружаю карту…</div><div class="hint">Синхронизация между вкладками работает только при общем хранилище браузера. Для отдельных HTML используйте .atlas.</div>
+<div id="dualMode739" role="group" aria-label="Режим карты"><button type="button" data-mode="political">Политическая</button><button type="button" data-mode="military">Военная</button><button type="button" data-mode="combined">Совмещённая</button></div><h3>Слои</h3><label><input type="checkbox" id="army" checked> Армия</label><label><input type="checkbox" id="regions" checked> Территории</label><label><input type="checkbox" id="showFlags713" checked> 🏳️ Флаги на территориях</label><label><input type="checkbox" id="countryNames726" checked> Названия государств</label><label><input type="checkbox" id="units" checked> Объекты</label><label><input type="checkbox" id="satellite" checked> Спутник</label>
+<h3>Подписи</h3>
+<label><input type="checkbox" id="placeNames" checked> Города и населённые пункты</label>
+<label><input type="checkbox" id="customNames" checked> Мои подписи</label>
+<button id="addName">+ Добавить подпись</button><button id="clearNames">Очистить мои подписи</button>
+<div id="atlasMilitaryLegend740" role="group" aria-label="Легенда военной карты"><strong style="font-size:12px">Военная карта · Легенда</strong><div class="legend-row"><i style="background:#d94c4c"></i> Оккупация</div><div class="legend-row"><i style="background:#55bfa5"></i> Освобождение</div><div class="legend-row" id="atlasGrayLegend740"><i style="background:#929aa6"></i> Серая зона</div><div class="legend-row"><i style="background:#ffcf69"></i> Линия фронта</div></div><h3>Кланонизации</h3><input id="atlasClanFind731" type="search" placeholder="Поиск кланонизации…" aria-label="Поиск кланонизации"><div class="list" id="countries"></div><h3>История</h3><select id="date"><option value="">Текущая карта</option></select><button id="play">▶ Пуск</button><button id="stop">■ Стоп</button><details class="legend"><summary>Легенда</summary><div class="legend-row"><i style="background:#cf555f"></i>Оккупация</div><div class="legend-row"><i style="background:#50b49f"></i>Освобождение</div><div class="legend-row"><i style="background:#969ca9"></i>Серая зона</div></details></aside><div style="position:relative;min-width:0"><div id="map"></div><div class="maphead">VIEW <span style="opacity:.5">· V0741</span></div></div></div><div id="glassTimeline"><span class="timeline-caption">◷ ИСТОРИЯ</span></div>
+<nav id="atlasTools727" aria-label="Быстрые инструменты карты"><button type="button" id="atlasSearchButton727" title="Найти государство">⌕</button><button type="button" id="atlasLayersButton727" title="Слои и настройки">▤</button><button type="button" id="atlasZoomIn727" title="Приблизить">＋</button><button type="button" id="atlasZoomOut727" title="Отдалить">−</button><button type="button" id="atlasFullscreen727" title="Полный экран">⛶</button><button type="button" id="atlasPresentation727" title="Режим презентации">▣</button></nav>
+<div id="atlasSearch727" hidden><input id="atlasSearchInput727" type="search" placeholder="Название государства…" aria-label="Поиск государства"><div id="atlasSearchResults727"></div></div>
+<section id="atlasCountryCard727" hidden aria-label="Карточка государства"><button type="button" class="card-close727" id="atlasCountryClose727" aria-label="Закрыть">✕</button><div class="card-title727" id="atlasCountryTitle727"></div><div id="atlasCardTabs731" role="tablist" aria-label="Данные кланонизации"><button type="button" data-tab="overview" aria-selected="true">Обзор</button><button type="button" data-tab="regions" aria-selected="false">Территории</button><button type="button" data-tab="history" aria-selected="false">История</button></div><div id="atlasCardContents731"></div><div hidden class="card-description727" id="atlasCountryDesc727"></div><div hidden class="card-regions727" id="atlasCountryRegions727"></div><div class="card-action727"><button type="button" id="atlasCountryFocus727">◎ Показать на карте</button></div></section>
+<section id="atlasArmyCard741" hidden role="region" aria-label="Информация о военной зоне"><button type="button" id="atlasArmyClose741" aria-label="Закрыть карточку">✕</button><div class="army-head741"><i id="atlasArmyDot741" class="army-dot741"></i><strong id="atlasArmyTitle741"></strong></div><div class="army-row741"><span>Тип</span><b id="atlasArmyType741"></b></div><div class="army-row741"><span>Название</span><b id="atlasArmyName741"></b></div><div class="army-row741"><span>Кланонизация</span><b id="atlasArmyClan741"></b></div><div class="army-row741"><span>Дата карты</span><b id="atlasArmyDate741"></b></div><div class="army-row741" id="atlasArmyDescriptionRow741" hidden><span>Описание</span><b id="atlasArmyDescription741"></b></div></section>
+<div id="viewSettings725" hidden role="presentation"><section class="view-settings-card725" role="dialog" aria-modal="true" aria-labelledby="settingsTitle725"><div class="view-settings-top725"><h2 id="settingsTitle725">⚙ Настройки ATLAS View</h2><button id="viewSettingsClose725" type="button">✕ Закрыть</button></div><div id="settingsLayers725" class="view-settings-section725"><h3>Слои и подписи</h3></div><div class="view-settings-section725"><h3>Интерфейс</h3><label><input type="checkbox" id="motionEnabled725" checked> Плавные анимации панелей</label><label><input type="checkbox" id="glassEnabled725" checked> Прозрачные панели с размытием</label><div class="settings-note725">Настройки оформления сохраняются в этом браузере. При снижении производительности отключи анимации или размытие.</div></div><div id="atlasSettings731" class="view-settings-section725"><h3>Тема и воспроизведение</h3><div class="atlas-row731"><label for="atlasPreset731">Оформление</label><select id="atlasPreset731"><option value="default">Стандартная</option><option value="midnight">Midnight</option><option value="ocean">Ocean</option><option value="graphite">Graphite</option></select></div><div class="atlas-row731"><label for="atlasPlayback731">Скорость истории</label><select id="atlasPlayback731"><option value="2800">0,5×</option><option value="1400" selected>1×</option><option value="700">2×</option></select></div><button type="button" id="atlasCinematicButton731">◩ Режим Cinematic</button></div><div id="atlasMilitarySettings740" class="view-settings-section725"><h3>Военная карта · Оформление</h3><div class="settings-note725">Параметры изменяют только отображение карты; исходная геометрия и проект не меняются.</div><div class="mil-range740"><div><span>Видимость оккупации</span><output id="atlasOccOut740">62%</output></div><input id="atlasOcc740" type="range" min="0" max="100" step="5" value="62"></div><div class="mil-range740"><div><span>Видимость освобождения</span><output id="atlasLibOut740">62%</output></div><input id="atlasLib740" type="range" min="0" max="100" step="5" value="62"></div><div class="mil-range740"><div><span>Толщина линий фронта</span><output id="atlasFrontOut740">100%</output></div><input id="atlasFront740" type="range" min="50" max="250" step="10" value="100"></div><label><input id="atlasGray740" type="checkbox" checked> Показывать серую зону</label><button type="button" id="atlasMilReset740">Сбросить военные настройки</button></div><div id="atlasVisualSettings727" class="view-settings-section725"><h3>Glass и анимации</h3><div class="viz-setting727">Непрозрачность панели: <output id="atlasOpacityOut727">76%</output><input type="range" id="atlasOpacity727" min="25" max="100" value="76"></div><div class="viz-setting727">Размытие: <output id="atlasBlurOut727">16 px</output><input type="range" id="atlasBlur727" min="0" max="30" value="16"></div><div class="viz-setting727">Скорость анимации: <output id="atlasSpeedOut727">260 мс</output><input type="range" id="atlasSpeed727" min="0" max="650" value="260" step="10"></div></div><div id="settingsActions725" class="view-settings-section725"><h3>Управление подписями</h3></div></section></div>
+<script id="atlasEmbeddedProject732" type="application/json">null</script>
+<script>
+(()=>{
+ const key='atlas-view-theme-v0723',root=document.body,buttons=[...document.querySelectorAll('#themeSwitcher723 button')];
+ function setTheme(theme){const light=theme==='light';root.classList.toggle('atlas-light',light);root.classList.toggle('atlas-dark',!light);for(const b of buttons)b.setAttribute('aria-pressed',String(b.dataset.theme===theme));try{localStorage.setItem(key,theme)}catch{}}
+ let initial='dark';try{const v=localStorage.getItem(key);if(v==='light'||v==='dark')initial=v}catch{};
+ setTheme(initial);for(const b of buttons)b.addEventListener('click',()=>setTheme(b.dataset.theme));
+})();
+(()=>{const menu=document.getElementById("glassMenuToggle");const timeline=document.getElementById("glassTimeline");for(const id of ["date","play","stop"]){const node=document.getElementById(id);if(node)timeline.appendChild(node)}menu.addEventListener("click",()=>{const hidden=document.body.classList.toggle("glass-sidebar-hidden");menu.setAttribute("aria-expanded",String(!hidden));menu.textContent=hidden?"☰ Панель":"☰ Меню";window.dispatchEvent(new Event("resize"))});})();
+</script>
+<script>
+(()=>{
+ const dialog=document.getElementById('viewSettings725'),openBtn=document.getElementById('viewSettingsToggle725'),closeBtn=document.getElementById('viewSettingsClose725');
+ const layers=document.getElementById('settingsLayers725'),actions=document.getElementById('settingsActions725');
+ // Move the existing inputs, not clones: listeners and layer rendering continue to work.
+ for(const id of ['army','regions','showFlags713','countryNames726','units','satellite','placeNames','customNames']){
+  const element=document.getElementById(id);if(element&&element.closest('label'))layers.appendChild(element.closest('label'));
+ }
+ for(const id of ['addName','clearNames']){const btn=document.getElementById(id);if(btn)actions.appendChild(btn)}
+ for(const heading of document.querySelectorAll('aside h3')){if(['Слои','Подписи'].includes(heading.textContent.trim()))heading.remove()}
+ let oldFocus=null;
+ function close(){dialog.hidden=true;document.body.style.removeProperty('overflow');(oldFocus||openBtn).focus()}
+ function open(){oldFocus=document.activeElement;dialog.hidden=false;closeBtn.focus()}
+ openBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);
+ dialog.addEventListener('click',e=>{if(e.target===dialog)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!dialog.hidden)close()});
+ const motion=document.getElementById('motionEnabled725'),glass=document.getElementById('glassEnabled725');
+ function read(k,def){try{const v=localStorage.getItem(k);return v===null?def:v==='1'}catch{return def}}
+ function save(k,v){try{localStorage.setItem(k,v?'1':'0')}catch{}}
+ function apply(){document.body.classList.toggle('atlas-reduced-motion725',!motion.checked);document.body.classList.toggle('atlas-no-glass725',!glass.checked);save('atlas-view-motion-v0725',motion.checked);save('atlas-view-glass-v0725',glass.checked)}
+ motion.checked=read('atlas-view-motion-v0725',true);glass.checked=read('atlas-view-glass-v0725',true);
+ motion.addEventListener('change',apply);glass.addEventListener('change',apply);apply();
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script><script>if(typeof L==='undefined'){document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>')}</script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script><script>if(typeof turf==='undefined'){document.write('<script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"><\/script>')}</script>
+<div id="atlasToastArea731" role="status" aria-live="polite"></div><div id="atlasCinematic731">ATLAS · <span id="atlasCinematicDate731">ТЕКУЩАЯ КАРТА</span></div><button id="atlasCinematicExit731" type="button">Выход из Cinematic · Esc</button>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id);if(typeof L==='undefined'){$('status').textContent='Не загрузилась библиотека Leaflet. Требуется интернет.';return}
+const map=L.map('map',{preferCanvas:false}).setView([49.0,31.0],6);let tile=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}).addTo(map);let project=null,layers=[],timer=null,current=null;
+let atlasMode739='political';try{const m=localStorage.getItem('atlas-view-mode-0739');if(['political','military','combined'].includes(m))atlasMode739=m}catch{}
+function syncMode739(){document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>{const active=b.dataset.mode===atlasMode739;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))})}
+document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>b.addEventListener('click',()=>{atlasMode739=b.dataset.mode;try{localStorage.setItem('atlas-view-mode-0739',atlasMode739)}catch{}syncMode739();syncMilitaryUI740();paint()}));syncMode739();
+const militaryDefaults740={occ:62,lib:62,front:100,gray:true};
+let militaryPrefs740={...militaryDefaults740};
+try{const v=JSON.parse(localStorage.getItem('atlas-view-military-0740')||'null');if(v&&typeof v==='object'){for(const k of ['occ','lib','front'])if(Number.isFinite(Number(v[k])))militaryPrefs740[k]=Math.max(k==='front'?50:0,Math.min(k==='front'?250:100,Number(v[k])));if(typeof v.gray==='boolean')militaryPrefs740.gray=v.gray}}catch{}
+function syncMilitaryUI740(){for(const [k,id,out,suffix] of [['occ','atlasOcc740','atlasOccOut740','%'],['lib','atlasLib740','atlasLibOut740','%'],['front','atlasFront740','atlasFrontOut740','%']]){document.getElementById(id).value=militaryPrefs740[k];document.getElementById(out).textContent=militaryPrefs740[k]+suffix}document.getElementById('atlasGray740').checked=militaryPrefs740.gray;document.getElementById('atlasGrayLegend740').hidden=!militaryPrefs740.gray;document.getElementById('atlasMilitaryLegend740').hidden=atlasMode739==='political'}
+function saveMilitaryPrefs740(){try{localStorage.setItem('atlas-view-military-0740',JSON.stringify(militaryPrefs740))}catch{}syncMilitaryUI740();paint()}
+for(const [k,id] of [['occ','atlasOcc740'],['lib','atlasLib740'],['front','atlasFront740']])document.getElementById(id).addEventListener('input',e=>{militaryPrefs740[k]=Number(e.target.value);saveMilitaryPrefs740()});
+document.getElementById('atlasGray740').addEventListener('change',e=>{militaryPrefs740.gray=e.target.checked;saveMilitaryPrefs740()});
+document.getElementById('atlasMilReset740').addEventListener('click',()=>{militaryPrefs740={...militaryDefaults740};saveMilitaryPrefs740()});
+syncMilitaryUI740();
+
+try{const saved=localStorage.getItem('atlas-view-country-names-v0726');if(saved!==null)$('countryNames726').checked=saved==='1'}catch{};$('countryNames726').addEventListener('change',()=>{try{localStorage.setItem('atlas-view-country-names-v0726',$('countryNames726').checked?'1':'0')}catch{}});try{const s=localStorage.getItem('atlas-view-flags-visible-v0713');if(s!==null)$('showFlags713').checked=s==='1'}catch{};$('showFlags713').addEventListener('change',()=>{try{localStorage.setItem('atlas-view-flags-visible-v0713',$('showFlags713').checked?'1':'0')}catch{}});const labelsKey='atlas-view-custom-labels-v0703';let customLabels=[];try{const v=JSON.parse(localStorage.getItem(labelsKey)||'[]');if(Array.isArray(v))customLabels=v.filter(x=>Number.isFinite(x.lat)&&Number.isFinite(x.lng)&&typeof x.text==='string').slice(0,500)}catch{}
+const labelsOverlay=L.layerGroup().addTo(map);map.createPane('atlasReferenceLabels');map.getPane('atlasReferenceLabels').style.zIndex=650;map.getPane('atlasReferenceLabels').style.pointerEvents='none';const placeLabels=L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{pane:'atlasReferenceLabels',maxZoom:19,opacity:1,attribution:'Labels © Esri',crossOrigin:true}).addTo(map);let addingName=false;const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const clone=o=>JSON.parse(JSON.stringify(o));const safeFeatures=fs=>Array.isArray(fs)?fs.filter(f=>f&&f.type==='Feature'&&f.geometry&&f.properties):[];
+function status(s){$('status').textContent=s}function valid(data){return data&&data.format==='ATLAS'&&Array.isArray(data.features)&&Array.isArray(data.groups)}
+function groups(){return project?.groups||[]}
+function displayFeatures(){const fs=safeFeatures(current||project?.features),result=[];const control=f=>f.properties.isArmy&&['occupation','liberation','contested'].includes(f.properties.armyMode)&&['Polygon','MultiPolygon'].includes(f.geometry.type);for(let i=0;i<fs.length;i++){let f=fs[i];if(!control(f)){result.push(f);continue}let parts=[clone(f)];if(typeof turf!=='undefined'){for(let j=i+1;j<fs.length&&parts.length;j++){const newer=fs[j];if(!control(newer)||newer.properties.armyMode===f.properties.armyMode)continue;const next=[];for(const piece of parts){try{if(!turf.booleanIntersects(piece,newer)){next.push(piece);continue}const diff=turf.difference(piece,newer);if(diff){if(diff.geometry.type==='MultiPolygon')diff.geometry.coordinates.forEach(coords=>next.push({...clone(piece),geometry:{type:'Polygon',coordinates:coords}}));else next.push({...clone(piece),geometry:diff.geometry})}}catch{next.push(piece)}}parts=next}}result.push(...parts)}return result}
+
+// V0752: Source-aligned frontline configuration. Same width and deterministic
+// contour displacement as Editor 0749. Settings are visual-only and never edit .atlas.
+function frontSettings752(){
+ let width=.45;
+ try{const settings=JSON.parse(localStorage.getItem('atlas-battle-strips-623')||'null');if(settings?.battleWidth623)width=Math.max(.2,Math.min(4,Number(settings.battleWidth623)||.8))}catch{}
+ width=Math.max(.15,width*0.55);return {width,organic:true,strength:30};
+}
+function organicBattlePolygon752(feature,width,strength){
+ if(!strength||!feature?.geometry||!['Polygon','MultiPolygon'].includes(feature.geometry.type))return feature;
+ try{
+  const radiusKm=width*(strength/100)*.34;
+  const coords=feature.geometry.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry.coordinates;
+  const processed=coords.map(poly=>poly.map(ring=>{
+   if(ring.length<4)return ring;
+   const src=ring.slice(0,-1),meanLat=src.reduce((a,c)=>a+c[1],0)/src.length;
+   const kx=111.32*Math.max(.15,Math.cos(meanLat*Math.PI/180)),ky=111.32,out=[];
+   const stepKm=Math.max(.12,Math.min(.3,width*.32));
+   for(let i=0;i<src.length;i++){
+    const a=src[i],b=src[(i+1)%src.length];
+    const dx=(b[0]-a[0])*kx,dy=(b[1]-a[1])*ky,len=Math.hypot(dx,dy),count=Math.max(1,Math.min(90,Math.ceil(len/stepKm)));
+    for(let j=0;j<count;j++){
+     const t=j/count,x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t;
+     const X=x*kx,Y=y*ky,wave=Math.sin(X*1.8+Y*.35)*.52+Math.sin(X*.53-Y*1.23+1.7)*.32+Math.sin(X*3.4+Y*2.3)*.16;
+     const disp=radiusKm*wave,nx=len>1e-10?-dy/len:0,ny=len>1e-10?dx/len:0;
+     out.push([x+nx*disp/kx,y+ny*disp/ky]);
+    }
+   }
+   if(out.length<3||out.length>15000)return ring;
+   out.push([...out[0]]);return out;
+  }));
+  const geom=feature.geometry.type==='Polygon'?{type:'Polygon',coordinates:processed[0]}:{type:'MultiPolygon',coordinates:processed};
+  const candidate={type:'Feature',properties:feature.properties||{},geometry:geom};
+  if(turf.kinks&&turf.kinks(candidate).features.length)return feature;
+  if(turf.booleanValid&&!turf.booleanValid(candidate))return feature;
+  return candidate;
+ }catch(e){console.warn('View 0752: organic fallback',e);return feature}
+}
+// V0750: display-only frontline synchronization with Editor 0749.
+// Input project features and snapshots are NEVER mutated.
+const armySyncCache750=new WeakMap();
+function armyMerge750(features,mode){
+ if(typeof turf==='undefined')return features;
+ const pending=features.slice(),components=[];
+ for(const f of pending){
+  let part=clone(f);
+  for(let i=0;i<components.length;){
+   const other=components[i];
+   try{
+    const a=turf.bbox(part),b=turf.bbox(other);
+    if(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1]){i++;continue}
+    if(!turf.booleanIntersects(part,other)&&!(turf.booleanTouches&&turf.booleanTouches(part,other))){i++;continue}
+    const u=turf.union(part,other);
+    if(!u?.geometry){i++;continue}
+    part.geometry=u.geometry;components.splice(i,1);i=0;
+   }catch(err){console.warn('View 0750: union',mode,err);i++}
+  }
+  components.push(part);
+ }
+ return components;
+}
+function armyExplode750(f){if(!f?.geometry)return[];return f.geometry.type==='MultiPolygon'?f.geometry.coordinates.map(c=>({...clone(f),geometry:{type:'Polygon',coordinates:c}})):[f]}
+function armySubtract750(parts,cuts){
+ if(typeof turf==='undefined')return parts;
+ for(const cut of cuts){
+  const remaining=[];
+  for(const part of parts){
+   try{
+    const a=turf.bbox(part),b=turf.bbox(cut);
+    if(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1]||!turf.booleanIntersects(part,cut)){remaining.push(part);continue}
+    const diff=turf.difference(part,cut);
+    if(diff)for(const piece of armyExplode750(diff))remaining.push({...piece,properties:clone(part.properties)});
+   }catch(err){console.warn('View 0750: difference',err);remaining.push(part)}
+  }
+  parts=remaining;
+ }
+ return parts;
+}
+function militaryFeatures750(){
+ const source=current||project?.features;
+ const original=displayFeatures();
+ if(typeof turf==='undefined'||atlasMode739==='political'||!$('army').checked)return original;
+ const settings752=frontSettings752();
+ const cache=armySyncCache750.get(source);
+ if(cache&&cache.gray===militaryPrefs740.gray&&cache.width===settings752.width&&cache.organic===settings752.organic&&cache.strength===settings752.strength)return cache.features;
+ const isZone=f=>f?.properties?.isArmy&&['occupation','liberation'].includes(f.properties.armyMode)&&['Polygon','MultiPolygon'].includes(f.geometry?.type);
+ const colors=original.filter(isZone),manual=original.filter(f=>f?.properties?.isArmy&&f.properties.armyMode==='contested'&&['Polygon','MultiPolygon'].includes(f.geometry?.type));
+ // Calculate a corridor only where the two visible armies have real contact.
+ let strips=[];const width=settings752.width;
+ if(militaryPrefs740.gray){
+  const red=colors.filter(f=>f.properties.armyMode==='occupation');
+  const blue=colors.filter(f=>f.properties.armyMode==='liberation');
+  for(const r of red){for(const b of blue){
+   try{
+    const ra=turf.buffer(r,width/2,{units:'kilometers',steps:8});
+    const ba=turf.buffer(b,width/2,{units:'kilometers',steps:8});
+    const x=turf.bbox(ra),y=turf.bbox(ba);
+    if(x[2]<y[0]||y[2]<x[0]||x[3]<y[1]||y[3]<x[1])continue;
+    const crossing=turf.intersect(ra,ba);
+    for(const piece of armyExplode750(crossing)){
+     const area=turf.area(piece);if(!area||area<width*width*1000000)continue;
+     const inRed=turf.intersect(piece,r),inBlue=turf.intersect(piece,b);
+     if(!inRed||!inBlue||turf.area(inRed)/area<.04||turf.area(inBlue)/area<.04)continue;
+     strips.push(piece);
+    }
+   }catch(err){console.warn('View 0750: front corridor',err)}
+  }}
+ }
+ // Union auto strip with existing hand-drawn gray zones; draw exactly once.
+ if(settings752.organic&&settings752.strength>0)strips=strips.map(f=>organicBattlePolygon752(f,width,settings752.strength));
+ const grayParts=militaryPrefs740.gray?armyMerge750([...manual,...strips],'contested'):[];
+ const clipped=colors.flatMap(f=>armySubtract750([f],grayParts));
+ const merged=[];
+ for(const mode of ['occupation','liberation']){
+  const subsets=clipped.filter(f=>f.properties.armyMode===mode);
+  const keys=new Map();
+  for(const f of subsets){const k=[f.properties.liberationTint628||'',f.properties.color||''].join('|');if(!keys.has(k))keys.set(k,[]);keys.get(k).push(f)}
+  for(const v of keys.values())merged.push(...armyMerge750(v,mode));
+ }
+ const nongray=original.filter(f=>!isZone(f)&&!(f?.properties?.isArmy&&f.properties.armyMode==='contested'&&['Polygon','MultiPolygon'].includes(f.geometry?.type)));
+ const unifiedGray=grayParts.map((f,i)=>({...f,properties:{...clone(f.properties||{}),id:'view750gray'+i,isArmy:true,armyMode:'contested',name:'Серая зона (единая)',description631:'Автоматическая линия соприкосновения и ручные серые зоны'}}));
+ const features=[...nongray,...merged,...unifiedGray];
+ armySyncCache750.set(source,{gray:militaryPrefs740.gray,width:settings752.width,organic:settings752.organic,strength:settings752.strength,features});
+ return features;
+}
+
+// 0729: diagnostics and reuse of unchanged country outlines across layer toggles.
+const outlineCache729=new WeakMap();let lastPaintMs729=0,lastDrawn729=0,lastVertices729=0;
+let perfFrames729=0,perfFps729=0,perfLast729=performance.now();
+const perfPanel729=document.createElement('div');perfPanel729.id='atlasPerfPanel729';perfPanel729.style.cssText='position:absolute;left:13px;bottom:92px;z-index:1100;background:rgba(8,11,16,.88);color:#f8faff;border:1px solid #ffffff66;border-radius:11px;padding:9px 12px;min-width:190px;font:12px/1.7 system-ui;box-shadow:0 8px 24px #0007;pointer-events:none;backdrop-filter:blur(12px);display:none';
+map.getContainer().append(perfPanel729);
+const perfToggle729=document.createElement('label');perfToggle729.style.cssText='display:flex;align-items:center;gap:9px;margin:10px 0;color:var(--ui-text,#fff);font:13px system-ui';perfToggle729.innerHTML='<input type="checkbox" id="atlasPerfToggle729"> Показывать производительность (FPS и полигоны)';
+const settings729=document.querySelector('#viewSettings725 .view-settings-card725');if(settings729)settings729.append(perfToggle729);
+const checkbox729=document.getElementById('atlasPerfToggle729');try{checkbox729.checked=localStorage.getItem('atlas-view-perf-0729')==='1'}catch{};
+function setPerfVisibility729(){perfPanel729.style.display=checkbox729.checked?'block':'none';try{localStorage.setItem('atlas-view-perf-0729',checkbox729.checked?'1':'0')}catch{}}checkbox729.addEventListener('change',setPerfVisibility729);setPerfVisibility729();
+function updatePerf729(){if(!checkbox729.checked)return;perfPanel729.textContent='ATLAS · Производительность\n'+perfFps729+' FPS · '+lastPaintMs729.toFixed(0)+' мс отрисовка\n'+lastDrawn729+' объектов · '+lastVertices729.toLocaleString('ru-RU')+' точек';perfPanel729.style.whiteSpace='pre-line'}
+function animatePerf729(now){perfFrames729++;if(now-perfLast729>=1000){perfFps729=Math.round(perfFrames729*1000/(now-perfLast729));perfFrames729=0;perfLast729=now;updatePerf729()}requestAnimationFrame(animatePerf729)}requestAnimationFrame(animatePerf729);
+function countVertices729(f){let n=0;const visit=x=>{if(!Array.isArray(x))return;if(typeof x[0]==='number'){n++;return}for(const v of x)visit(v)};visit(f.geometry?.coordinates);return n}
+function hideArmyInfo741(){document.getElementById('atlasArmyCard741').hidden=true}
+function showArmyInfo741(f,g){
+ const p=f.properties||{},mode=p.armyMode||'other';
+ const modes={occupation:['Оккупация','#d94c4c'],liberation:['Освобождение',p.liberationTint628==='blue'?'#358ce8':'#55bfa5'],contested:['Серая зона','#929aa6'],front:['Линия фронта',p.color||'#ffcf69']};
+ const [type,color]=modes[mode]||['Военный объект',p.color||'#e0bb72'];
+ document.getElementById('atlasArmyTitle741').textContent=p.name||type;
+ document.getElementById('atlasArmyType741').textContent=type;
+ document.getElementById('atlasArmyName741').textContent=p.name||'Не указано';
+ document.getElementById('atlasArmyClan741').textContent=(g&&g.id!=='none'&&g.name)||'Не указана';
+ document.getElementById('atlasArmyDate741').textContent=document.getElementById('date').value||'Текущая карта';
+ document.getElementById('atlasArmyDot741').style.background=color;
+ const desc=p.description631||p.description||'';
+ document.getElementById('atlasArmyDescriptionRow741').hidden=!desc;
+ document.getElementById('atlasArmyDescription741').textContent=desc;
+ document.getElementById('atlasArmyCard741').hidden=false;
+ document.getElementById('atlasCountryCard727').hidden=true;
+ try{map.closePopup()}catch{}
+}
+document.getElementById('atlasArmyClose741').addEventListener('click',hideArmyInfo741);
+document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>b.addEventListener('click',hideArmyInfo741));
+document.getElementById('date').addEventListener('change',hideArmyInfo741);
+function paint(){syncMilitaryUI740();const start729=performance.now();for(const l of layers)map.removeLayer(l);layers=[];if(!project)return;const fs=militaryFeatures750();lastDrawn729=fs.length;lastVertices729=fs.reduce((n,f)=>n+countVertices729(f),0);const source729=current||project.features;let outlineGroupCache729=outlineCache729.get(source729);if(!outlineGroupCache729){outlineGroupCache729=new Map();outlineCache729.set(source729,outlineGroupCache729)}for(const f of fs){const p=f.properties||{},geo=f.geometry,g=groups().find(x=>x.id===p.groupId);if(g?.visible===false||project.ui?.hidden?.includes(p.id))continue;if(p.isArmy&&(atlasMode739==='political'||!$('army').checked))continue;if(p.isArmy&&p.armyMode==='contested'&&!militaryPrefs740.gray)continue;if(!p.isArmy&&['Polygon','MultiPolygon'].includes(geo.type)&&atlasMode739==='military')continue;if(!p.isArmy&&!p.atlasCity616&&!p.atlasUnit622&&!$('regions').checked)continue;if((p.atlasCity616||p.atlasUnit622)&&!$('units').checked)continue;
+ const army=p.isArmy,color=p.liberationTint628==='blue'&&p.armyMode==='liberation'?'#358ce8':p.armyMode==='occupation'?'#d94c4c':p.armyMode==='liberation'?'#55bfa5':p.armyMode==='contested'?'#929aa6':p.color||'#e0bb72';const style=army?{color:p.armyMode==='front'?p.color||'#ffcf69':color,weight:p.armyMode==='front'?Number(p.frontWidth622||3)*militaryPrefs740.front/100:.8,fillColor:color,fillOpacity:p.armyMode==='front'?0:p.armyMode==='occupation'?militaryPrefs740.occ/100:p.armyMode==='liberation'?militaryPrefs740.lib/100:.62,dashArray:p.frontDash622||null}:{color:'#ffffff',weight:(g&&g.id!=='none'?0:0.8),fillColor:p.color||g?.color||'#4d8aaa',fillOpacity:Number(p.opacity??.34)};
+ try{const layer=L.geoJSON(f,{style,pointToLayer:(feature,ll)=>L.circleMarker(ll,{radius:p.atlasCity616?6:9,color:'#f4ffff',weight:1.5,fillColor:p.color||'#48c4ba',fillOpacity:1})}).addTo(map);layer.bindPopup('<b>'+esc(p.name||'Объект')+'</b><div>'+esc(g?.name||'')+'</div>'+(p.description631?'<p>'+esc(p.description631)+'</p>':''));if(p.isArmy){layer.on('click',e=>{if(atlasMode739==='political')return;try{L.DomEvent.stopPropagation(e)}catch{}showArmyInfo741(f,g)});}if(g&&g.id!=='none'&&!p.isArmy&&['Polygon','MultiPolygon'].includes(geo.type)){layer.on('click',()=>{showCountry727(g);try{map.closePopup()}catch{}})}if(atlasMode739!=='military'&&$('showFlags713').checked&&(p.flagImage||g?.flag)&&['Polygon','MultiPolygon'].includes(geo.type)){layer.eachLayer(child=>{const path=child._path;if(!path)return;const svg=path.ownerSVGElement;if(!svg)return;const ns='http://www.w3.org/2000/svg',defs=svg.querySelector('defs')||document.createElementNS(ns,'defs');if(!defs.parentNode)svg.insertBefore(defs,svg.firstChild);const pattern=document.createElementNS(ns,'pattern'),img=document.createElementNS(ns,'image'),id='avflag'+Math.random().toString(36).slice(2);pattern.setAttribute('id',id);pattern.setAttribute('patternUnits','objectBoundingBox');pattern.setAttribute('patternContentUnits','objectBoundingBox');pattern.setAttribute('width','1');pattern.setAttribute('height','1');img.setAttribute('href',p.flagImage||g?.flag);img.setAttribute('x','0');img.setAttribute('y','0');img.setAttribute('width','1');img.setAttribute('height','1');img.setAttribute('preserveAspectRatio','none');pattern.append(img);defs.append(pattern);path.setAttribute('fill','url(#'+id+')');path.setAttribute('fill-opacity',String(p.flagOpacity??g?.flagOpacity??.65))})}layers.push(layer)}catch(e){console.warn('ATLAS View: объект не отображён',e)}
+ }
+ // ATLAS V0720: one white outline per state and one automatic name per state.
+ if($('regions').checked||atlasMode739==='military'){
+  for(const g of groups().filter(x=>x&&x.id!=='none'&&x.visible!==false)){
+   const provinces=fs.filter(f=>f&&!f.properties?.isArmy&&f.properties?.groupId===g.id&&['Polygon','MultiPolygon'].includes(f.geometry?.type)&&!project.ui?.hidden?.includes(f.properties?.id));
+   if(!provinces.length)continue;
+   let cached729=outlineGroupCache729.get(g.id);
+   if(!cached729){
+    let merged=clone(provinces[0]);const fallback=[];
+    for(const part of provinces.slice(1)){
+     try{if(typeof turf==='undefined')throw Error('Turf unavailable');const candidate=turf.union(merged,part);if(candidate&&candidate.geometry)merged.geometry=candidate.geometry;else fallback.push(part)}catch{fallback.push(part)}
+    }
+    cached729={outlines:[merged,...fallback]};outlineGroupCache729.set(g.id,cached729);
+   }
+   for(const outline of cached729.outlines){
+    try{layers.push(L.geoJSON(outline,{interactive:false,style:{color:'#fff',weight:1.2,opacity:.95,fill:false}}).addTo(map))}catch(e){console.warn('View country outline',g.name,e)}
+   }
+   let largest=null,area=-1;
+   for(const f of provinces){try{const a=typeof turf!=='undefined'?turf.area(f):1;if(a>area){area=a;largest=f}}catch{if(!largest)largest=f}}
+   if(largest&&$('countryNames726').checked){try{const at=typeof turf!=='undefined'?turf.pointOnFeature(largest).geometry.coordinates:null;
+    const pos=at?L.latLng(at[1],at[0]):L.geoJSON(largest).getBounds().getCenter();
+    const html='<span style="color:white;font:800 14px system-ui,Arial;text-shadow:0 2px 4px #000,0 0 5px #000;white-space:nowrap;letter-spacing:1px;transform:translate(-50%,-50%);display:inline-block">'+esc(g.name||'')+'</span>';
+    layers.push(L.marker(pos,{interactive:false,icon:L.divIcon({className:'',html,iconSize:[0,0]})}).addTo(map))
+   }catch(e){console.warn('View state label',g.name,e)}}
+  }
+ }
+ lastPaintMs729=performance.now()-start729;updatePerf729();status('Объектов на карте: '+fs.length+(typeof turf==='undefined'?' · Turf недоступен: пересечения могут накладываться':''))}
+function saveNames(){try{localStorage.setItem(labelsKey,JSON.stringify(customLabels))}catch(e){status('Не удалось сохранить подписи: '+e.message)}}
+function renderNames(){labelsOverlay.clearLayers();if(!$('customNames').checked)return;customLabels.forEach(item=>{const icon=L.divIcon({className:'atlas-label-icon',html:'<span class="atlas-custom-label">'+esc(item.text)+'</span>',iconSize:[0,0]});const marker=L.marker([item.lat,item.lng],{icon,interactive:true}).addTo(labelsOverlay);marker.bindPopup('<b>'+esc(item.text)+'</b><div class="atlas-name-state">Своя подпись</div><button type="button" class="delete-atlas-name" style="width:auto;margin-top:8px">Удалить</button>');marker.on('popupopen',e=>{const btn=e.popup.getElement()?.querySelector('.delete-atlas-name');if(btn)btn.onclick=()=>{customLabels=customLabels.filter(x=>x.id!==item.id);saveNames();renderNames();map.closePopup()}})})}
+$('placeNames').onchange=()=>{if($('placeNames').checked)placeLabels.addTo(map);else map.removeLayer(placeLabels)};
+$('customNames').onchange=renderNames;
+$('addName').onclick=()=>{addingName=!addingName;$('addName').textContent=addingName?'Отмена добавления':'+ Добавить подпись';map.getContainer().classList.toggle('atlas-label-cross',addingName);status(addingName?'Нажмите на нужное место карты, чтобы добавить подпись.':'Добавление подписи отменено.')};
+map.on('click',e=>{if(!addingName)return;addingName=false;map.getContainer().classList.remove('atlas-label-cross');$('addName').textContent='+ Добавить подпись';const value=prompt('Текст подписи (название города, района и т. д.):','');if(!value?.trim())return;customLabels.push({id:Date.now()+'-'+Math.random().toString(36).slice(2),lat:e.latlng.lat,lng:e.latlng.lng,text:value.trim().slice(0,90)});saveNames();renderNames();status('Подпись добавлена. Для удаления нажмите на неё.')});
+$('clearNames').onclick=()=>{if(!customLabels.length){status('Добавленных подписей нет.');return}if(!confirm('Удалить все добавленные в ATLAS View подписи?'))return;customLabels=[];saveNames();renderNames();status('Подписи очищены.')};
+renderNames();
+let lastProjectSignature='',manualFileMode=false,syncUpdateTimer=null;
+function setup(options={}){
+ if(!project)return;
+ const preserve=!!options.preserve;
+ const oldDate=preserve?$('date').value:'';
+ const container=$('countries');container.replaceChildren();
+ for(const g of groups().filter(x=>x.id!=='none')){
+  const row=document.createElement('div');row.className='entry';
+  const dot=document.createElement('span');dot.className='color';dot.style.background=g.color||'#47ac9f';
+  const flagSrc=typeof g.flag==='string'&&/^(https?:|data:image\/|blob:)/i.test(g.flag)?g.flag:null;
+  if(flagSrc){const img=document.createElement('img');img.src=flagSrc;img.alt='';img.loading='lazy';row.append(img)}
+  row.append(dot);
+  const name=document.createElement('span');name.className='atlas-name731';name.textContent=g.name||'Кланонизация';row.append(name);
+  const more=document.createElement('span');more.textContent='›';more.setAttribute('aria-hidden','true');row.append(more);
+  row.tabIndex=0;row.setAttribute('role','button');row.dataset.name731=(g.name||'').toLocaleLowerCase('ru');
+  row.onclick=()=>{showCountry727(g);focusCountry727(g)};
+  row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();row.click()}};
+  container.append(row)
+ }
+ const date=$('date');date.replaceChildren(new Option('Текущая карта',''));
+ Object.keys(project.snapshots||{}).sort().forEach(d=>date.add(new Option(d,d)));
+ if(oldDate&&Object.prototype.hasOwnProperty.call(project.snapshots||{},oldDate))date.value=oldDate;
+ current=date.value?clone(project.snapshots?.[date.value]?.features||project.snapshots?.[date.value]||[]):null;
+ if(!preserve&&project.view?.center&&Number.isFinite(project.view.zoom))map.setView([project.view.center.lat,project.view.center.lng],project.view.zoom);
+ paint();
+}
+function apply(data,origin,options={}){
+ if(!valid(data)){status('Файл не похож на проект ATLAS (.atlas)');return false}
+ project=data;setup(options);$('liveLabel').textContent=origin;return true;
+}
+async function readSharedEditor(){
+ // 0715: the canonical Editor document is in IndexedDB; localStorage may be a stale mirror.
+ let db=null;
+ try{
+  db=await new Promise((resolve,reject)=>{const req=indexedDB.open('ATLAS_BETA_PERSISTENCE_0708',1);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('documents'))req.result.createObjectStore('documents')}});
+  const record=await new Promise((resolve,reject)=>{const tx=db.transaction('documents','readonly'),req=tx.objectStore('documents').get('active');req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error)});
+  if(valid(record))return record;
+ }catch(e){console.warn('View IndexedDB fallback',e)}finally{try{db?.close()}catch{}}
+ const published=JSON.parse(localStorage.getItem('atlas-view-published-v1')||'null');
+ const storedFeatures=JSON.parse(localStorage.getItem('atlas-objects-v1')||'null');
+ const storedGroups=JSON.parse(localStorage.getItem('atlas-groups-v4')||'null');
+ const storedSnapshots=JSON.parse(localStorage.getItem('atlas-snapshots-v1')||'null');
+ if(Array.isArray(storedFeatures)&&Array.isArray(storedGroups))return {
+  ...(valid(published)?published:{}),format:'ATLAS',features:storedFeatures,groups:storedGroups,
+  snapshots:storedSnapshots&&typeof storedSnapshots==='object'?storedSnapshots:(valid(published)?published.snapshots||{}:{}),
+ };
+ return valid(published)?published:null;
+}
+async function sync(explicit=false){
+ if(manualFileMode&&!explicit)return;
+ try{
+  const data=await readSharedEditor();
+  // An imported .atlas must win over any in-flight auto sync.
+  if(manualFileMode&&!explicit)return;
+  if(!data){if(explicit||!project)status('Общее хранилище не найдено. Откройте .atlas из Editor.');return}
+  const signature=data.revision!=null?'db:'+data.updatedAt+':'+data.revision:JSON.stringify({features:data.features,groups:data.groups,snapshots:data.snapshots});
+  if(signature===lastProjectSignature&&!explicit)return;
+  lastProjectSignature=signature;manualFileMode=false;
+  apply(data,'Синхронизировано с ATLAS Editor',{preserve:!!project});
+ }catch(e){status('Ошибка синхронизации: '+e.message)}
+}
+function scheduleSync(){if(manualFileMode)return;if(syncUpdateTimer)clearTimeout(syncUpdateTimer);syncUpdateTimer=setTimeout(()=>{syncUpdateTimer=null;sync()},160)}
+$('sync').onclick=()=>{manualFileMode=false;lastProjectSignature='';sync(true)};
+$('load').onclick=()=>$('file').click();
+$('file').onchange=async e=>{
+ const f=e.target.files?.[0];if(!f)return;
+ try{
+  if(f.size>60*1024*1024)throw Error('Файл слишком большой');
+  const data=JSON.parse(await f.text());if(apply(data,'Файл: '+f.name)){manualFileMode=true;lastProjectSignature=''}
+ }catch(err){status('Ошибка файла: '+err.message)}e.target.value='';
+};
+$('date').onchange=()=>{const date=$('date').value;current=date?clone(project.snapshots?.[date]?.features||project.snapshots?.[date]||[]):null;paint()};$('play').onclick=()=>{stop();const dates=Object.keys(project?.snapshots||{}).sort();if(!dates.length){status('Нет сохранённых исторических дат');return}let i=0;timer=setInterval(()=>{if(i>=dates.length){stop();return}$('date').value=dates[i];$('date').onchange();i++},Number($('atlasPlayback731')?.value||1400))};function stop(){if(timer){clearInterval(timer);timer=null}}$('stop').onclick=stop;
+for(const id of ['army','regions','units','showFlags713','countryNames726'])$(id).onchange=paint;$('satellite').onchange=()=>{if($('satellite').checked)tile.addTo(map);else map.removeLayer(tile)};
+
+// V0728: map-attached country cards, quick tools and timeline; no project mutations.
+let chosenCountry727=null;
+const by727=id=>document.getElementById(id);
+function provinceList727(g){return safeFeatures(current||project?.features).filter(f=>f.properties?.groupId===g.id&&!f.properties?.isArmy&&['Polygon','MultiPolygon'].includes(f.geometry?.type))}
+function focusCountry727(g){const provinces=provinceList727(g);if(!provinces.length)return;try{const b=L.featureGroup(provinces.map(f=>L.geoJSON(f))).getBounds();if(b.isValid())map.flyToBounds(b.pad(.15),{duration:document.body.classList.contains('atlas-reduced-motion725')?0:.6})}catch(e){console.warn('Focus country',e)}}
+function showCountry727(g){if(!g)return;hideArmyInfo741();chosenCountry727=g;const panel=by727('atlasCountryCard727');const head=by727('atlasCountryTitle727');head.replaceChildren();if(g.flag){const img=document.createElement('img');img.src=g.flag;img.alt='Флаг '+(g.name||'государства');head.append(img)}const name=document.createElement('span');name.textContent=g.name||'Государство';head.append(name);const desc=by727('atlasCountryDesc727');desc.textContent=g.description631||g.description||g.info||'Информация о государстве не добавлена.';const ps=provinceList727(g);by727('atlasCountryRegions727').textContent=ps.length?ps.map(f=>f.properties?.name||'Без названия').slice(0,60).join(' · ')+(ps.length>60?' …':''):'Провинций нет';panel.hidden=false;by727('atlasSearch727').hidden=true}
+by727('atlasCountryClose727').onclick=()=>by727('atlasCountryCard727').hidden=true;
+by727('atlasCountryFocus727').onclick=()=>chosenCountry727&&focusCountry727(chosenCountry727);
+
+// V0731: progressive UI extensions, not modifying .atlas project structure.
+const clanFind731=by727('atlasClanFind731');
+clanFind731.addEventListener('input',()=>{const q=clanFind731.value.trim().toLocaleLowerCase('ru');for(const row of by727('countries').children)row.hidden=!row.dataset.name731?.includes(q)});
+const cardTabs731=[...document.querySelectorAll('#atlasCardTabs731 button')];let currentCardTab731='overview';
+function updateCardTabs731(){const g=chosenCountry727;if(!g)return;for(const b of cardTabs731)b.setAttribute('aria-selected',String(b.dataset.tab===currentCardTab731));const content=by727('atlasCardContents731');content.replaceChildren();const provinces=provinceList727(g);if(currentCardTab731==='overview'){const d=document.createElement('p');d.textContent=g.description631||g.description||g.info||'Описание пока не добавлено.';content.append(d);const count=document.createElement('p');count.textContent='Провинций: '+provinces.length;content.append(count)}else if(currentCardTab731==='regions'){content.textContent=provinces.length?provinces.map(f=>'• '+(f.properties?.name||'Территория')).slice(0,120).join('\n'):'Территорий нет.'}else{const dates=Object.keys(project?.snapshots||{}).sort();content.textContent=dates.length?'Исторические снимки проекта:':'В проекте нет сохранённых исторических дат.';for(const d of dates.slice(0,80)){const button=document.createElement('button');button.type='button';button.style.cssText='width:auto;margin:4px;padding:5px 9px';button.textContent=d;button.onclick=()=>{by727('date').value=d;by727('date').dispatchEvent(new Event('change'))};content.append(button)}}}
+for(const b of cardTabs731)b.onclick=()=>{currentCardTab731=b.dataset.tab;updateCardTabs731()};
+const originalShow731=showCountry727;
+showCountry727=function(g){originalShow731(g);updateCardTabs731()};
+const playback731=by727('atlasPlayback731');try{const saved=localStorage.getItem('atlas-playback731');if(['2800','1400','700'].includes(saved))playback731.value=saved}catch{}
+playback731.addEventListener('change',()=>{try{localStorage.setItem('atlas-playback731',playback731.value)}catch{}});
+const preset731=by727('atlasPreset731');try{const v=localStorage.getItem('atlas-preset731');if(['default','midnight','ocean','graphite'].includes(v))preset731.value=v}catch{}
+function applyPreset731(){document.body.classList.remove('atlas-preset-midnight731','atlas-preset-ocean731','atlas-preset-graphite731');if(preset731.value!=='default')document.body.classList.add('atlas-preset-'+preset731.value+'731');try{localStorage.setItem('atlas-preset731',preset731.value)}catch{}}
+preset731.addEventListener('change',applyPreset731);applyPreset731();
+const toastArea731=by727('atlasToastArea731');function toast731(message){const item=document.createElement('div');item.className='atlasToast731';item.textContent=message;toastArea731.append(item);setTimeout(()=>item.remove(),3300)}
+const cinematicExit731=by727('atlasCinematicExit731');function toggleCinematic731(force){const active=typeof force==='boolean'?force:!document.body.classList.contains('atlas-cinematic731');document.body.classList.toggle('atlas-cinematic731',active);by727('atlasCinematicButton731').textContent=active?'◩ Выйти из Cinematic':'◩ Режим Cinematic';updateCinematicDate731();setTimeout(()=>map.invalidateSize(),70)}
+function updateCinematicDate731(){by727('atlasCinematicDate731').textContent=by727('date').value||'ТЕКУЩАЯ КАРТА'}
+by727('atlasCinematicButton731').onclick=()=>{by727('viewSettingsClose725').click();toggleCinematic731()};cinematicExit731.onclick=()=>toggleCinematic731(false);
+by727('date').addEventListener('change',updateCinematicDate731);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('atlas-cinematic731'))toggleCinematic731(false)});
+by727('file').addEventListener('change',()=>toast731('Загрузка файла проекта…'));
+
+// Handle clicks on states, not army objects or custom labels. Preserve the original Leaflet popup.
+map.on('click',ev=>{if(addingName||!project||atlasMode739==='military'||!document.getElementById('atlasArmyCard741').hidden)return;const point=ev.latlng;const fs=safeFeatures(current||project.features);for(let i=fs.length-1;i>=0;i--){const f=fs[i],g=groups().find(x=>x.id===f.properties?.groupId);if(!g||g.id==='none'||f.properties?.isArmy||!['Polygon','MultiPolygon'].includes(f.geometry?.type))continue;try{if(typeof turf!=='undefined'&&turf.booleanPointInPolygon(turf.point([point.lng,point.lat]),f)){showCountry727(g);return}}catch{}}});
+by727('atlasZoomIn727').onclick=()=>map.zoomIn();by727('atlasZoomOut727').onclick=()=>map.zoomOut();by727('atlasLayersButton727').onclick=()=>by727('viewSettingsToggle725').click();
+by727('atlasFullscreen727').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch(e){status('Полноэкранный режим недоступен: '+e.message)}};
+by727('atlasPresentation727').onclick=()=>{document.body.classList.toggle('atlas-presentation727');by727('atlasPresentation727').title=document.body.classList.contains('atlas-presentation727')?'Выйти из презентации':'Режим презентации';setTimeout(()=>map.invalidateSize(),60)};
+by727('atlasSearchButton727').onclick=()=>{const box=by727('atlasSearch727');box.hidden=!box.hidden;if(!box.hidden){by727('atlasSearchInput727').focus();updateSearch727()}};
+function updateSearch727(){const term=by727('atlasSearchInput727').value.toLocaleLowerCase('ru');const dest=by727('atlasSearchResults727');dest.replaceChildren();for(const g of groups().filter(g=>g.id!=='none'&&g.name?.toLocaleLowerCase('ru').includes(term)).slice(0,30)){const btn=document.createElement('button');btn.type='button';btn.textContent=g.name;btn.onclick=()=>{showCountry727(g);focusCountry727(g)};dest.append(btn)}}
+by727('atlasSearchInput727').addEventListener('input',updateSearch727);
+const range727=document.createElement('input');range727.id='atlasDateRange727';range727.type='range';range727.min='0';range727.step='1';range727.value='0';range727.setAttribute('aria-label','Историческая шкала');const dateText727=document.createElement('span');dateText727.id='atlasDateCaption727';by727('glassTimeline').insertBefore(range727,by727('date'));by727('glassTimeline').insertBefore(dateText727,by727('date'));
+function refreshRange727(){const options=[...by727('date').options];range727.max=String(Math.max(0,options.length-1));range727.value=String(Math.max(0,by727('date').selectedIndex));dateText727.textContent=by727('date').value||'Сейчас';range727.disabled=options.length<=1}
+range727.addEventListener('input',()=>{by727('date').selectedIndex=Number(range727.value);by727('date').dispatchEvent(new Event('change'))});
+by727('date').addEventListener('change',refreshRange727);
+new MutationObserver(refreshRange727).observe(by727('date'),{childList:true});refreshRange727();
+for(const [id,prop,min,max,unit,fallback] of [['atlasOpacity727','--glass-alpha727',25,100,'%',76],['atlasBlur727','--glass-blur727',0,30,' px',16],['atlasSpeed727','--glass-speed727',0,650,' мс',260]]){const input=by727(id),out=by727(id.replace('727','Out727'));let saved=fallback;try{const n=Number(localStorage.getItem('atlas-view-'+id));if(Number.isFinite(n)&&n>=min&&n<=max)saved=n}catch{}input.value=String(saved);function set(){const n=Number(input.value);document.documentElement.style.setProperty(prop,id==='atlasOpacity727'?String(n/100):n+(id==='atlasBlur727'?'px':'ms'));out.textContent=n+unit;try{localStorage.setItem('atlas-view-'+id,String(n))}catch{}}input.addEventListener('input',set);set()}
+
+window.addEventListener('storage',e=>{if(['atlas-objects-v1','atlas-groups-v4','atlas-snapshots-v1','atlas-view-published-v1'].includes(e.key))scheduleSync()});try{const bc=new BroadcastChannel('atlas-view-sync-v1');bc.onmessage=e=>{if(['editor-changed','editor-saved','published'].includes(e.data?.type))scheduleSync()}}catch{};
+// ATLAS View V0732: portable publication. No dependency on viewer's IndexedDB.
+function inlineProject732(data){return JSON.stringify(data).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029')}
+function downloadPublished732(){
+ if(!valid(project)){status('Сначала откройте или синхронизируйте проект ATLAS.');return}
+ try{
+  // Serialise the already loaded HTML document, replacing the embedded JSON slot.
+  const cloneDoc=document.documentElement.cloneNode(true);
+  const slot=cloneDoc.querySelector('#atlasEmbeddedProject732');
+  if(!slot)throw Error('Не найден контейнер для проекта');
+  slot.textContent=inlineProject732(project);
+  // Never include private, session-only DOM input state or map-generated tiles.
+  const mapNode=cloneDoc.querySelector('#map');if(mapNode)mapNode.replaceChildren();
+  cloneDoc.querySelectorAll('#atlasCountryCard727,#viewSettings725,#atlasSearch727').forEach(node=>node.setAttribute('hidden',''));
+  const html='<!DOCTYPE html>\n'+cloneDoc.outerHTML;
+  const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+  const a=document.createElement('a');a.href=url;a.download='ATLAS_View_Public_V0752.html';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);
+  status('Публичный HTML создан. Отправь этот файл зрителю — карта встроена.');
+ }catch(e){status('Ошибка публикации: '+e.message);console.error(e)}
+}
+document.getElementById('atlasPublish732').addEventListener('click',downloadPublished732);
+async function initPublic732(){
+ try{
+  const node=document.getElementById('atlasEmbeddedProject732');
+  const embedded=node?.textContent?.trim();
+  if(embedded&&embedded!=='null'){
+   const data=JSON.parse(embedded);
+   if(apply(data,'Публичная карта (встроена)')){manualFileMode=true;return}
+  }
+ }catch(e){status('Ошибка встроенной карты: '+e.message);return}
+ // For hosting: place map.atlas beside this HTML, or set ?project=relative-name.atlas.
+ if(location.protocol==='http:'||location.protocol==='https:'){
+  try{
+   const params=new URLSearchParams(location.search);
+   const file=params.get('project')||'map.atlas';
+   const url=new URL(file,location.href);
+   if(url.origin===location.origin&&['http:','https:'].includes(url.protocol)){
+    const response=await fetch(url.toString(),{cache:'no-cache'});
+    if(response.ok){
+     const data=await response.json();
+     if(apply(data,'Опубликованная карта: '+file)){manualFileMode=true;return}
+    }
+   }
+  }catch(e){console.warn('ATLAS: site map.atlas not found',e)}
+ }
+ sync();
+}
+initPublic732();
+// V0756: cloud reader runs inside the same closure as apply()/project.
+// Only public URL and publishable key, never account passwords or secret keys.
+const ATLAS_CLOUD_URL_0756='https://nptyuoohfkfriinmkvhe.supabase.co';
+const ATLAS_CLOUD_KEY_0756='sb_publishable_cO46yOJ_MHXO7F3fzkPWDw_tESOxkgF';
+const cloudInfo756=document.createElement('div');
+cloudInfo756.id='atlasCloudStatus756';
+cloudInfo756.style.cssText='position:fixed;left:13px;bottom:10px;z-index:1200;background:#142a37e8;color:#d1fff1;border:1px solid #76a29b80;border-radius:9px;padding:7px 10px;font:12px system-ui;max-width:300px;box-shadow:0 4px 20px #0007';
+cloudInfo756.textContent='Online Sync: подключение';
+document.body.append(cloudInfo756);
+let cloudRevision756=null,cloudBusy756=false;
+async function cloudRefresh756(){
+ if(cloudBusy756)return;
+ const base=ATLAS_CLOUD_URL_0756.replace(/\/rest\/v1\/?$/i,'').replace(/\/+$/,'');
+ const key=ATLAS_CLOUD_KEY_0756.trim();
+ if(!/^https:\/\/[^/]+\.supabase\.co$/i.test(base)||!key||key.startsWith('REPLACE_')){
+  cloudInfo756.textContent='Online Sync: настрой URL и publishable key в HTML';return;
+ }
+ cloudBusy756=true;
+ try{
+  const url=base+'/rest/v1/atlas_public_maps?id=eq.main&select=payload,updated_at';
+  const response=await fetch(url,{headers:{'apikey':key,'Accept':'application/json'},cache:'no-store'});
+  if(!response.ok)throw Error('HTTP '+response.status+' '+(await response.text()).slice(0,120));
+  const rows=await response.json();const item=rows?.[0];
+  if(!item){cloudInfo756.textContent='Online Sync: карта main ещё не опубликована';return}
+  if(cloudRevision756===item.updated_at)return;
+  if(!item.payload||!Array.isArray(item.payload.features))throw Error('Сервер вернул проект без features');
+  if(apply(item.payload,'Online Sync · '+new Date(item.updated_at).toLocaleString('ru-RU'),{preserve:!!project})){
+   manualFileMode=true;
+   cloudRevision756=item.updated_at;
+   cloudInfo756.textContent='☁ ATLAS обновлён · '+new Date(item.updated_at).toLocaleTimeString('ru-RU');
+  }
+ }catch(err){cloudInfo756.textContent='Online Sync: '+err.message;console.warn('ATLAS cloud read',err)}
+ finally{cloudBusy756=false}
+}
+// The regular local sync initialization is asynchronous; cloudRefresh runs later and wins.
+setTimeout(cloudRefresh756,350);
+setInterval(cloudRefresh756,30000);
+// V0752: explicit live refresh, with the existing Sync button. Public snapshots
+// intentionally remain static until republished; no fake remote auto-sync.
+
+})();
+</script>
+</body></html>
