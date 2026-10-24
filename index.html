@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0760 — Online Public Sync</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0761 — Online Public Sync</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -384,6 +384,42 @@ function armySubtract750(parts,cuts){
  }
  return parts;
 }
+
+// 0761: constrain generated gray geometry to actual visible control territory.
+// This avoids rounded buffer end-caps spilling into the unclaimed map.
+function atlasConstrainGray0761(strips,territories){
+ const parts=[];
+ for(const strip of strips){
+  for(const territory of territories){
+   try{
+    const a=turf.bbox(strip),b=turf.bbox(territory);
+    if(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1])continue;
+    const cut=turf.intersect(strip,territory);
+    if(cut?.geometry&&['Polygon','MultiPolygon'].includes(cut.geometry.type))parts.push(cut);
+   }catch(error){console.warn('ATLAS 0761: gray territory clipping',error)}
+  }
+ }
+ // Overlay pieces must form one geometry, or their translucent fills overlap.
+ const merged=[];
+ for(const part of parts){
+  let current=part,changed=true;
+  while(changed){
+   changed=false;
+   for(let i=0;i<merged.length;i++){
+    try{
+     const a=turf.bbox(current),b=turf.bbox(merged[i]);
+     if(a[2]<b[0]||b[2]<a[0]||a[3]<b[1]||b[3]<a[1])continue;
+     if(!turf.booleanIntersects(current,merged[i]))continue;
+     const together=turf.union(current,merged[i]);
+     if(together?.geometry){current=together;merged.splice(i,1);changed=true;break}
+    }catch(error){console.warn('ATLAS 0761: gray merge',error)}
+   }
+  }
+  merged.push(current);
+ }
+ return merged;
+}
+
 function militaryFeatures750(){
  const source=current||project?.features;
  const original=displayFeatures();
@@ -416,6 +452,8 @@ function militaryFeatures750(){
  }
  // Union auto strip with existing hand-drawn gray zones; draw exactly once.
  if(settings752.organic&&settings752.strength>0)strips=strips.map(f=>organicBattlePolygon752(f,width,settings752.strength));
+ // 0761: avoid gray extending into land outside the two army control polygons.
+ strips=atlasConstrainGray0761(strips,colors);
  const grayParts=militaryPrefs740.gray?armyMerge750([...manual,...strips],'contested'):[];
  const clipped=colors.flatMap(f=>armySubtract750([f],grayParts));
  const merged=[];
