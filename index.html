@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0756 — Online Public Sync</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0757 — Online Public Sync</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -651,7 +651,7 @@ async function initPublic732(){
 initPublic732();
 // V0756: cloud reader runs inside the same closure as apply()/project.
 // Only public URL and publishable key, never account passwords or secret keys.
-const ATLAS_CLOUD_URL_0756='https://nptyuoohfkfriinmkvhe.supabase.co';
+const ATLAS_CLOUD_URL_0756='2d29659e-0083-4205-9871-06da74e53e53';
 const ATLAS_CLOUD_KEY_0756='sb_publishable_cO46yOJ_MHXO7F3fzkPWDw_tESOxkgF';
 const cloudInfo756=document.createElement('div');
 cloudInfo756.id='atlasCloudStatus756';
@@ -668,17 +668,20 @@ async function cloudRefresh756(){
  }
  cloudBusy756=true;
  try{
-  const url=base+'/rest/v1/atlas_public_maps?id=eq.main&select=payload,updated_at';
-  const response=await fetch(url,{headers:{'apikey':key,'Accept':'application/json'},cache:'no-store'});
-  if(!response.ok)throw Error('HTTP '+response.status+' '+(await response.text()).slice(0,120));
-  const rows=await response.json();const item=rows?.[0];
-  if(!item){cloudInfo756.textContent='Online Sync: карта main ещё не опубликована';return}
-  if(cloudRevision756===item.updated_at)return;
-  if(!item.payload||!Array.isArray(item.payload.features))throw Error('Сервер вернул проект без features');
-  if(apply(item.payload,'Online Sync · '+new Date(item.updated_at).toLocaleString('ru-RU'),{preserve:!!project})){
-   manualFileMode=true;
-   cloudRevision756=item.updated_at;
-   cloudInfo756.textContent='☁ ATLAS обновлён · '+new Date(item.updated_at).toLocaleTimeString('ru-RU');
+  const fileBase=base+'/storage/v1/object/public/atlas-maps/';
+  const r=await fetch(fileBase+'version.json?t='+Date.now(),{headers:{apikey:key},cache:'no-store'});
+  if(!r.ok)throw Error('Версия Storage: HTTP '+r.status+' '+(await r.text()).slice(0,110));
+  const version=await r.json();
+  if(!version.revision)throw Error('Неверный version.json');
+  if(cloudRevision756===version.revision)return;
+  cloudInfo756.textContent='☁ Загружаю новую карту…';
+  const dataRes=await fetch(fileBase+'main.atlas?v='+encodeURIComponent(version.revision),{headers:{apikey:key},cache:'no-store'});
+  if(!dataRes.ok)throw Error('Загрузка main.atlas: HTTP '+dataRes.status);
+  const data=await dataRes.json();
+  if(!data||data.format!=='ATLAS'||!Array.isArray(data.features))throw Error('В облаке неверный проект');
+  if(apply(data,'Online Sync · '+version.revision,{preserve:!!project})){
+   manualFileMode=true;cloudRevision756=version.revision;
+   cloudInfo756.textContent='☁ ATLAS обновлён · '+new Date(version.revision).toLocaleTimeString('ru-RU');
   }
  }catch(err){cloudInfo756.textContent='Online Sync: '+err.message;console.warn('ATLAS cloud read',err)}
  finally{cloudBusy756=false}
