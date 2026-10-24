@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0757 — Online Public Sync</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0760 — Online Public Sync</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -213,7 +213,28 @@ body.atlas-reduced-motion725 #countries .entry,body.atlas-reduced-motion725 .atl
 #atlasArmyCard741 .army-row741 b{text-align:right;overflow-wrap:anywhere}
 #atlasArmyClose741{position:absolute;right:10px;top:10px;width:29px;height:29px;min-width:0;padding:0;border-radius:8px}
 @media(max-width:650px){#atlasArmyCard741{bottom:72px;right:10px;width:min(335px,calc(100vw - 20px))}}
-</style></head><body>
+</style>
+<style id="atlasFrontlineTheme0760">
+/* Frontline visual theme only; no changes to polygons, geometries or sync. */
+body.atlas-frontline-0760 {--ui-panel-heavy:rgba(15,20,24,.94);--ui-panel:rgba(20,25,29,.90);--ui-outline:rgba(172,185,187,.34);--ui-text:#eef2ef;--ui-muted:#b1bdbc;}
+body.atlas-frontline-0760 #map .leaflet-tile-pane {filter:brightness(.77) saturate(.72) contrast(1.05);}
+body.atlas-frontline-0760 header,body.atlas-frontline-0760 aside,body.atlas-frontline-0760 #glassTimeline,body.atlas-frontline-0760 .maphead {background:rgba(16,21,25,.93)!important; border-color:rgba(155,170,172,.30)!important;backdrop-filter:blur(7px)!important;-webkit-backdrop-filter:blur(7px)!important;box-shadow:0 10px 32px #0008!important;}
+body.atlas-frontline-0760 header strong {letter-spacing:1.35px;color:#f2f4f0;}
+body.atlas-frontline-0760 aside h3 {color:#c3ccca!important;letter-spacing:1.25px;}
+body.atlas-frontline-0760 #dualMode739 [data-mode="military"] {background:#394c49!important;color:#f5faf6!important;border-color:#91ada8!important;}
+body.atlas-frontline-0760 #atlasMilitaryLegend740 {background:#151d20!important;border:1px solid #506065!important;border-radius:8px!important;padding:12px!important;}
+body.atlas-frontline-0760 #atlasMilitaryLegend740 .legend-row {font-size:12px;margin:9px 0!important;}
+body.atlas-frontline-0760 #atlasMilitaryLegend740 .legend-row i{width:13px;height:13px;border-radius:2px;border:1px solid #ffffff55;}
+body.atlas-frontline-0760 #atlasArmyCard741 {background:rgba(19,25,29,.97)!important;border-radius:10px!important;border:1px solid #657377!important;backdrop-filter:blur(8px)!important;}
+body.atlas-frontline-0760 .leaflet-popup-content-wrapper,body.atlas-frontline-0760 .leaflet-popup-tip {background:#172227!important;color:#eef2ee!important;}
+#frontlineStatus0760{display:none;position:fixed;z-index:1060;right:64px;top:100px;max-width:min(235px,calc(100vw - 90px));background:#151e23eb;color:#eef3f1;border:1px solid #70817e77;border-radius:9px;padding:10px 12px;pointer-events:none;box-shadow:0 9px 26px #0009;font:11px/1.5 system-ui,sans-serif;}
+#frontlineStatus0760 b{letter-spacing:1.5px;font-size:11px;color:#d9e1de;}
+#frontlineStatus0760 .frontrow{display:flex;align-items:center;gap:8px;margin-top:6px;}
+#frontlineStatus0760 .frontdot{display:inline-block;height:9px;width:9px;border-radius:2px;}
+body.atlas-frontline-0760 #frontlineStatus0760{display:block;}
+@media(max-width:800px){#frontlineStatus0760{right:52px;top:110px;padding:8px;font-size:10px;}}
+</style>
+</head><body>
 <header><button type="button" id="glassMenuToggle" aria-label="Открыть или скрыть меню" aria-expanded="true">☰ Меню</button><strong>ATLAS <span style="color:#5dcdbe;font-size:18px">VIEW</span></strong><span>0.8 BETA · V0741 · Military Information</span><span id="liveLabel" style="margin-left:auto">LOCAL</span><div id="themeSwitcher723" role="group" aria-label="Тема интерфейса"><button type="button" data-theme="dark" aria-pressed="true">☾ Тёмная</button><button type="button" data-theme="light" aria-pressed="false">☀ Светлая</button></div><button type="button" id="viewSettingsToggle725" aria-haspopup="dialog" aria-controls="viewSettings725">⚙ Настройки</button></header>
 <div class="layout"><aside><h3>Проект</h3><button class="primary" id="sync">Обновить из Editor</button><button id="load">Открыть файл</button><button id="atlasPublish732" title="Создать HTML с встроенной картой для отправки зрителям">📤 Опубликовать карту (HTML)</button><input hidden type="file" id="file" accept=".atlas,.json,application/json"><div class="status" id="status">Загружаю карту…</div><div class="hint">Синхронизация между вкладками работает только при общем хранилище браузера. Для отдельных HTML используйте .atlas.</div>
 <div id="dualMode739" role="group" aria-label="Режим карты"><button type="button" data-mode="political">Политическая</button><button type="button" data-mode="military">Военная</button><button type="button" data-mode="combined">Совмещённая</button></div><h3>Слои</h3><label><input type="checkbox" id="army" checked> Армия</label><label><input type="checkbox" id="regions" checked> Территории</label><label><input type="checkbox" id="showFlags713" checked> 🏳️ Флаги на территориях</label><label><input type="checkbox" id="countryNames726" checked> Названия государств</label><label><input type="checkbox" id="units" checked> Объекты</label><label><input type="checkbox" id="satellite" checked> Спутник</label>
@@ -221,7 +242,7 @@ body.atlas-reduced-motion725 #countries .entry,body.atlas-reduced-motion725 .atl
 <label><input type="checkbox" id="placeNames" checked> Города и населённые пункты</label>
 <label><input type="checkbox" id="customNames" checked> Мои подписи</label>
 <button id="addName">+ Добавить подпись</button><button id="clearNames">Очистить мои подписи</button>
-<div id="atlasMilitaryLegend740" role="group" aria-label="Легенда военной карты"><strong style="font-size:12px">Военная карта · Легенда</strong><div class="legend-row"><i style="background:#d94c4c"></i> Оккупация</div><div class="legend-row"><i style="background:#55bfa5"></i> Освобождение</div><div class="legend-row" id="atlasGrayLegend740"><i style="background:#929aa6"></i> Серая зона</div><div class="legend-row"><i style="background:#ffcf69"></i> Линия фронта</div></div><h3>Кланонизации</h3><input id="atlasClanFind731" type="search" placeholder="Поиск кланонизации…" aria-label="Поиск кланонизации"><div class="list" id="countries"></div><h3>История</h3><select id="date"><option value="">Текущая карта</option></select><button id="play">▶ Пуск</button><button id="stop">■ Стоп</button><details class="legend"><summary>Легенда</summary><div class="legend-row"><i style="background:#cf555f"></i>Оккупация</div><div class="legend-row"><i style="background:#50b49f"></i>Освобождение</div><div class="legend-row"><i style="background:#969ca9"></i>Серая зона</div></details></aside><div style="position:relative;min-width:0"><div id="map"></div><div class="maphead">VIEW <span style="opacity:.5">· V0741</span></div></div></div><div id="glassTimeline"><span class="timeline-caption">◷ ИСТОРИЯ</span></div>
+<div id="atlasMilitaryLegend740" role="group" aria-label="Легенда военной карты"><strong style="font-size:12px">Военная карта · Легенда</strong><div class="legend-row"><i style="background:#d94c4c"></i> Оккупация</div><div class="legend-row"><i style="background:#55bfa5"></i> Освобождение</div><div class="legend-row" id="atlasGrayLegend740"><i style="background:#929aa6"></i> Серая зона</div><div class="legend-row"><i style="background:#ffcf69"></i> Линия фронта</div></div><h3>Кланонизации</h3><input id="atlasClanFind731" type="search" placeholder="Поиск кланонизации…" aria-label="Поиск кланонизации"><div class="list" id="countries"></div><h3>История</h3><select id="date"><option value="">Текущая карта</option></select><button id="play">▶ Пуск</button><button id="stop">■ Стоп</button><details class="legend"><summary>Легенда</summary><div class="legend-row"><i style="background:#cf555f"></i>Оккупация</div><div class="legend-row"><i style="background:#50b49f"></i>Освобождение</div><div class="legend-row"><i style="background:#969ca9"></i>Серая зона</div></details></aside><div style="position:relative;min-width:0"><div id="map"></div><div class="maphead">VIEW <span style="opacity:.5">· V0741</span></div></div></div><div id="frontlineStatus0760" aria-label="Обозначения фронта"><b>ATLAS / FRONTLINE</b><div class="frontrow"><i class="frontdot" style="background:#c84e4a"></i> Оккупация</div><div class="frontrow"><i class="frontdot" style="background:#418acb"></i> Освобождение</div><div class="frontrow"><i class="frontdot" style="background:#929ba3"></i> Серая зона</div><div style="margin-top:7px;opacity:.7">Историческая карта · Визуальный режим</div></div><div id="glassTimeline"><span class="timeline-caption">◷ ИСТОРИЯ</span></div>
 <nav id="atlasTools727" aria-label="Быстрые инструменты карты"><button type="button" id="atlasSearchButton727" title="Найти государство">⌕</button><button type="button" id="atlasLayersButton727" title="Слои и настройки">▤</button><button type="button" id="atlasZoomIn727" title="Приблизить">＋</button><button type="button" id="atlasZoomOut727" title="Отдалить">−</button><button type="button" id="atlasFullscreen727" title="Полный экран">⛶</button><button type="button" id="atlasPresentation727" title="Режим презентации">▣</button></nav>
 <div id="atlasSearch727" hidden><input id="atlasSearchInput727" type="search" placeholder="Название государства…" aria-label="Поиск государства"><div id="atlasSearchResults727"></div></div>
 <section id="atlasCountryCard727" hidden aria-label="Карточка государства"><button type="button" class="card-close727" id="atlasCountryClose727" aria-label="Закрыть">✕</button><div class="card-title727" id="atlasCountryTitle727"></div><div id="atlasCardTabs731" role="tablist" aria-label="Данные кланонизации"><button type="button" data-tab="overview" aria-selected="true">Обзор</button><button type="button" data-tab="regions" aria-selected="false">Территории</button><button type="button" data-tab="history" aria-selected="false">История</button></div><div id="atlasCardContents731"></div><div hidden class="card-description727" id="atlasCountryDesc727"></div><div hidden class="card-regions727" id="atlasCountryRegions727"></div><div class="card-action727"><button type="button" id="atlasCountryFocus727">◎ Показать на карте</button></div></section>
@@ -268,7 +289,7 @@ body.atlas-reduced-motion725 #countries .entry,body.atlas-reduced-motion725 .atl
 (()=>{'use strict';const $=id=>document.getElementById(id);if(typeof L==='undefined'){$('status').textContent='Не загрузилась библиотека Leaflet. Требуется интернет.';return}
 const map=L.map('map',{preferCanvas:false}).setView([49.0,31.0],6);let tile=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}).addTo(map);let project=null,layers=[],timer=null,current=null;
 let atlasMode739='political';try{const m=localStorage.getItem('atlas-view-mode-0739');if(['political','military','combined'].includes(m))atlasMode739=m}catch{}
-function syncMode739(){document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>{const active=b.dataset.mode===atlasMode739;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))})}
+function syncMode739(){document.body.classList.toggle('atlas-frontline-0760',atlasMode739==='military');document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>{const active=b.dataset.mode===atlasMode739;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))})}
 document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>b.addEventListener('click',()=>{atlasMode739=b.dataset.mode;try{localStorage.setItem('atlas-view-mode-0739',atlasMode739)}catch{}syncMode739();syncMilitaryUI740();paint()}));syncMode739();
 const militaryDefaults740={occ:62,lib:62,front:100,gray:true};
 let militaryPrefs740={...militaryDefaults740};
@@ -651,20 +672,39 @@ async function initPublic732(){
 initPublic732();
 // V0756: cloud reader runs inside the same closure as apply()/project.
 // Only public URL and publishable key, never account passwords or secret keys.
-const ATLAS_CLOUD_URL_0756='https://nptyuoohfkfriinmkvhe.supabase.co';
-const ATLAS_CLOUD_KEY_0756='sb_publishable_cO46yOJ_MHXO7F3fzkPWDw_tESOxkgF';
+const ATLAS_CLOUD_URL_0756='REPLACE_WITH_SUPABASE_URL';
+const ATLAS_CLOUD_KEY_0756='REPLACE_WITH_PUBLISHABLE_KEY';
 const cloudInfo756=document.createElement('div');
 cloudInfo756.id='atlasCloudStatus756';
 cloudInfo756.style.cssText='position:fixed;left:13px;bottom:10px;z-index:1200;background:#142a37e8;color:#d1fff1;border:1px solid #76a29b80;border-radius:9px;padding:7px 10px;font:12px system-ui;max-width:300px;box-shadow:0 4px 20px #0007';
-cloudInfo756.textContent='Online Sync: подключение';
+cloudInfo756.textContent='● Подключение к ATLAS Cloud…';
+cloudInfo756.setAttribute('role','status');
+cloudInfo756.setAttribute('aria-live','polite');
+cloudInfo756.style.maxWidth='min(360px,calc(100vw - 28px))';
 document.body.append(cloudInfo756);
-let cloudRevision756=null,cloudBusy756=false;
+const cloudToast758=document.createElement('div');
+cloudToast758.id='atlasCloudToast758';
+cloudToast758.style.cssText='position:fixed;left:50%;top:75px;transform:translateX(-50%);z-index:5000;max-width:min(360px,calc(100vw - 30px));border:1px solid #80b9ab88;border-radius:12px;background:#132d35ee;box-shadow:0 8px 28px #0009;padding:10px 16px;color:#d9fff4;font:13px system-ui;text-align:center;display:none;pointer-events:none';
+document.body.append(cloudToast758);
+let cloudRevision756=null,cloudBusy756=false,cloudLastCheck758=null,cloudLastUpdate758=null,cloudHealthy758=false,cloudToastTimer758=null;
+function cloudStamp758(d){return d?d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'—'}
+function cloudStatus758(message,isError=false){
+ cloudInfo756.style.borderColor=isError?'#e1a477a8':'#76a29b80';
+ cloudInfo756.style.color=isError?'#ffe2c6':'#d1fff1';
+ cloudInfo756.textContent=message+' · Проверено: '+cloudStamp758(cloudLastCheck758)+(cloudLastUpdate758?' · Карта: '+cloudStamp758(cloudLastUpdate758):'');
+ cloudInfo756.title='Проверка обновлений каждые 30 секунд. Новая карта загружается только после публикации в Editor.';
+}
+function cloudNotify758(message){
+ cloudToast758.textContent=message;cloudToast758.style.display='block';
+ if(cloudToastTimer758)clearTimeout(cloudToastTimer758);
+ cloudToastTimer758=setTimeout(()=>{cloudToast758.style.display='none'},4200);
+}
 async function cloudRefresh756(){
  if(cloudBusy756)return;
  const base=ATLAS_CLOUD_URL_0756.replace(/\/rest\/v1\/?$/i,'').replace(/\/+$/,'');
  const key=ATLAS_CLOUD_KEY_0756.trim();
  if(!/^https:\/\/[^/]+\.supabase\.co$/i.test(base)||!key||key.startsWith('REPLACE_')){
-  cloudInfo756.textContent='Online Sync: настрой URL и publishable key в HTML';return;
+  cloudStatus758('⚙ Нужны URL и publishable key',true);return;
  }
  cloudBusy756=true;
  try{
@@ -673,17 +713,19 @@ async function cloudRefresh756(){
   if(!r.ok)throw Error('Версия Storage: HTTP '+r.status+' '+(await r.text()).slice(0,110));
   const version=await r.json();
   if(!version.revision)throw Error('Неверный version.json');
-  if(cloudRevision756===version.revision)return;
-  cloudInfo756.textContent='☁ Загружаю новую карту…';
+  cloudLastCheck758=new Date();
+  if(cloudRevision756===version.revision){cloudHealthy758=true;cloudStatus758('● Подключено · Обновлений нет');return;}
+  cloudStatus758('↻ Загружаю новую версию…');
   const dataRes=await fetch(fileBase+'main.atlas?v='+encodeURIComponent(version.revision),{headers:{apikey:key},cache:'no-store'});
   if(!dataRes.ok)throw Error('Загрузка main.atlas: HTTP '+dataRes.status);
   const data=await dataRes.json();
   if(!data||data.format!=='ATLAS'||!Array.isArray(data.features))throw Error('В облаке неверный проект');
   if(apply(data,'Online Sync · '+version.revision,{preserve:!!project})){
-   manualFileMode=true;cloudRevision756=version.revision;
-   cloudInfo756.textContent='☁ ATLAS обновлён · '+new Date(version.revision).toLocaleTimeString('ru-RU');
+   manualFileMode=true;cloudRevision756=version.revision;cloudHealthy758=true;cloudLastUpdate758=new Date();
+   cloudStatus758('● Подключено · Карта актуальна');
+   cloudNotify758('☁ '+(cloudLastCheck758&&cloudLastUpdate758?'Новая версия ATLAS загружена':'Карта загружена'));
   }
- }catch(err){cloudInfo756.textContent='Online Sync: '+err.message;console.warn('ATLAS cloud read',err)}
+ }catch(err){cloudLastCheck758=new Date();cloudHealthy758=false;cloudStatus758('● Ошибка подключения: '+err.message,true);console.warn('ATLAS cloud read',err)}
  finally{cloudBusy756=false}
 }
 // The regular local sync initialization is asynchronous; cloudRefresh runs later and wins.
