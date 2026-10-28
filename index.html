@@ -213,6 +213,13 @@ body.atlas-reduced-motion725 #countries .entry,body.atlas-reduced-motion725 .atl
 #atlasArmyCard741 .army-row741 b{text-align:right;overflow-wrap:anywhere}
 #atlasArmyClose741{position:absolute;right:10px;top:10px;width:29px;height:29px;min-width:0;padding:0;border-radius:8px}
 @media(max-width:650px){#atlasArmyCard741{bottom:72px;right:10px;width:min(335px,calc(100vw - 20px))}}
+
+/* V0770 — Main Events, read-only */
+#atlasEvents0770{position:fixed;z-index:1250;top:225px;right:65px;width:min(320px,calc(100vw - 85px));max-height:calc(100dvh - 315px,490px);overflow:auto;color:#eaf3f9;background:rgba(13,23,30,.94);border:1px solid rgba(129,155,162,.46);border-radius:14px;box-shadow:0 12px 32px #0008;backdrop-filter:blur(15px);font:12px/1.45 system-ui,sans-serif}#atlasEvents0770[hidden]{display:none!important}
+#atlasEvents0770 .at-event-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 13px;background:#12222deb;border-bottom:1px solid #ffffff20;font-size:12px;font-weight:750;letter-spacing:.6px}#atlasEvents0770 .at-event-head button{width:auto;margin:0;padding:3px 8px;min-height:24px}
+#atlasEvents0770 .at-event-item{padding:10px 12px;border-bottom:1px solid #ffffff18}#atlasEvents0770 time{color:#9fc7db;font-size:11px}#atlasEvents0770 strong{display:block;margin:4px 0;font-size:13px}#atlasEvents0770 p{margin:3px 0 8px;color:#c1d0dc;overflow-wrap:anywhere}#atlasEvents0770 .at-event-item button{width:auto;display:inline-block;padding:5px 9px;font-size:11px;margin:0;border-radius:7px}#atlasEvents0770 .at-empty{padding:14px;color:#b9c9d1;line-height:1.65}
+#atlasEventsToggle0770{position:fixed;z-index:1300;top:177px;right:64px;width:auto!important;padding:8px 12px!important;margin:0!important;color:#f2f7ff;background:#1a3441e8;border:1px solid #81a3b36b;border-radius:10px;box-shadow:0 4px 16px #0008;font-size:12px;font-weight:700}
+@media(max-width:700px){#atlasEvents0770{top:175px;right:9px;max-height:45dvh;width:min(300px,calc(100vw - 20px))}#atlasEventsToggle0770{top:130px;right:10px}}
 </style>
 <style id="atlasFrontlineTheme0760">
 /* Frontline visual theme only; no changes to polygons, geometries or sync. */
@@ -769,6 +776,42 @@ async function cloudRefresh756(){
 // The regular local sync initialization is asynchronous; cloudRefresh runs later and wins.
 setTimeout(cloudRefresh756,350);
 setInterval(cloudRefresh756,30000);
+
+// V0770: Main events — external public events.json; no changes to project geometry.
+const mainEventToggle0770=document.createElement('button');mainEventToggle0770.id='atlasEventsToggle0770';mainEventToggle0770.type='button';mainEventToggle0770.textContent='★ Главные события';document.body.append(mainEventToggle0770);
+const mainEventsPanel0770=document.createElement('section');mainEventsPanel0770.id='atlasEvents0770';mainEventsPanel0770.setAttribute('aria-label','Главные события');mainEventsPanel0770.hidden=true;
+mainEventsPanel0770.innerHTML='<div class="at-event-head"><span>★ ГЛАВНЫЕ СОБЫТИЯ</span><button type="button" id="atlasEventsClose0770" aria-label="Закрыть">✕</button></div><div id="atlasEventsBody0770" class="at-empty">Загружаю события…</div>';
+document.body.append(mainEventsPanel0770);
+mainEventToggle0770.onclick=()=>{mainEventsPanel0770.hidden=!mainEventsPanel0770.hidden;mainEventToggle0770.setAttribute('aria-expanded',String(!mainEventsPanel0770.hidden))};
+document.getElementById('atlasEventsClose0770').onclick=()=>{mainEventsPanel0770.hidden=true;mainEventToggle0770.setAttribute('aria-expanded','false')};
+let atlasEventsRevision0770='',atlasEventsItems0770=[];
+function renderMainEvents0770(){
+ const node=document.getElementById('atlasEventsBody0770');node.replaceChildren();node.className='';
+ if(!atlasEventsItems0770.length){node.className='at-empty';node.textContent='События ещё не добавлены. Заполни файл events.json в репозитории GitHub, и они появятся здесь автоматически.';return}
+ for(const entry of atlasEventsItems0770){
+  const item=document.createElement('article');item.className='at-event-item';
+  const date=document.createElement('time');date.textContent=entry.date||'Без даты';item.append(date);
+  const title=document.createElement('strong');title.textContent=entry.title;item.append(title);
+  if(entry.description){const detail=document.createElement('p');detail.textContent=entry.description;item.append(detail)}
+  if(entry.lat!=null&&entry.lng!=null||entry.date){const go=document.createElement('button');go.type='button';go.textContent='Показать на карте';go.onclick=()=>{
+   if(entry.date&&project?.snapshots&&Object.prototype.hasOwnProperty.call(project.snapshots,entry.date)){$('date').value=entry.date;$('date').dispatchEvent(new Event('change'))}
+   if(Number.isFinite(entry.lat)&&Number.isFinite(entry.lng))map.flyTo([entry.lat,entry.lng],Number.isFinite(entry.zoom)?Math.max(3,Math.min(18,entry.zoom)):Math.max(9,map.getZoom()),{duration:.7});
+   if(window.innerWidth<700)mainEventsPanel0770.hidden=true;
+  };item.append(go)}node.append(item)
+ }
+}
+async function refreshMainEvents0770(){
+ try{
+  const r=await fetch(new URL('events.json',location.href).toString()+'?t='+Date.now(),{cache:'no-store'});
+  if(!r.ok)throw Error('events.json: '+r.status);
+  const data=await r.json();const entries=Array.isArray(data)?data:data.events;
+  if(!Array.isArray(entries))throw Error('Неверный формат events.json');
+  const items=entries.slice(0,100).filter(e=>e&&typeof e.title==='string'&&e.title.trim()).map(e=>({title:e.title.slice(0,150),date:typeof e.date==='string'?e.date.slice(0,30):'',description:typeof e.description==='string'?e.description.slice(0,1000):'',lat:e.lat==null?null:Number(e.lat),lng:e.lng==null?null:Number(e.lng),zoom:e.zoom==null?null:Number(e.zoom)}));
+  const rev=JSON.stringify(items);if(rev!==atlasEventsRevision0770){atlasEventsRevision0770=rev;atlasEventsItems0770=items;renderMainEvents0770()}
+ }catch(e){if(!atlasEventsRevision0770){const node=document.getElementById('atlasEventsBody0770');node.className='at-empty';node.textContent='Не удалось загрузить events.json. Размести этот файл рядом с index.html на GitHub.'}console.warn('ATLAS events',e)}
+}
+refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
+
 // V0752: explicit live refresh, with the existing Sync button. Public snapshots
 // intentionally remain static until republished; no fake remote auto-sync.
 
