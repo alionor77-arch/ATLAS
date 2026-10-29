@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View V0761 — Online Public Sync</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View 0791 — Slow Smoke Drift</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -241,7 +241,72 @@ body.atlas-frontline-0760 .leaflet-popup-content-wrapper,body.atlas-frontline-07
 body.atlas-frontline-0760 #frontlineStatus0760{display:block;}
 @media(max-width:800px){#frontlineStatus0760{right:52px;top:110px;padding:8px;font-size:10px;}}
 </style>
-</head><body>
+<style>.atlas-pulse774{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#ffcb60b3;border:2px solid #fff6;color:#fff;box-shadow:0 0 0 0 #fcca67;animation:atlasPulse774 2s ease-out infinite;font-weight:bold}.atlas-effects-paused774 .atlas-pulse774{animation:none}@keyframes atlasPulse774{50%{box-shadow:0 0 0 13px #ffcb6010}100%{box-shadow:0 0 0 20px transparent}}</style><style id="atlasImageAnim0777">
+@keyframes atlasFade0777{0%,100%{opacity:0;transform:scale(.95)}20%,80%{opacity:var(--atlas-opacity,1);transform:scale(1)}}
+@keyframes atlasPulseImage0777{0%,100%{transform:scale(.86);opacity:calc(var(--atlas-opacity,1)*.7)}50%{transform:scale(1.1);opacity:var(--atlas-opacity,1)}}
+@keyframes atlasGrow0777{0%{transform:scale(.65);opacity:0}45%,80%{transform:scale(1);opacity:var(--atlas-opacity,1)}100%{transform:scale(1.12);opacity:0}}
+@keyframes atlasIn0777{0%{opacity:0;transform:scale(.8)}100%{opacity:var(--atlas-opacity,1);transform:scale(1)}}
+@keyframes atlasOut0777{0%{opacity:var(--atlas-opacity,1);transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}
+.atlas-img0777{display:block;object-fit:contain;transform-origin:50% 50%;opacity:var(--atlas-opacity,1);will-change:transform,opacity;pointer-events:auto}
+.atlas-img0777[data-anim="fade"]{animation:atlasFade0777 var(--atlas-duration,4s) ease-in-out infinite}
+.atlas-img0777[data-anim="pulse"]{animation:atlasPulseImage0777 var(--atlas-duration,4s) ease-in-out infinite}
+.atlas-img0777[data-anim="grow"]{animation:atlasGrow0777 var(--atlas-duration,4s) ease-in-out infinite}
+.atlas-img0777[data-anim="in"]{animation:atlasIn0777 var(--atlas-duration,4s) ease-out both}
+.atlas-img0777[data-anim="out"]{animation:atlasOut0777 var(--atlas-duration,4s) ease-in both}
+.atlas-effects-paused774 .atlas-img0777,.atlas-img0777.atlas-anim-off0777{animation:none!important;transform:none!important;opacity:var(--atlas-opacity,1)!important}
+@media(prefers-reduced-motion:reduce){.atlas-img0777{animation:none!important}}
+
+
+/* 0780: Decorative continuous-burning plume: four staggered CSS layers, no JS frame loop. */
+.atlas-af779 .af-plume0,.atlas-af779 .af-plume1,.atlas-af779 .af-plume2,.atlas-af779 .af-glow{
+ position:absolute;pointer-events:none;transform-origin:50% 85%;display:none;
+}
+.atlas-af779[data-preset="burning"] .af-ring,.atlas-af779[data-preset="burning"] .af-flash,.atlas-af779[data-preset="burning"] .af-dust{display:none}
+.atlas-af779[data-preset="burning"] .af-smoke{display:none}
+.atlas-af779[data-preset="burning"] .af-mark{display:block;inset:30%;opacity:.5;animation:none}
+.atlas-af779[data-preset="burning"] .af-glow{display:block;left:33%;top:64%;width:34%;height:22%;border-radius:50%;background:radial-gradient(ellipse,rgba(247,136,67,.42),rgba(201,79,26,.24) 34%,transparent 72%);filter:blur(6px);animation:afGlow780 2.8s ease-in-out infinite}
+.atlas-af779[data-preset="burning"] .af-plume0,.atlas-af779[data-preset="burning"] .af-plume1,.atlas-af779[data-preset="burning"] .af-plume2{
+ display:block;left:24%;top:22%;width:52%;height:63%;border-radius:42% 50% 48% 54%;
+ background:radial-gradient(ellipse at 48% 78%,rgba(44,44,45,.84),rgba(69,69,71,.71) 28%,rgba(99,98,95,.44) 56%,rgba(139,132,119,.16) 70%,transparent 82%);
+ filter:blur(9px);opacity:0;animation:afPlume780 var(--duration) cubic-bezier(.21,.35,.51,1) infinite;
+ will-change:transform,opacity;
+}
+.atlas-af779[data-preset="burning"] .af-plume1{animation-delay:calc(var(--duration) * -.33);left:18%}
+.atlas-af779[data-preset="burning"] .af-plume2{animation-delay:calc(var(--duration) * -.67);left:31%}
+@keyframes afPlume780{
+ 0%{opacity:0;transform:translate(0,18%) scale(.28,.34) rotate(-7deg)}
+ 15%{opacity:calc(var(--strength) * .9);transform:translate(-4%,-10%) scale(.55,.85) rotate(2deg)}
+ 50%{opacity:calc(var(--strength) * .8);transform:translate(9%,-62%) scale(.85,1.5) rotate(-4deg)}
+ 84%{opacity:calc(var(--strength) * .35);transform:translate(-12%,-119%) scale(1.35,2.1) rotate(5deg)}
+ 100%{opacity:0;transform:translate(5%,-153%) scale(1.65,2.45) rotate(-4deg)}
+}
+@keyframes afGlow780{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:.8;transform:scale(1.2)}}
+.atlas-effects-paused774 .atlas-af779 .af-plume0,.atlas-effects-paused774 .atlas-af779 .af-plume1,.atlas-effects-paused774 .atlas-af779 .af-plume2,.atlas-effects-paused774 .atlas-af779 .af-glow,
+.atlas-anim-off0777 .atlas-af779 .af-plume0,.atlas-anim-off0777 .atlas-af779 .af-plume1,.atlas-anim-off0777 .atlas-af779 .af-plume2,.atlas-anim-off0777 .atlas-af779 .af-glow{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.atlas-af779[data-preset="burning"] .af-plume0{animation:none;opacity:.55;transform:translateY(-35%) scale(1,1.4)}.atlas-af779[data-preset="burning"] .af-plume1,.atlas-af779[data-preset="burning"] .af-plume2{display:none}.atlas-af779[data-preset="burning"] .af-glow{animation:none}}
+
+/* 0779 decorative aftermath visuals: CSS-only, no geometry computations */
+.atlas-af779{position:relative;display:block;width:100%;height:100%;pointer-events:none;isolation:isolate;--duration:6s;--strength:.7}
+.atlas-af779 .af-dust,.atlas-af779 .af-smoke,.atlas-af779 .af-ring,.atlas-af779 .af-mark,.atlas-af779 .af-flash{position:absolute;inset:0;border-radius:50%;transform-origin:50% 50%;pointer-events:none}
+.atlas-af779 .af-dust{background:radial-gradient(ellipse at 50% 57%,rgba(126,108,84,.66) 0%,rgba(149,128,101,.45) 28%,rgba(160,143,118,.21) 54%,transparent 78%);filter:blur(6px);animation:afDust779 var(--duration) ease-out both}
+.atlas-af779 .af-smoke{background:radial-gradient(ellipse at 48% 63%,rgba(52,52,54,.78) 0%,rgba(74,74,77,.66) 28%,rgba(104,100,95,.40) 52%,rgba(152,144,130,.16) 70%,transparent 84%);filter:blur(10px);animation:afSmoke779 var(--duration) ease-out both}
+.atlas-af779 .af-ring{inset:31%;border:4px solid rgba(205,182,145,.56);box-shadow:0 0 8px rgba(189,153,112,.25);filter:blur(2px);animation:afRing779 var(--duration) ease-out both}
+.atlas-af779 .af-mark{inset:24%;background:radial-gradient(ellipse,rgba(36,33,31,.72) 0%,rgba(49,45,41,.43) 42%,rgba(66,61,55,.12) 62%,transparent 78%);opacity:0;animation:afMark779 var(--duration) ease-out both}
+.atlas-af779 .af-flash{inset:31%;background:radial-gradient(circle,rgba(255,249,232,.82) 0%,rgba(255,219,150,.58) 20%,rgba(233,138,62,.24) 42%,transparent 68%);animation:afFlash779 var(--duration) ease-out both}
+.atlas-af779[data-preset="dust"] .af-smoke,.atlas-af779[data-preset="dust"] .af-flash,.atlas-af779[data-preset="dust"] .af-ring{display:none}
+.atlas-af779[data-preset="smoke"] .af-dust,.atlas-af779[data-preset="smoke"] .af-ring,.atlas-af779[data-preset="smoke"] .af-flash{display:none}
+.atlas-af779[data-preset="ring"] .af-dust,.atlas-af779[data-preset="ring"] .af-smoke,.atlas-af779[data-preset="ring"] .af-flash{display:none}
+.atlas-af779[data-preset="mark"] .af-dust,.atlas-af779[data-preset="mark"] .af-smoke,.atlas-af779[data-preset="mark"] .af-ring,.atlas-af779[data-preset="mark"] .af-flash{display:none}
+.atlas-af779[data-mark="0"] .af-mark{display:none}
+.atlas-af779[data-repeat="1"] .af-dust,.atlas-af779[data-repeat="1"] .af-smoke,.atlas-af779[data-repeat="1"] .af-ring,.atlas-af779[data-repeat="1"] .af-flash{animation-iteration-count:infinite}
+.atlas-af779[data-repeat="1"] .af-mark{animation-iteration-count:infinite}
+.atlas-effects-paused774 .atlas-af779 *, .atlas-anim-off0777 .atlas-af779 *{animation-play-state:paused!important}
+@keyframes afDust779{0%{transform:scale(.16,.10);opacity:0}16%{opacity:calc(var(--strength)*.78)}58%{transform:scale(1.02,.72);opacity:calc(var(--strength)*.52)}100%{transform:scale(1.72,.96);opacity:0}}
+@keyframes afSmoke779{0%{transform:translateY(9%) scale(.24);opacity:0}20%{opacity:calc(var(--strength)*.52)}56%{opacity:calc(var(--strength)*.70)}100%{transform:translateY(-34%) scale(1.52);opacity:0}}
+@keyframes afRing779{0%{transform:scale(.14);opacity:0}8%{opacity:calc(var(--strength)*.82)}56%{opacity:0}100%{transform:scale(2.3);opacity:0}}
+@keyframes afMark779{0%,15%{opacity:0}35%,100%{opacity:calc(var(--strength)*.68)}}
+@keyframes afFlash779{0%{opacity:calc(var(--strength)*.92);transform:scale(.22)}10%{opacity:.35;transform:scale(1.08)}100%{opacity:0;transform:scale(1.42)}}
+</style></head><body>
 <header><button type="button" id="glassMenuToggle" aria-label="Открыть или скрыть меню" aria-expanded="true">☰ Меню</button><strong>ATLAS <span style="color:#5dcdbe;font-size:18px">VIEW</span></strong><span>0.8 BETA · V0741 · Military Information</span><span id="liveLabel" style="margin-left:auto">LOCAL</span><div id="themeSwitcher723" role="group" aria-label="Тема интерфейса"><button type="button" data-theme="dark" aria-pressed="true">☾ Тёмная</button><button type="button" data-theme="light" aria-pressed="false">☀ Светлая</button></div><button type="button" id="viewSettingsToggle725" aria-haspopup="dialog" aria-controls="viewSettings725">⚙ Настройки</button></header>
 <div class="layout"><aside><h3>Проект</h3><button class="primary" id="sync">Обновить из Editor</button><button id="load">Открыть файл</button><button id="atlasPublish732" title="Создать HTML с встроенной картой для отправки зрителям">📤 Опубликовать карту (HTML)</button><input hidden type="file" id="file" accept=".atlas,.json,application/json"><div class="status" id="status">Загружаю карту…</div><div class="hint">Синхронизация между вкладками работает только при общем хранилище браузера. Для отдельных HTML используйте .atlas.</div>
 <div id="dualMode739" role="group" aria-label="Режим карты"><button type="button" data-mode="political">Политическая</button><button type="button" data-mode="military">Военная</button><button type="button" data-mode="combined">Совмещённая</button></div><h3>Слои</h3><label><input type="checkbox" id="army" checked> Армия</label><label><input type="checkbox" id="regions" checked> Территории</label><label><input type="checkbox" id="showFlags713" checked> 🏳️ Флаги на территориях</label><label><input type="checkbox" id="countryNames726" checked> Названия государств</label><label><input type="checkbox" id="units" checked> Объекты</label><label><input type="checkbox" id="satellite" checked> Спутник</label>
@@ -295,6 +360,51 @@ body.atlas-frontline-0760 #frontlineStatus0760{display:block;}
 <script>
 (()=>{'use strict';const $=id=>document.getElementById(id);if(typeof L==='undefined'){$('status').textContent='Не загрузилась библиотека Leaflet. Требуется интернет.';return}
 const map=L.map('map',{preferCanvas:false}).setView([49.0,31.0],6);let tile=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}).addTo(map);let project=null,layers=[],timer=null,current=null;
+
+// ATLAS 0773 fictional animation overlay, read-only.
+const motionOverlay773=L.layerGroup().addTo(map);let motionCurrent773=[],motionProgress773=0;
+let motionEnabled774=true;
+const motionSwitch774=document.createElement('label');
+motionSwitch774.style.cssText='position:fixed;right:19px;bottom:117px;z-index:1200;padding:8px 11px;border-radius:9px;background:#152536ee;border:1px solid #57738b;color:#eee;font:12px system-ui;cursor:pointer';
+motionSwitch774.innerHTML='<input type="checkbox" checked style="vertical-align:middle"> Анимации';
+document.body.append(motionSwitch774);
+motionSwitch774.querySelector('input').onchange=e=>{motionEnabled774=e.target.checked;motionOverlay773.getLayers().forEach(l=>{const el=l.getElement?.();if(el?.classList)el.classList.toggle('atlas-effects-paused774',!motionEnabled774)});motionRender773();};
+
+function atlasAftermathHTML779(x){
+ const preset=['combined','dust','smoke','ring','mark','burning'].includes(x.afPreset)?x.afPreset:'combined';
+ const duration=Math.max(1,Math.min(20,Number(x.afDuration)||6));
+ const strength=Math.max(.1,Math.min(1,Number(x.afIntensity)||.7));
+ return '<span class="atlas-af779" data-preset="'+preset+'" data-repeat="'+(x.afRepeat?'1':'0')+'" data-mark="'+(x.afMark?'1':'0')+'" style="--duration:'+duration+'s;--strength:'+strength+'"><i class="af-mark"></i><i class="af-ring"></i><i class="af-dust"></i><i class="af-smoke"></i><i class="af-flash"></i><i class="af-glow"></i><i class="af-plume0"></i><i class="af-plume1"></i><i class="af-plume2"></i></span>';
+}
+function motionRender773(){
+ motionOverlay773.clearLayers();motionCurrent773=[];
+ if(!project||atlasMode739==='political'||!motionEnabled774){motionSwitch774.style.display=atlasMode739==='political'?'none':'block';return;}
+ motionSwitch774.style.display='block';
+ for(const e of (project.motionEffects||[]).slice(0,100)){
+  if(!e||!Array.isArray(e.points)||!['route','marker','arrow','pulse','image','aftermath'].includes(e.kind))continue;
+  const pts=e.points.filter(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite));if(!pts.length)continue;
+  if(['route','arrow'].includes(e.kind)&&pts.length>1){
+   L.polyline(pts,{color:e.kind==='arrow'?'#ffe09a':'#ffc66a',weight:e.kind==='arrow'?4:2,dashArray:e.kind==='arrow'?null:'5 8',interactive:false}).addTo(motionOverlay773);
+   const dot=L.circleMarker(pts[0],{radius:e.kind==='arrow'?7:5,fillColor:'#ffd272',fillOpacity:1,color:'#fff',weight:1,interactive:false}).addTo(motionOverlay773);
+   motionCurrent773.push({pts,dot,speed:Math.max(.02,Math.min(2,Number(e.speed)||.25))});
+  }else if(e.kind==='aftermath'){
+   const size=Math.max(40,Math.min(350,Number(e.afSize)||150));
+   L.marker(pts[0],{interactive:false,icon:L.divIcon({className:'',html:atlasAftermathHTML779(e),iconSize:[size,size],iconAnchor:[size/2,size/2]})}).addTo(motionOverlay773);
+  }else if(e.kind==='image'){
+   if(typeof e.image!=='string'||!/^data:image\/(png|webp|jpeg);base64,[A-Za-z0-9+/=]+$/.test(e.image)||e.image.length>1400000)continue;
+   const size=Math.max(30,Math.min(360,Number(e.imageSize)||120));const opacity=Math.max(.1,Math.min(1,Number(e.imageOpacity)||.8));
+   const anim=['fade','pulse','grow','in','out'].includes(e.imageAnimation)?e.imageAnimation:'none';const duration=Math.max(1,Math.min(20,Number(e.imageDuration)||4));
+   const html='<img class="atlas-img0777" data-anim="'+anim+'" alt="" draggable="false" src="'+e.image+'" style="width:'+size+'px;height:'+size+'px;--atlas-opacity:'+opacity+';--atlas-duration:'+duration+'s">';
+   L.marker(pts[0],{interactive:false,icon:L.divIcon({className:'',html,iconSize:[size,size],iconAnchor:[size/2,size/2]})}).addTo(motionOverlay773);
+  }else if(['marker','pulse'].includes(e.kind)){
+   const safe=String(e.symbol||'◆').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+   const html=e.kind==='pulse'?'<span class="atlas-pulse774">✦</span>':'<span style="background:#172433e8;color:#fff;border:1px solid #ffcc77;border-radius:7px;padding:4px 8px;font-size:17px">'+safe+'</span>';
+   L.marker(pts[0],{interactive:false,icon:L.divIcon({className:'',html,iconSize:[40,28]})}).addTo(motionOverlay773);
+  }
+ }
+}
+setInterval(()=>{if(document.hidden||!motionEnabled774||!motionCurrent773.length)return;motionProgress773+=.02;for(const x of motionCurrent773){const f=(motionProgress773*x.speed)%(x.pts.length-1),i=Math.floor(f),a=x.pts[i],b=x.pts[i+1],t=f-i;x.dot.setLatLng([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]);}},50);
+
 let atlasMode739='political';try{const m=localStorage.getItem('atlas-view-mode-0739');if(['political','military','combined'].includes(m))atlasMode739=m}catch{}
 function syncMode739(){document.body.classList.toggle('atlas-frontline-0760',atlasMode739==='military');document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>{const active=b.dataset.mode===atlasMode739;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))})}
 document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>b.addEventListener('click',()=>{atlasMode739=b.dataset.mode;try{localStorage.setItem('atlas-view-mode-0739',atlasMode739)}catch{}syncMode739();syncMilitaryUI740();paint()}));syncMode739();
@@ -312,7 +422,38 @@ try{const saved=localStorage.getItem('atlas-view-country-names-v0726');if(saved!
 const labelsOverlay=L.layerGroup().addTo(map);map.createPane('atlasReferenceLabels');map.getPane('atlasReferenceLabels').style.zIndex=650;map.getPane('atlasReferenceLabels').style.pointerEvents='none';const placeLabels=L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{pane:'atlasReferenceLabels',maxZoom:19,opacity:1,attribution:'Labels © Esri',crossOrigin:true}).addTo(map);let addingName=false;const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const clone=o=>JSON.parse(JSON.stringify(o));const safeFeatures=fs=>Array.isArray(fs)?fs.filter(f=>f&&f.type==='Feature'&&f.geometry&&f.properties):[];
 function status(s){$('status').textContent=s}function valid(data){return data&&data.format==='ATLAS'&&Array.isArray(data.features)&&Array.isArray(data.groups)}
 function groups(){return project?.groups||[]}
-function displayFeatures(){const fs=safeFeatures(current||project?.features),result=[];const control=f=>f.properties.isArmy&&['occupation','liberation','contested'].includes(f.properties.armyMode)&&['Polygon','MultiPolygon'].includes(f.geometry.type);for(let i=0;i<fs.length;i++){let f=fs[i];if(!control(f)){result.push(f);continue}let parts=[clone(f)];if(typeof turf!=='undefined'){for(let j=i+1;j<fs.length&&parts.length;j++){const newer=fs[j];if(!control(newer)||newer.properties.armyMode===f.properties.armyMode)continue;const next=[];for(const piece of parts){try{if(!turf.booleanIntersects(piece,newer)){next.push(piece);continue}const diff=turf.difference(piece,newer);if(diff){if(diff.geometry.type==='MultiPolygon')diff.geometry.coordinates.forEach(coords=>next.push({...clone(piece),geometry:{type:'Polygon',coordinates:coords}}));else next.push({...clone(piece),geometry:diff.geometry})}}catch{next.push(piece)}}parts=next}}result.push(...parts)}return result}
+// V0772: fast, conservative bounding-box rejection before Turf boolean operations.
+const bboxCache0772=new WeakMap();
+function featureBBox0772(f){
+ if(!f||!f.geometry)return null;
+ let b=bboxCache0772.get(f);if(b)return b;
+ try{b=turf.bbox(f);if(b.every(Number.isFinite)){bboxCache0772.set(f,b);return b}}catch{}
+ return null;
+}
+function bboxOverlaps0772(a,b,pad=0){return !a||!b||!(a[2]+pad<b[0]||b[2]+pad<a[0]||a[3]+pad<b[1]||b[3]+pad<a[1]);}
+function displayFeatures(){
+ const fs=safeFeatures(current||project?.features),result=[];
+ const control=f=>f.properties.isArmy&&['occupation','liberation','contested'].includes(f.properties.armyMode)&&['Polygon','MultiPolygon'].includes(f.geometry.type);
+ const zones=fs.map(control),boxes=fs.map((f,i)=>zones[i]&&typeof turf!=='undefined'?featureBBox0772(f):null);
+ for(let i=0;i<fs.length;i++){
+  const f=fs[i];if(!zones[i]){result.push(f);continue}
+  let parts=[f];
+  if(typeof turf!=='undefined'){
+   const candidates=[];
+   for(let j=i+1;j<fs.length;j++)if(zones[j]&&fs[j].properties.armyMode!==f.properties.armyMode&&bboxOverlaps0772(boxes[i],boxes[j]))candidates.push(j);
+   if(candidates.length){parts=[clone(f)];for(const j of candidates){if(!parts.length)break;
+    const newer=fs[j],newerBox=boxes[j],next=[];
+    for(const piece of parts){try{
+      if(!bboxOverlaps0772(featureBBox0772(piece),newerBox)||!turf.booleanIntersects(piece,newer)){next.push(piece);continue}
+      const diff=turf.difference(piece,newer);
+      if(diff){if(diff.geometry.type==='MultiPolygon')diff.geometry.coordinates.forEach(coords=>next.push({...clone(piece),geometry:{type:'Polygon',coordinates:coords}}));else next.push({...clone(piece),geometry:diff.geometry})}
+     }catch{next.push(piece)}}parts=next;
+   }}
+  }
+  result.push(...parts)
+ }
+ return result
+}
 
 // V0752: Source-aligned frontline configuration. Same width and deterministic
 // contour displacement as Editor 0749. Settings are visual-only and never edit .atlas.
@@ -443,6 +584,11 @@ function militaryFeatures750(){
   const blue=colors.filter(f=>f.properties.armyMode==='liberation');
   for(const r of red){for(const b of blue){
    try{
+    // Two width/2 buffers cannot overlap if original boxes are this far apart.
+    const rb=featureBBox0772(r),bb=featureBBox0772(b);
+    const maxLatitude=Math.max(Math.abs(rb?.[1]||0),Math.abs(rb?.[3]||0),Math.abs(bb?.[1]||0),Math.abs(bb?.[3]||0));
+    const approxPad=width/(111*Math.max(.18,Math.cos(maxLatitude*Math.PI/180)))*1.5;
+    if(!bboxOverlaps0772(rb,bb,approxPad))continue;
     const ra=turf.buffer(r,width/2,{units:'kilometers',steps:8});
     const ba=turf.buffer(b,width/2,{units:'kilometers',steps:8});
     const x=turf.bbox(ra),y=turf.bbox(ba);
@@ -510,7 +656,7 @@ function showArmyInfo741(f,g){
 document.getElementById('atlasArmyClose741').addEventListener('click',hideArmyInfo741);
 document.querySelectorAll('#dualMode739 [data-mode]').forEach(b=>b.addEventListener('click',hideArmyInfo741));
 document.getElementById('date').addEventListener('change',hideArmyInfo741);
-function paint(){syncMilitaryUI740();const start729=performance.now();for(const l of layers)map.removeLayer(l);layers=[];if(!project)return;const fs=militaryFeatures750();lastDrawn729=fs.length;lastVertices729=fs.reduce((n,f)=>n+countVertices729(f),0);const source729=current||project.features;let outlineGroupCache729=outlineCache729.get(source729);if(!outlineGroupCache729){outlineGroupCache729=new Map();outlineCache729.set(source729,outlineGroupCache729)}for(const f of fs){const p=f.properties||{},geo=f.geometry,g=groups().find(x=>x.id===p.groupId);if(g?.visible===false||project.ui?.hidden?.includes(p.id))continue;if(p.isArmy&&(atlasMode739==='political'||!$('army').checked))continue;if(p.isArmy&&p.armyMode==='contested'&&!militaryPrefs740.gray)continue;if(!p.isArmy&&['Polygon','MultiPolygon'].includes(geo.type)&&atlasMode739==='military')continue;if(!p.isArmy&&!p.atlasCity616&&!p.atlasUnit622&&!$('regions').checked)continue;if((p.atlasCity616||p.atlasUnit622)&&!$('units').checked)continue;
+function paint(){motionRender773();syncMilitaryUI740();const start729=performance.now();for(const l of layers)map.removeLayer(l);layers=[];if(!project)return;const fs=militaryFeatures750();lastDrawn729=fs.length;lastVertices729=fs.reduce((n,f)=>n+countVertices729(f),0);const source729=current||project.features;let outlineGroupCache729=outlineCache729.get(source729);if(!outlineGroupCache729){outlineGroupCache729=new Map();outlineCache729.set(source729,outlineGroupCache729)}for(const f of fs){const p=f.properties||{},geo=f.geometry,g=groups().find(x=>x.id===p.groupId);if(g?.visible===false||project.ui?.hidden?.includes(p.id))continue;if(p.isArmy&&(atlasMode739==='political'||!$('army').checked))continue;if(p.isArmy&&p.armyMode==='contested'&&!militaryPrefs740.gray)continue;if(!p.isArmy&&['Polygon','MultiPolygon'].includes(geo.type)&&atlasMode739==='military')continue;if(!p.isArmy&&!p.atlasCity616&&!p.atlasUnit622&&!$('regions').checked)continue;if((p.atlasCity616||p.atlasUnit622)&&!$('units').checked)continue;
  const army=p.isArmy,color=p.liberationTint628==='blue'&&p.armyMode==='liberation'?'#358ce8':p.armyMode==='occupation'?'#d94c4c':p.armyMode==='liberation'?'#55bfa5':p.armyMode==='contested'?'#929aa6':p.color||'#e0bb72';const style=army?{color:p.armyMode==='front'?p.color||'#ffcf69':color,weight:p.armyMode==='front'?Number(p.frontWidth622||3)*militaryPrefs740.front/100:.8,fillColor:color,fillOpacity:p.armyMode==='front'?0:p.armyMode==='occupation'?militaryPrefs740.occ/100:p.armyMode==='liberation'?militaryPrefs740.lib/100:.62,dashArray:p.frontDash622||null}:{color:'#ffffff',weight:(g&&g.id!=='none'?0:0.8),fillColor:p.color||g?.color||'#4d8aaa',fillOpacity:Number(p.opacity??.34)};
  try{const layer=L.geoJSON(f,{style,pointToLayer:(feature,ll)=>L.circleMarker(ll,{radius:p.atlasCity616?6:9,color:'#f4ffff',weight:1.5,fillColor:p.color||'#48c4ba',fillOpacity:1})}).addTo(map);layer.bindPopup('<b>'+esc(p.name||'Объект')+'</b><div>'+esc(g?.name||'')+'</div>'+(p.description631?'<p>'+esc(p.description631)+'</p>':''));if(p.isArmy){layer.on('click',e=>{if(atlasMode739==='political')return;try{L.DomEvent.stopPropagation(e)}catch{}showArmyInfo741(f,g)});}if(g&&g.id!=='none'&&!p.isArmy&&['Polygon','MultiPolygon'].includes(geo.type)){layer.on('click',()=>{showCountry727(g);try{map.closePopup()}catch{}})}if(atlasMode739!=='military'&&$('showFlags713').checked&&(p.flagImage||g?.flag)&&['Polygon','MultiPolygon'].includes(geo.type)){layer.eachLayer(child=>{const path=child._path;if(!path)return;const svg=path.ownerSVGElement;if(!svg)return;const ns='http://www.w3.org/2000/svg',defs=svg.querySelector('defs')||document.createElementNS(ns,'defs');if(!defs.parentNode)svg.insertBefore(defs,svg.firstChild);const pattern=document.createElementNS(ns,'pattern'),img=document.createElementNS(ns,'image'),id='avflag'+Math.random().toString(36).slice(2);pattern.setAttribute('id',id);pattern.setAttribute('patternUnits','objectBoundingBox');pattern.setAttribute('patternContentUnits','objectBoundingBox');pattern.setAttribute('width','1');pattern.setAttribute('height','1');img.setAttribute('href',p.flagImage||g?.flag);img.setAttribute('x','0');img.setAttribute('y','0');img.setAttribute('width','1');img.setAttribute('height','1');img.setAttribute('preserveAspectRatio','none');pattern.append(img);defs.append(pattern);path.setAttribute('fill','url(#'+id+')');path.setAttribute('fill-opacity',String(p.flagOpacity??g?.flagOpacity??.65))})}layers.push(layer)}catch(e){console.warn('ATLAS View: объект не отображён',e)}
  }
@@ -576,7 +722,7 @@ function setup(options={}){
 }
 function apply(data,origin,options={}){
  if(!valid(data)){status('Файл не похож на проект ATLAS (.atlas)');return false}
- project=data;setup(options);$('liveLabel').textContent=origin;return true;
+ project=data;setup(options);motionRender773();$('liveLabel').textContent=origin;return true;
 }
 async function readSharedEditor(){
  // 0715: the canonical Editor document is in IndexedDB; localStorage may be a stale mirror.
@@ -815,6 +961,267 @@ refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
 // V0752: explicit live refresh, with the existing Sync button. Public snapshots
 // intentionally remain static until republished; no fake remote auto-sync.
 
+// ATLAS View 0783: atmospheric click effects. Purely decorative; not stored in .atlas.
+(function atlasTransientCombat782(){
+ const css=document.createElement('style');css.id='atlasCombatStyles782';css.textContent=`
+ .atlas-combat782{position:relative;width:100%;height:100%;pointer-events:none;overflow:visible;isolation:isolate;--glow:#ffba65}
+ .atlas-combat782 .combat-tracer782{position:absolute;left:50%;top:50%;height:2px;width:var(--travel);border-radius:5px;transform-origin:0 50%;background:linear-gradient(90deg,transparent 0%,var(--glow) 35%,#fffbe3 88%,#fff 100%);box-shadow:0 0 5px 1px var(--glow),0 0 13px var(--glow);opacity:0;animation:atlasTracer782 var(--speed) linear var(--delay) both;will-change:transform,opacity}
+ .atlas-combat782 .combat-flash782{position:absolute;left:50%;top:50%;width:var(--radius);height:var(--radius);border-radius:50%;background:radial-gradient(circle,#fffcef 0%,#ffeaa2 14%,var(--glow) 32%,transparent 72%);box-shadow:0 0 17px var(--glow);transform:translate(-50%,-50%) scale(.1);opacity:0;animation:atlasFlash782 .46s ease-out var(--delay) both}
+ .atlas-combat782 .combat-spark782{position:absolute;left:50%;top:50%;width:3px;height:3px;border-radius:50%;background:#fff5bb;box-shadow:0 0 7px var(--glow);opacity:0;animation:atlasSpark782 .48s ease-out var(--delay) both}
+ @keyframes atlasTracer782{0%{transform:translate(var(--x),var(--y)) rotate(var(--angle)) translateX(calc(-1 * var(--travel))) scaleX(.65);opacity:0}12%{opacity:.95}75%{opacity:.9}100%{transform:translate(var(--x),var(--y)) rotate(var(--angle)) translateX(var(--distance)) scaleX(.27);opacity:0}}
+ @keyframes atlasFlash782{0%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.15)}15%{opacity:1;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.25)}45%{opacity:.7}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.9)}}
+ @keyframes atlasSpark782{0%{opacity:0;transform:translate(var(--x),var(--y)) scale(.5)}25%{opacity:1}100%{opacity:0;transform:translate(calc(var(--x) + var(--dx)),calc(var(--y) + var(--dy))) scale(.2)}}
+ @media(prefers-reduced-motion:reduce){.atlas-combat782 *{animation:none!important;opacity:0!important}}
+
+/* ATLAS 0788: more realistic blast, smoke and debris; decorative only. */
+.atlas-combat782 .combat-tracer782{height:2px;background:linear-gradient(90deg,transparent 0%,color-mix(in srgb,var(--glow) 25%,transparent) 18%,color-mix(in srgb,var(--glow) 82%,#ffd18e) 58%,#fff6dc 92%,#fff 100%);box-shadow:0 0 3px 1px color-mix(in srgb,var(--glow) 55%,transparent),0 0 10px 2px color-mix(in srgb,var(--glow) 32%,transparent);filter:brightness(1.02)}
+.atlas-combat782 .combat-tracer782::after{content:"";position:absolute;right:-2px;top:-2px;width:6px;height:6px;border-radius:50%;background:#fff5dc;box-shadow:0 0 7px 2px color-mix(in srgb,var(--glow) 52%,transparent)}
+.atlas-combat782 .combat-flash782{background:radial-gradient(circle,#fff9ea 0%,#ffd99a 16%,color-mix(in srgb,var(--glow) 84%,#ffb26d) 34%,rgba(110,67,28,.20) 54%,transparent 72%);box-shadow:0 0 10px 2px color-mix(in srgb,var(--glow) 62%,transparent),0 0 22px color-mix(in srgb,var(--glow) 28%,transparent)}
+.atlas-combat782 .combat-spark782{width:2px;height:2px;box-shadow:0 0 6px 1px color-mix(in srgb,var(--glow) 58%,transparent);background:#ffdca0}
+.atlas-combat782 .combat-haze787{position:absolute;left:50%;top:50%;width:var(--radius);height:var(--radius);border-radius:50%;background:radial-gradient(circle,rgba(122,116,108,.30),rgba(88,89,92,.17) 48%,transparent 74%);filter:blur(7px);opacity:0;animation:atlasHaze787 1.8s ease-out var(--delay) both}
+.atlas-combat782 .combat-smoke788{position:absolute;left:50%;top:50%;width:var(--radius);height:calc(var(--radius) * 1.08);border-radius:46% 54% 48% 52%;background:radial-gradient(ellipse at 50% 72%,rgba(55,55,55,.78) 0%,rgba(72,72,71,.66) 25%,rgba(101,97,92,.46) 47%,rgba(146,136,123,.24) 64%,transparent 82%);filter:blur(10px);opacity:0;animation:atlasSmoke788 2.55s cubic-bezier(.18,.35,.28,1) var(--delay) both}
+.atlas-combat782 .combat-dust788{position:absolute;left:50%;top:50%;width:var(--radius);height:calc(var(--radius) * .52);border-radius:50%;background:radial-gradient(ellipse at 50% 55%,rgba(124,105,83,.52) 0%,rgba(147,126,101,.36) 35%,rgba(155,137,116,.17) 58%,transparent 78%);filter:blur(6px);opacity:0;animation:atlasDust788 1.55s ease-out var(--delay) both}
+@keyframes atlasTracer782{0%{transform:translate(var(--x),var(--y)) rotate(var(--angle)) translateX(calc(-1 * var(--travel))) scaleX(.72);opacity:0}10%{opacity:.96}72%{opacity:.72}100%{transform:translate(var(--x),var(--y)) rotate(var(--angle)) translateX(var(--distance)) scaleX(.32);opacity:0}}
+@keyframes atlasFlash782{0%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.10)}11%{opacity:1;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.18)}28%{opacity:.62;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.92)}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.72)}}
+@keyframes atlasSpark782{0%{opacity:0;transform:translate(var(--x),var(--y)) scale(.55)}18%{opacity:1}100%{opacity:0;transform:translate(calc(var(--x) + var(--dx)),calc(var(--y) + var(--dy))) scale(.18)}}
+@keyframes atlasHaze787{0%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-46% + var(--y))) scale(.28)}22%{opacity:.42}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-88% + var(--y))) scale(1.85)}}
+@keyframes atlasSmoke788{0%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-10% + var(--y))) scale(.22)}16%{opacity:.54}42%{opacity:.74;transform:translate(calc(-50% + var(--x) + var(--drift)),calc(-58% + var(--y))) scale(.86)}100%{opacity:0;transform:translate(calc(-50% + var(--x) + calc(var(--drift) * 1.3)),calc(-124% + var(--y))) scale(var(--scale,1.7))}}
+@keyframes atlasDust788{0%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.22,.12)}20%{opacity:.58}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-30% + var(--y))) scale(1.78,.88)}}
+.atlas-blast-marker781 .atlas-burst787{position:absolute;inset:0;pointer-events:none;--explosion-light:#ffc475}
+.atlas-blast-marker781 .atlas-burst787 .burst-core787{position:absolute;inset:28%;border-radius:50%;background:radial-gradient(circle,#fffaf0 0%,#ffe3b3 14%,#ffb56a 28%,rgba(183,95,35,.38) 47%,rgba(71,42,20,.10) 63%,transparent 76%);filter:blur(3px);animation:atlasBurstCore787 var(--burst-time,6s) ease-out both}
+.atlas-blast-marker781 .atlas-burst787 .burst-wave787{position:absolute;inset:37%;border:2px solid rgba(244,212,167,.86);border-radius:50%;box-shadow:0 0 10px rgba(197,141,84,.35);animation:atlasBurstWave787 var(--burst-time,6s) ease-out both}
+.atlas-blast-marker781 .atlas-burst787 .burst-ember787{position:absolute;top:50%;left:50%;width:var(--ember-size,2.6px);height:var(--ember-size,2.6px);border-radius:50%;background:#ffd39a;box-shadow:0 0 5px rgba(255,159,79,.70);animation:atlasBurstEmber787 var(--burst-time,6s) ease-out both}
+.atlas-blast-marker781 .atlas-burst787 .burst-haze787{position:absolute;inset:31%;border-radius:50%;filter:blur(10px);background:radial-gradient(circle,rgba(82,84,88,.60),rgba(111,103,93,.27) 52%,transparent 76%);animation:atlasBurstHaze787 var(--burst-time,6s) ease-out both}
+.atlas-blast-marker781 .atlas-burst787 .burst-smoke788{position:absolute;left:50%;top:52%;width:38%;height:34%;border-radius:48% 52% 44% 56%;background:radial-gradient(ellipse at 50% 70%,rgba(49,49,49,.78) 0%,rgba(72,72,71,.65) 28%,rgba(115,107,97,.34) 55%,transparent 80%);filter:blur(9px);opacity:0;animation:atlasBurstSmoke788 var(--burst-time,6s) cubic-bezier(.19,.38,.28,.98) both;animation-delay:var(--delay,90ms)}
+.atlas-blast-marker781 .atlas-burst787 .burst-dust788{position:absolute;left:50%;top:58%;width:44%;height:18%;border-radius:50%;background:radial-gradient(ellipse at 50% 50%,rgba(118,100,78,.52) 0%,rgba(145,126,102,.34) 40%,transparent 76%);filter:blur(5px);opacity:0;animation:atlasBurstDust788 var(--burst-time,6s) ease-out both;animation-delay:var(--delay,50ms)}
+@keyframes atlasBurstCore787{0%{opacity:0;transform:scale(.10)}2%{opacity:1;transform:scale(1.14)}6%{opacity:.72;transform:scale(.95)}18%,100%{opacity:0;transform:scale(1.42)}}
+@keyframes atlasBurstWave787{0%{opacity:0;transform:scale(.14)}3%{opacity:.95}17%{opacity:0;transform:scale(2.9)}100%{opacity:0;transform:scale(2.9)}}
+@keyframes atlasBurstEmber787{0%{opacity:0;transform:translate(-50%,-50%) scale(.40)}4%{opacity:1}24%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.20)}100%{opacity:0}}
+@keyframes atlasBurstHaze787{0%,5%{opacity:0;transform:translateY(5%) scale(.24)}18%{opacity:.58}64%{opacity:.24}100%{opacity:0;transform:translateY(-32%) scale(1.78)}}
+@keyframes atlasBurstSmoke788{0%{opacity:0;transform:translate(calc(-50% + var(--sx,0px)),0) scale(.28)}16%{opacity:.46}48%{opacity:.72;transform:translate(calc(-50% + var(--sx,0px)),calc(-1 * var(--rise,28px))) scale(.92)}100%{opacity:0;transform:translate(calc(-50% + var(--sx,0px)),calc(-1.55 * var(--rise,28px))) scale(var(--scale,1.62))}}
+@keyframes atlasBurstDust788{0%{opacity:0;transform:translate(-50%,-50%) scale(.24,.14)}18%{opacity:.44}100%{opacity:0;transform:translate(-50%,-32%) scale(1.9,.84)}}
+.atlas-blast-marker781.atlas-quality-low787 .burst-ember787:nth-of-type(n+5),.atlas-blast-marker781.atlas-quality-low787 .burst-haze787{display:none}
+.atlas-blast-marker781.atlas-quality-low787 .burst-smoke788:nth-of-type(n+2){display:none}
+.atlas-blast-marker781.atlas-quality-high787 .burst-core787{filter:blur(4px) brightness(1.08)}
+.atlas-blast-marker781.atlas-quality-high787 .burst-smoke788{filter:blur(11px)}
+@media(prefers-reduced-motion:reduce){.atlas-burst787,.atlas-combat782 .combat-haze787,.atlas-combat782 .combat-smoke788,.atlas-combat782 .combat-dust788{display:none!important}}
+
+/* ATLAS 0789 — procedural cinematic smoke columns, wind dispersion and ground shadow. */
+.atlas-blast-marker781 .atlas-burst787 .burst-wave787 { display:none; }
+.atlas-blast-marker781.atlas-wave-on789 .atlas-burst787 .burst-wave787 { display:block; }
+.atlas-blast-marker781 .atlas-af779 .af-ring { display:none!important; }
+.atlas-blast-marker781.atlas-wave-on789 .atlas-af779 .af-ring { display:block!important; }
+.atlas-blast-marker781 .atlas-af779 .af-smoke { opacity:.05; }
+.atlas-blast-marker781 .atlas-burst787 .burst-smoke788 { display:none; }
+.atlas-blast-marker781 .atlas-burst787 .burst-haze787 { display:none; }
+.atlas-blast-marker781 .atlas-burst787 .burst-core787 { transform-origin:center; }
+.atlas-blast-marker781.atlas-type-artillery789 .burst-core787 { filter:blur(3px) brightness(.89); }
+.atlas-blast-marker781.atlas-type-rocket789 .burst-core787 { filter:blur(4px) brightness(1.30); }
+.atlas-blast-marker781.atlas-type-airburst789 .burst-dust788 { display:none; }
+.atlas-blast-marker781.atlas-type-small789 .burst-core787 { filter:blur(2px) brightness(.87); }
+.atlas-real789 {position:absolute;inset:0;pointer-events:none;isolation:isolate;--life789:6s;--windx789:28px;--windy789:-10px;}
+.atlas-real789 .smoke-shadow789 {position:absolute;left:50%;top:58%;width:46%;height:20%;border-radius:50%;
+ background:radial-gradient(ellipse,rgba(12,15,18,.62),rgba(23,23,26,.32) 42%,transparent 74%);
+ filter:blur(8px);transform-origin:center;animation:atlasShadow789 var(--life789) ease-out both;z-index:0;}
+.atlas-real789 .smoke-puff789{position:absolute;left:50%;top:52%;width:var(--puffsize789,35%);height:var(--puffsize789,35%);
+ border-radius:43% 57% 53% 47% / 52% 40% 60% 48%;
+ background:radial-gradient(ellipse at 46% 60%,rgba(43,43,45,.87),rgba(69,69,71,.80) 31%,rgba(102,99,94,.59) 55%,rgba(144,134,119,.27) 73%,transparent 87%);
+ filter:blur(var(--blur789,7px));opacity:0;transform-origin:50% 67%;
+ animation:atlasPuff789 var(--life789) cubic-bezier(.17,.35,.35,1) var(--delay789,0s) both;
+ z-index:2;}
+.atlas-real789 .smoke-puff789:nth-child(3n){background:radial-gradient(ellipse at 52% 64%,rgba(61,58,55,.79),rgba(96,89,82,.7) 36%,rgba(134,118,101,.37) 65%,transparent 86%);}
+.atlas-real789 .smoke-puff789:nth-child(4n){background:radial-gradient(ellipse at 52% 62%,rgba(35,37,40,.86),rgba(67,70,73,.70) 40%,rgba(115,111,102,.31) 72%,transparent 88%);}
+.atlas-real789 .smoke-ground789{position:absolute;left:50%;top:57%;width:52%;height:17%;border-radius:50%;opacity:0;
+ background:radial-gradient(ellipse,rgba(132,114,94,.50),rgba(154,139,121,.30) 45%,transparent 78%);filter:blur(6px);
+ animation:atlasGround789 var(--life789) ease-out both;z-index:1;}
+@keyframes atlasPuff789{
+ 0%{opacity:0;transform:translate(calc(-50% + var(--localx789,0px)),14%) scale(.20,.18)}
+ 11%{opacity:.80}
+ 28%{opacity:.91;transform:translate(calc(-50% + var(--localx789,0px) + var(--wind25x789)),-35%) scale(.95,1.06)}
+ 66%{opacity:.68;transform:translate(calc(-50% + var(--localx789,0px) + var(--wind71x789)),calc(-95% + var(--wind45y789))) scale(1.44,1.65)}
+ 100%{opacity:0;transform:translate(calc(-50% + var(--localx789,0px) + var(--windx789)),calc(-128% + var(--windy789))) scale(1.9,2.0)}
+}
+@keyframes atlasShadow789{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.24,.32)}
+ 17%{opacity:.74;transform:translate(-50%,-50%) scale(.86,.7)}
+ 63%{opacity:.54;transform:translate(calc(-50% + var(--wind38x789)),-50%) scale(1.55,.85)}
+ 100%{opacity:0;transform:translate(calc(-50% + var(--wind70x789)),-50%) scale(2.05,1)}
+}
+@keyframes atlasGround789{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+ 12%{opacity:.67}
+ 72%{opacity:.28;transform:translate(-50%,-50%) scale(1.72,.98)}
+ 92%{opacity:.10;transform:translate(-50%,-50%) scale(1.94,1.03)}
+ 100%{opacity:0;transform:translate(-50%,-50%) scale(2.06,1.06)}
+}
+.atlas-blast-marker781.atlas-quality-low787 .smoke-puff789:nth-child(n+5){display:none}
+.atlas-blast-marker781.atlas-type-airburst789 .smoke-ground789{display:none}
+.atlas-blast-marker781.atlas-type-airburst789 .smoke-shadow789{opacity:.35}
+.atlas-real789 .smoke-puff789,.atlas-real789 .smoke-shadow789,.atlas-real789 .smoke-ground789{animation-play-state:running}
+@media(prefers-reduced-motion:reduce){.atlas-real789{display:none!important}}
+
+/* 0790: distinct smoke signatures and staggered gusts; screen-space decoration only. */
+.atlas-blast-marker781.atlas-type-artillery789 .atlas-real789{--smoke-rise790:-42px}
+.atlas-blast-marker781.atlas-type-rocket789 .atlas-real789{--smoke-rise790:-104px}
+.atlas-blast-marker781.atlas-type-small789 .atlas-real789{--smoke-rise790:-24px}
+.atlas-blast-marker781.atlas-type-airburst789 .atlas-real789{--smoke-rise790:-55px}
+.atlas-blast-marker781 .atlas-af779 .af-smoke,.atlas-blast-marker781 .atlas-af779 .af-dust{display:none!important}
+.atlas-blast-marker781 .atlas-burst787 .burst-dust788{display:none}
+.atlas-real789 .smoke-puff789{width:var(--puffsize789,35%);height:var(--puffheight790,var(--puffsize789,35%));
+ border-radius:var(--shape790,46% 54% 51% 49% / 44% 57% 43% 56%);
+ background:radial-gradient(ellipse at var(--shade-x790,43%) 60%,rgba(39,40,42,.9) 0%,rgba(65,66,67,.83) 24%,rgba(94,91,87,.69) 47%,rgba(132,126,116,.40) 66%,rgba(159,150,136,.13) 79%,transparent 88%);
+ filter:blur(var(--blur789,5px));animation:atlasPuff790 var(--life789) cubic-bezier(.16,.4,.29,1) var(--delay789,0s) both;}
+.atlas-real789 .smoke-puff789:nth-child(3n){background:radial-gradient(ellipse at 56% 59%,rgba(62,59,56,.88),rgba(91,85,78,.73) 35%,rgba(138,125,106,.45) 63%,transparent 88%)}
+.atlas-real789 .smoke-puff789:nth-child(4n){background:radial-gradient(ellipse at 43% 58%,rgba(32,34,38,.86),rgba(62,65,68,.76) 36%,rgba(124,121,114,.34) 69%,transparent 88%)}
+@keyframes atlasPuff790{
+ 0%{opacity:0;transform:translate(calc(-50% + var(--localx789,0px)),var(--starty790,12px)) rotate(var(--rotation790,0deg)) scale(.22,.19)}
+ 10%{opacity:var(--peak790,.84)}
+ 32%{opacity:var(--peak790,.84);transform:translate(calc(-50% + var(--localx789,0px) + var(--gust1x790,0px)),calc(var(--starty790,12px) + var(--rise1y790,-15px))) rotate(var(--rotation790,0deg)) scale(.84,1.02)}
+ 60%{opacity:.81;transform:translate(calc(-50% + var(--localx789,0px) + var(--gust2x790,0px)),calc(var(--starty790,12px) + var(--rise2y790,-35px))) rotate(var(--rotation790,0deg)) scale(1.18,1.38)}
+ 82%{opacity:.56;transform:translate(calc(-50% + var(--localx789,0px) + var(--gust3x790,0px)),calc(var(--starty790,12px) + var(--rise3y790,-51px))) rotate(var(--rotation790,0deg)) scale(1.55,1.72)}
+ 94%{opacity:.22;transform:translate(calc(-50% + var(--localx789,0px) + var(--gust4x790,0px)),calc(var(--starty790,12px) + var(--rise4y790,-63px))) rotate(var(--rotation790,0deg)) scale(1.88,1.92)}
+ 100%{opacity:0;transform:translate(calc(-50% + var(--localx789,0px) + var(--gust5x790,0px)),calc(var(--starty790,12px) + var(--rise5y790,-76px))) rotate(var(--rotation790,0deg)) scale(2.08,2.04)}
+}
+.atlas-real789 .smoke-ground789{width:var(--groundwidth790,52%);height:var(--groundheight790,17%);background:radial-gradient(ellipse,rgba(118,101,83,.68),rgba(153,135,109,.42) 42%,transparent 78%);animation:atlasGround789 var(--life789) ease-out both}
+.atlas-blast-marker781.atlas-type-artillery789 .smoke-ground789{width:82%;height:28%;filter:blur(9px)}
+.atlas-blast-marker781.atlas-type-rocket789 .smoke-ground789{width:48%;height:15%}
+.atlas-blast-marker781.atlas-type-artillery789 .burst-core787{inset:34%;filter:blur(3px) brightness(.75)}
+.atlas-blast-marker781.atlas-type-rocket789 .burst-core787{inset:20%;filter:blur(5px) brightness(1.3)}
+.atlas-blast-marker781.atlas-type-artillery789 .smoke-puff789{filter:blur(var(--blur789,6px)) saturate(.62)}
+.atlas-blast-marker781.atlas-type-rocket789 .smoke-puff789{filter:blur(var(--blur789,5px)) contrast(1.08)}
+.atlas-real789 .smoke-shadow789{width:var(--shadowwidth790,46%);height:var(--shadowheight790,20%);animation:atlasShadow789 var(--life789) ease-out both}
+.atlas-blast-marker781.atlas-type-artillery789 .smoke-shadow789{width:78%;height:26%}
+.atlas-blast-marker781.atlas-type-rocket789 .smoke-shadow789{width:42%;height:19%}
+
+
+
+ `;document.head.append(css);
+ const container=document.createElement('div');container.id='atlasBlastPanel781';container.style.cssText='position:fixed;bottom:64px;right:12px;z-index:3200;width:270px;max-width:calc(100vw - 24px);max-height:75vh;overflow:auto;background:#142337ed;border:1px solid #7390a1;border-radius:10px;padding:9px;color:#eef5ff;font:12px system-ui;box-shadow:0 8px 20px #0007';
+ container.innerHTML=`<button type="button" id="atlasBlastOpen783" style="width:100%;background:#203e54;color:white;border:1px solid #658398;border-radius:6px;padding:8px;cursor:pointer">✦ Клик-взрывы ▾</button><button type="button" id="atlasBlastToggle781" style="width:100%;background:#27445b;color:white;border:1px solid #658398;border-radius:6px;padding:8px;cursor:pointer">✦ Клик-взрывы: выключены</button>
+ <div id="atlasBlastSettings781" style="display:block;margin-top:8px">
+ <label>Эффект<select id="atlasBlastPreset781" style="width:100%;margin:4px 0 8px;background:#253d52;color:white"><option value="combined">Взрыв + пыль + дым</option><option value="dust">Пыль</option><option value="smoke">Облако дыма</option><option value="ring">Кольцо пыли</option><option value="burning">Дым горения (временный)</option><option value="tracers">✧ Трассеры</option><option value="flashes">✦ Вспышки боя</option><option value="battle">⚡ Бой: трассеры + вспышки</option></select></label>
+ <label>Тип взрыва<select id="atlasBlastType789" style="width:100%;margin:4px 0 8px;background:#253d52;color:white">
+ <option value="artillery">Артиллерийский · плотный пылевой дым</option>
+ <option value="rocket">Ракетный · мощная вспышка и высокий дым</option>
+ <option value="small">Малый · компактный дым</option>
+ <option value="airburst">Воздушный · дым без наземной пыли</option>
+ </select></label>
+ <label style="display:flex;align-items:center;gap:7px"><input type="checkbox" id="atlasBlastWave789"> Показать ударную волну</label>
+ <label style="display:flex;align-items:center;gap:7px"><input type="checkbox" id="atlasBlastShadow789" checked> Тень от столба дыма</label>
+ <small style="color:#a8c0d1">Направление рассеивания дыма выбирается случайно при каждом клике.</small>
+ <label>Длительность: <output id="atlasBlastTimeOut781">6</output> с<input id="atlasBlastTime781" type="range" min="2" max="20" value="6" style="width:100%"></label>
+ <label>Размер: <output id="atlasBlastSizeOut781">150</output> px<input id="atlasBlastSize781" type="range" min="60" max="300" value="150" style="width:100%"></label>
+ <label>Качество анимации<select id="atlasBlastQuality787" style="width:100%;margin:4px 0 8px;background:#253d52;color:white"><option value="medium">Среднее · баланс</option><option value="low">Низкое · быстрее</option><option value="high">Высокое · детальнее</option></select></label>
+
+ <div id="atlasCombatOptions782" style="display:none;border:1px solid #50667a;border-radius:8px;padding:8px;margin:6px 0">
+ <label>Плотность: <output id="atlasCombatDensityOut782">12</output><input id="atlasCombatDensity782" type="range" min="2" max="35" value="12" style="width:100%"></label>
+ <label>Скорость: <output id="atlasCombatSpeedOut782">60</output>%<input id="atlasCombatSpeed782" type="range" min="20" max="100" value="60" style="width:100%"></label>
+ <label>Направление: <output id="atlasCombatAngleOut782">0</output>°<input id="atlasCombatAngle782" type="range" min="0" max="359" value="0" style="width:100%"></label>
+ <label>Разброс: <output id="atlasCombatSpreadOut782">65</output>°<input id="atlasCombatSpread782" type="range" min="0" max="180" value="65" style="width:100%"></label>
+ <label>Цвет трассеров<select id="atlasCombatColor782" style="width:100%;margin:4px 0 6px;background:#253d52;color:#fff"><option value="gold">Жёлто-оранжевый</option><option value="red">Красный</option><option value="white">Белый</option><option value="green">Зелёный (стилизация)</option></select></label>
+ <small style="color:#aac3d3">Направление задаётся на экране карты; визуальные эффекты не моделируют реальную баллистику.</small></div>
+ <p style="margin:7px 0;color:#c1d2df">Кликай по карте — эффекты исчезают сами и не записываются в проект.</p>
+ <button type="button" id="atlasBlastClear781" style="width:100%;padding:5px">Очистить временные эффекты</button></div>`;
+ document.body.append(container);
+ const $=id=>document.getElementById(id),layers=L.layerGroup().addTo(map),active=new Map();let enabled=false;
+ const button=$('atlasBlastToggle781'),settings=$('atlasBlastSettings781'),presetSelect=$('atlasBlastPreset781');
+ $('atlasBlastOpen783').onclick=()=>{const visible=settings.style.display!=='none';settings.style.display=visible?'none':'block';$('atlasBlastOpen783').textContent='✦ Клик-взрывы '+(visible?'▸':'▾');};
+ button.onclick=()=>{enabled=!enabled;button.textContent='✦ Клик-взрывы: '+(enabled?'включены':'выключены');button.style.background=enabled?'#31765f':'#27445b';map.getContainer().style.cursor=enabled?'crosshair':'';};
+ const combatModes=new Set(['tracers','flashes','battle']);
+ presetSelect.onchange=()=>{$('atlasCombatOptions782').style.display=combatModes.has(presetSelect.value)?'block':'none'};
+ for(const [input,out] of [['atlasBlastTime781','atlasBlastTimeOut781'],['atlasBlastSize781','atlasBlastSizeOut781'],['atlasCombatDensity782','atlasCombatDensityOut782'],['atlasCombatSpeed782','atlasCombatSpeedOut782'],['atlasCombatAngle782','atlasCombatAngleOut782'],['atlasCombatSpread782','atlasCombatSpreadOut782']])$(input).oninput=()=>$(out).textContent=$(input).value;
+ function remove(id){const item=active.get(id);if(!item)return;clearTimeout(item.timer);layers.removeLayer(item.layer);active.delete(id)}
+ $('atlasBlastClear781').onclick=()=>{for(const id of [...active.keys()])remove(id)};
+ const random=(a,b)=>a+Math.random()*(b-a);
+ function combatHTML(preset,size,duration){
+  const density=Number($('atlasCombatDensity782').value),speed=Number($('atlasCombatSpeed782').value),angle=Number($('atlasCombatAngle782').value),spread=Number($('atlasCombatSpread782').value);
+  const glow=({gold:'#ffb15a',red:'#ff6c58',white:'#d8e2ee',green:'#a7e4ae'})[$('atlasCombatColor782').value]||'#ffb15a';
+  const root=document.createElement('div');root.className='atlas-combat782';root.style.setProperty('--glow',glow);
+  const make=(cls,vars)=>{const el=document.createElement('i');el.className=cls;for(const [k,v] of Object.entries(vars))el.style.setProperty('--'+k,v);root.append(el)};
+  const quality=$('atlasBlastQuality787').value, factor=quality==='low'?.55:quality==='high'?1.45:1;
+  const tracerCount=preset==='flashes'?0:Math.max(1,Math.round(density*.95*factor)),flashCount=preset==='tracers'?0:Math.max(2,Math.round(density*.68*factor));
+  const period=Math.max(.17,1.16-speed*.0092),windowMs=Math.max(0,(duration-0.65)*1000);
+  for(let i=0;i<tracerCount;i++){
+   const deg=angle+random(-spread,spread);
+   make('combat-tracer782',{x:random(-size*.18,size*.18).toFixed(0)+'px',y:random(-size*.16,size*.16).toFixed(0)+'px',angle:deg.toFixed(1)+'deg',travel:random(size*.16,size*.34).toFixed(0)+'px',distance:random(size*.24,size*.48).toFixed(0)+'px',delay:Math.round(random(0,windowMs))+'ms',speed:(period*random(.72,1.14)).toFixed(2)+'s'});
+  }
+  for(let i=0;i<flashCount;i++){
+   const x=random(-size*.32,size*.32),y=random(-size*.30,size*.30),delay=Math.round(random(0,windowMs)),flashRadius=random(10,quality==='high'?29:25);
+   make('combat-flash782',{x:x.toFixed(0)+'px',y:y.toFixed(0)+'px',radius:flashRadius.toFixed(0)+'px',delay:delay+'ms'});
+   make('combat-dust788',{x:x.toFixed(0)+'px',y:(y+random(3,10)).toFixed(0)+'px',radius:random(22,quality==='high'?64:52).toFixed(0)+'px',delay:(delay+30)+'ms'});
+   make('combat-smoke788',{x:x.toFixed(0)+'px',y:(y-random(0,5)).toFixed(0)+'px',radius:random(24,quality==='high'?62:50).toFixed(0)+'px',delay:(delay+70)+'ms',drift:random(-10,14).toFixed(0)+'px',scale:random(1.45,quality==='high'?2.18:1.92).toFixed(2)});
+   if(quality!=='low' || preset==='battle')make('combat-haze787',{x:x.toFixed(0)+'px',y:y.toFixed(0)+'px',radius:random(22,46).toFixed(0)+'px',delay:(delay+20)+'ms'});
+   const sparks=quality==='high'?4:(quality==='low'?2:3);
+   for(let j=0;j<sparks;j++)make('combat-spark782',{x:x.toFixed(0)+'px',y:y.toFixed(0)+'px',dx:random(-28,28).toFixed(0)+'px',dy:random(-26,24).toFixed(0)+'px',delay:(delay+Math.round(random(0,90)))+'ms'});
+  }
+  return root.outerHTML;
+ }
+
+ function enhanceBlast787(html,preset,size,duration){
+  if(preset==='burning'||preset==='mark')return html;
+  const q=$('atlasBlastQuality787').value,type=$('atlasBlastType789').value;
+  const wrap=document.createElement('div');wrap.style.cssText='position:relative;width:100%;height:100%;pointer-events:none';wrap.innerHTML=html;
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  const burst=document.createElement('div');burst.className='atlas-burst787';burst.style.setProperty('--burst-time',duration+'s');
+  const node=(parent,cls,vars={})=>{const n=document.createElement('i');n.className=cls;for(const [k,v] of Object.entries(vars))n.style.setProperty(k,v);parent.append(n)};
+  node(burst,'burst-core787');if($('atlasBlastWave789').checked)node(burst,'burst-wave787');
+  const amount=q==='low'?3:q==='high'?14:8;
+  for(let i=0;i<amount;i++){
+   const a=rand(0,Math.PI*2),r=size*rand(.09,type==='rocket'?.38:.26);
+   node(burst,'burst-ember787',{'--dx':(Math.cos(a)*r).toFixed(0)+'px','--dy':(Math.sin(a)*r).toFixed(0)+'px','--ember-size':rand(1.8,3.3).toFixed(1)+'px'});
+  }
+  wrap.append(burst);
+  const smoke=document.createElement('div');smoke.className='atlas-real789';const smokeLife=(duration*1.42);smoke.style.setProperty('--life789',smokeLife.toFixed(2)+'s');
+  const theta=rand(0,Math.PI*2),w=rand(size*.34,size*.66),wx=Math.cos(theta)*w,wy=Math.sin(theta)*w*.26;
+  const windVars={'--windx789':wx+'px','--windy789':wy+'px','--wind25x789':wx*.25+'px','--wind71x789':wx*.71+'px','--wind38x789':wx*.38+'px','--wind70x789':wx*.7+'px','--wind100x791':wx+'px','--wind45y789':wy*.45+'px'};
+  Object.entries(windVars).forEach(([k,v])=>smoke.style.setProperty(k,v));
+  if($('atlasBlastShadow789').checked)node(smoke,'smoke-shadow789');
+  if(type!=='airburst')node(smoke,'smoke-ground789');
+  const count=q==='low'?5:q==='high'?19:11;
+  const rocket=type==='rocket',art=type==='artillery',air=type==='airburst',small=type==='small';
+  const sizeFactor=small?.54:air?.82:rocket?1.18:1;
+  const rise=(rocket?-size*.88:art?-size*.32:air?-size*.58:-size*.21)*rand(.86,1.17);
+  const baseWidth=rocket?[19,36]:art?[38,69]:small?[16,30]:[23,42];
+  for(let i=0;i<count;i++){
+   const t=i/Math.max(1,count-1),spread=(art?size*.29:rocket?size*.12:size*.15);
+   const puff=rand(baseWidth[0],baseWidth[1])*sizeFactor;
+   const localx=rand(-spread,spread)+(rocket?Math.sin(t*3.2)*size*.06:0);
+   const starty=(art?size*.06:rocket?-size*.05:air?-size*.17:0)+rand(-size*.06,size*.08);
+   const riseOffset=rise*(rocket?.55+t*.7:art?.38+t*.38:.5+t*.5);
+   const gustStrength=rand(1.05,2.05),gustPhase=rand(-size*.24,size*.24),gust=wx*gustStrength;
+   const g1=gust*.22,g2=gust*.64+gustPhase*.42,g3=gust*.98+gustPhase*1.08,g4=gust*1.34+gustPhase*.92,g5=gust*1.62+gustPhase*1.15;
+   const style={'--puffsize789':puff.toFixed(1)+'%','--puffheight790':(puff*(rocket?rand(1.22,1.57):art?rand(.65,.95):rand(.84,1.25))).toFixed(1)+'%',
+     '--blur789':(q==='low'?5:rand(3.2,7.5)).toFixed(1)+'px','--delay789':(t*(rocket?.22:art?.13:.2)).toFixed(2)+'s',
+     '--localx789':localx.toFixed(1)+'px','--starty790':starty.toFixed(1)+'px','--rotation790':rand(-21,21).toFixed(1)+'deg',
+     '--shape790':`${rand(36,54).toFixed(0)}% ${rand(45,64).toFixed(0)}% ${rand(40,62).toFixed(0)}% ${rand(35,56).toFixed(0)}% / ${rand(39,61).toFixed(0)}% ${rand(36,65).toFixed(0)}% ${rand(38,59).toFixed(0)}% ${rand(40,62).toFixed(0)}%`,
+     '--peak790':rand(.64,.96).toFixed(2),'--shade-x790':rand(36,64).toFixed(0)+'%',
+     '--gust1x790':g1.toFixed(1)+'px','--gust2x790':g2.toFixed(1)+'px','--gust3x790':g3.toFixed(1)+'px','--gust4x790':g4.toFixed(1)+'px','--gust5x790':g5.toFixed(1)+'px',
+     '--rise1y790':(riseOffset*.18+wy*.08).toFixed(1)+'px','--rise2y790':(riseOffset*.52+wy*.22).toFixed(1)+'px',
+     '--rise3y790':(riseOffset*.86+wy*.48).toFixed(1)+'px','--rise4y790':(riseOffset*1.18+wy*.78).toFixed(1)+'px','--rise5y790':(riseOffset*1.52+wy*1.08).toFixed(1)+'px'};
+   node(smoke,'smoke-puff789',style);
+  }
+  wrap.append(smoke);return wrap.innerHTML;
+ }
+
+ let n=0;
+ map.getContainer().addEventListener('click',ev=>{
+  if(!enabled)return;
+  if(ev.target instanceof Element && ev.target.closest('.leaflet-control, .leaflet-popup, button, input, select, label'))return;
+  ev.preventDefault();ev.stopImmediatePropagation();
+  const location=map.containerPointToLatLng(map.mouseEventToContainerPoint(ev));
+  const duration=Number($('atlasBlastTime781').value),size=Number($('atlasBlastSize781').value),preset=presetSelect.value;
+  if(active.size>=24)remove(active.keys().next().value);
+  const html=combatModes.has(preset)?combatHTML(preset,size,duration):enhanceBlast787(atlasAftermathHTML779({afPreset:preset,afDuration:duration,afIntensity:.75,afRepeat:false,afMark:false,afSize:size}),preset,size,duration);
+  const layer=L.marker(location,{interactive:false,keyboard:false,icon:L.divIcon({className:'atlas-blast-marker781 atlas-quality-'+$('atlasBlastQuality787').value+'787 atlas-type-'+$('atlasBlastType789').value+'789'+($('atlasBlastWave789').checked?' atlas-wave-on789':''),html,iconSize:[size,size],iconAnchor:[size/2,size/2]})}).addTo(layers);
+  const lifeMultiplier=combatModes.has(preset)?1:1.42; const id=++n,timer=setTimeout(()=>remove(id),duration*1000*lifeMultiplier);
+  active.set(id,{layer,timer});
+ },true);
 })();
+
+
+})();
+
+
+
 </script>
 </body></html>
