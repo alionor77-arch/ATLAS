@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View 0808 — Combat FX Controls</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View 0810 — Combat FX Controls</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -1623,7 +1623,11 @@ panel.innerHTML=`<button type="button" id="flightOpen801">🛸 Маршруты 
 <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightLine801" checked> Показывать линию маршрута</label>
 <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightArrivalBlast801" checked> Взрыв по прибытии</label>
 <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightArrivalAll801"> Взрыв для всех объектов, не только для ракеты</label>
+<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightMulti810"> Промежуточные точки маршрута</label>
+<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightTrail810" checked> Исчезающий след полёта</label>
+<div class="flhint801">Для маршрута с поворотами выбери несколько точек и нажми «Завершить маршрут».</div>
 <button type="button" id="flightPick801">Указать две точки на карте</button>
+<button type="button" id="flightFinish810">Завершить маршрут</button>
 <div class="flrow801"><button type="button" id="flightPause801">Пауза</button><button type="button" id="flightReplay801">Повторить</button></div>
 <button type="button" id="flightClear801">Очистить маршруты</button>
 <div style="margin-top:9px;padding-top:8px;border-top:1px solid #3b5568">
@@ -1681,10 +1685,22 @@ function clearImpacts803(){
 function setStatus(s){status.textContent=s}
 function point(ll){const p=map.latLngToContainerPoint(ll);return {x:p.x,y:p.y}}
 function update(){
-for(const item of routes){const a=point(item.start),b=point(item.end),x=a.x+(b.x-a.x)*item.progress,y=a.y+(b.y-a.y)*item.progress;
+for(const item of routes){const pts=(item.waypoints||[item.start,item.end]).map(point);
+ const lengths=pts.slice(1).map((p,i)=>Math.max(1,Math.hypot(p.x-pts[i].x,p.y-pts[i].y)));
+ const total=lengths.reduce((a,b)=>a+b,0);
+ let remaining=item.progress*total,segment=0;
+ while(segment<lengths.length-1&&remaining>lengths[segment]){remaining-=lengths[segment];segment++}
+ const a=pts[segment],b=pts[segment+1],t=Math.min(1,remaining/lengths[segment]);
+ const x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t;
  const ang=Math.atan2(b.y-a.y,b.x-a.x);
  item.dot.style.display=item.impacted?'none':'';item.dot.style.left=x+'px';item.dot.style.top=y+'px';item.dot.style.transform='translate(-50%,-50%) rotate('+ang+'rad)';
- if(item.line){const dx=b.x-a.x,dy=b.y-a.y;item.line.style.left=a.x+'px';item.line.style.top=a.y+'px';item.line.style.width=Math.hypot(dx,dy)+'px';item.line.style.transform='rotate('+Math.atan2(dy,dx)+'rad)';}
+ if(item.line){item.line.style.display=pts.length>2?'none':'';const first=pts[0],last=pts[pts.length-1];const dx=last.x-first.x,dy=last.y-first.y;item.line.style.left=first.x+'px';item.line.style.top=first.y+'px';item.line.style.width=Math.hypot(dx,dy)+'px';item.line.style.transform='rotate('+Math.atan2(dy,dx)+'rad)';}
+ if(item.trail){const dim=map.getSize();item.trail.setAttribute('viewBox',`0 0 ${dim.x} ${dim.y}`);
+ const full=[...pts.slice(0,segment+1),{x,y}].map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+ const trailPath=item.trail.querySelector('path');
+ trailPath.setAttribute('d','M'+full.replaceAll(' ',' L').replaceAll(',',' '));
+ trailPath.style.opacity=String(Math.max(.12,1-item.progress*.55));
+ }
  item.endDot.style.left=b.x+'px';item.endDot.style.top=b.y+'px';
  }
  for(const imp of impacts803){const ip=point(imp.latlng);imp.fx.style.left=ip.x+'px';imp.fx.style.top=ip.y+'px';}
@@ -1701,29 +1717,159 @@ function textureSVG801(type){
  return svgs[type]||svgs.quad;
  }
  function addDot(type,ghost=false){const el=document.createElement('div');el.className='atlas-flight-dot801';el.dataset.type=type;el.dataset.ghost=ghost?'1':'0';el.innerHTML=textureSVG801(type);overlay.append(el);return el}
-function addRoute(start,end){
-if(routes.length>=12){const old=routes.shift();old.dot.remove();old.line?.remove();old.endDot.remove()}
-const type=$('flightType801').value,speed=Number($('flightSpeed801').value),line=$('flightLine801').checked?document.createElement('div'):null;
+function addRoute(start,end,waypoints=null){
+if(routes.length>=12){const old=routes.shift();old.dot.remove();old.line?.remove();old.endDot.remove();old.trail?.remove()}
+const pts=waypoints&&waypoints.length>=2?waypoints.slice():[start,end];
+const type=$('flightType801').value,speed=Number($('flightSpeed801').value);
+const line=$('flightLine801').checked?document.createElement('div'):null;
 if(line){line.className='atlas-flight-line801';overlay.append(line)}
 const endDot=document.createElement('div');endDot.className='atlas-flight-end801';overlay.append(endDot);
-const item={id:++seq,start,end,speed,type,progress:0,dot:addDot(type),line,endDot};routes.push(item);update();setStatus('Маршрут добавлен. БПЛА на карте: '+routes.length)}
+const trail=$('flightTrail810').checked?document.createElement('svg'):null;
+if(trail){trail.classList.add('atlas-flight-trail810');trail.innerHTML='<path/>';overlay.append(trail)}
+const item={id:++seq,start:pts[0],end:pts[pts.length-1],waypoints:pts,speed,type,progress:0,dot:addDot(type),line,endDot,trail};
+routes.push(item);update();setStatus('Маршрут добавлен. Точек: '+pts.length+'. Объектов: '+routes.length)}
 function setPicking(on){picking=on;window.atlasSuppressBlast0804=!!on;if(!on&&pending){pending.el.remove();pending=null;}root.style.cursor=on?'crosshair':(document.getElementById('atlasBlastToggle781')?.textContent.includes('включены')?'crosshair':'');$('flightPick801').textContent=on?'Отменить выбор точек':'Указать две точки на карте';if(on)setStatus('Выбери начальную точку.');else setStatus('Выбор точек завершён.');}
 $('flightPick801').onclick=()=>setPicking(!picking);
 root.addEventListener('click',function(ev){if(!picking)return;
 if(ev.target instanceof Element&&ev.target.closest('.leaflet-control,.leaflet-popup,button,input,label,select'))return;
 ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();
 const ll=map.containerPointToLatLng(map.mouseEventToContainerPoint(ev));
+if($('flightMulti810').checked){
+ if(!pending){pending={ll,points:[ll],el:addDot('marker',true)};}
+ else{pending.points.push(ll);}
+ setStatus('Точек маршрута: '+pending.points.length+'. Нажми «Завершить маршрут», когда закончишь.');
+ update();return;
+}
 if(!pending){pending={ll,el:addDot('marker',true)};setStatus('Теперь выбери конечную точку.');update();}
 else{addRoute(pending.ll,ll);pending.el.remove();pending=null;setPicking(false);}
 },true);
+$('flightFinish810').onclick=()=>{
+ if(!pending||!pending.points||pending.points.length<2){setStatus('Выбери минимум две точки маршрута.');return;}
+ addRoute(pending.points[0],pending.points[pending.points.length-1],pending.points);
+ setPicking(false);
+};
 $('flightPause801').onclick=()=>{paused=!paused;$('flightPause801').textContent=paused?'Продолжить':'Пауза'};
 $('flightReplay801').onclick=()=>{clearImpacts803();routes.forEach(x=>{x.progress=0;x.impacted=false;x.dot.style.display='';});paused=false;$('flightPause801').textContent='Пауза';update();setStatus('Движение запущено заново.')};
-$('flightClear801').onclick=()=>{for(const x of routes){x.dot.remove();x.line?.remove();x.endDot.remove()}routes=[];clearImpacts803();if(typeof window.atlasBlastClear0804==='function')window.atlasBlastClear0804();setPicking(false);setStatus('Маршруты и временные взрывы очищены.')};
+$('flightClear801').onclick=()=>{for(const x of routes){x.dot.remove();x.line?.remove();x.endDot.remove();x.trail?.remove()}routes=[];clearImpacts803();if(typeof window.atlasBlastClear0804==='function')window.atlasBlastClear0804();setPicking(false);setStatus('Маршруты и временные взрывы очищены.')};
 map.on('zoom move resize viewreset',update);
 function tick(now){const dt=last?Math.min(.09,(now-last)/1000):0;last=now;
-if(!paused){for(const x of routes){if(x.progress>=1)continue;const a=point(x.start),b=point(x.end);const distance=Math.max(1,Math.hypot(b.x-a.x,b.y-a.y));x.progress=Math.min(1,x.progress+dt*x.speed/distance);if(x.progress>=1)arrivalImpact803(x)}update()}
+if(!paused){for(const x of routes){if(x.progress>=1)continue;const ps=(x.waypoints||[x.start,x.end]).map(point);let distance=0;for(let i=1;i<ps.length;i++)distance+=Math.hypot(ps[i].x-ps[i-1].x,ps[i].y-ps[i-1].y);distance=Math.max(1,distance);x.progress=Math.min(1,x.progress+dt*x.speed/distance);if(x.progress>=1)arrivalImpact803(x)}update()}
 requestAnimationFrame(tick)}
 requestAnimationFrame(tick);
 if(!window.atlasEffectsMap0785)document.body.classList.add('atlas-flight-view801');
 })();
-</script></body></html>
+</script>
+<style id="atlasTactical809Styles">
+/* Filter only the imagery tile plane, never zones, routes, markers or smoke */
+html.atlas-tactical809 #map .leaflet-tile-pane > .leaflet-layer {
+  filter: brightness(.68) saturate(.43) contrast(1.18) sepia(.11);
+}
+#atlasThemePanel809{
+ position:fixed;left:14px;bottom:14px;z-index:7905;
+ color:#e9f3f9;background:rgba(16,32,47,.94);
+ border:1px solid #5c8295;border-radius:10px;
+ padding:8px 10px;box-shadow:0 8px 24px rgba(0,0,0,.4);
+ font:12px system-ui,sans-serif;max-width:calc(100vw - 28px)
+}
+#atlasThemePanel809 .at-label809{font-size:11px;color:#b9d1dd;display:block;margin-bottom:5px}
+#atlasThemePanel809 .at-row809{display:flex;gap:5px;align-items:center}
+#atlasThemePanel809 button{
+ padding:7px 9px;border:1px solid #668da4;border-radius:7px;
+ color:#eaf3fc;background:#213b4b;font:inherit;cursor:pointer
+}
+#atlasThemePanel809 button[aria-pressed=true]{
+ background:#28768a;border-color:#9ed8e4;color:#fff
+}
+@media(max-width:740px){#atlasThemePanel809{bottom:8px;left:8px;padding:6px 7px}#atlasThemePanel809 button{padding:6px}}
+</style>
+<style id="atlasFlightTrail810Css">
+.atlas-flight-trail810{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+.atlas-flight-trail810 path{fill:none;stroke:#8edcf2;stroke-width:2.5;stroke-linejoin:round;stroke-dasharray:5 4;filter:drop-shadow(0 0 4px rgba(105,220,255,.65))}
+</style>
+<script id="atlasTactical809">
+(()=>{
+ const map=window.atlasEffectsMap0785;
+ if(!map||document.getElementById('atlasThemePanel809'))return;
+ const key='atlas-tactical-theme-0809';
+ const el=document.createElement('div');
+ el.id='atlasThemePanel809';
+ el.innerHTML='<span class="at-label809">Стиль спутниковой карты</span><div class="at-row809"><button type="button" data-mode="normal">Обычная</button><button type="button" data-mode="tactical">Tactical Satellite</button></div>';
+ document.body.append(el);
+ const buttons=[...el.querySelectorAll('button[data-mode]')];
+ function apply(mode){
+  mode=mode==='tactical'?'tactical':'normal';
+  document.documentElement.classList.toggle('atlas-tactical809',mode==='tactical');
+  for(const btn of buttons)btn.setAttribute('aria-pressed',String(btn.dataset.mode===mode));
+  try{localStorage.setItem(key,mode)}catch(e){}
+ }
+ el.addEventListener('click',ev=>{
+  const btn=ev.target.closest('button[data-mode]');
+  if(btn)apply(btn.dataset.mode);
+ });
+ let saved='normal';
+ try{saved=localStorage.getItem(key)||'normal'}catch(e){}
+ apply(saved);
+ window.atlasSetTheme0809=apply;
+})();
+</script>
+
+<style id="atlasModes810Css">
+html.atlas-night810 #map .leaflet-tile-pane > .leaflet-layer {filter:brightness(.35) saturate(.28) contrast(1.36) hue-rotate(8deg)!important}
+html.atlas-night810 #map {background:#0b1925}
+#atlasGrid810 {position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:650;overflow:hidden}
+#atlasGrid810 path {stroke:rgba(147,207,229,.27);stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+#atlasThemePanel809 .at-row810{display:flex;align-items:center;gap:7px;margin-top:7px;font-size:11px}
+#atlasThemePanel809 .at-row810 input{accent-color:#62c6db}
+</style>
+<script id="atlasModes810">
+(()=>{
+ const map=window.atlasEffectsMap0785;
+ const base=document.getElementById('atlasThemePanel809');
+ if(!map||!base||document.getElementById('atlasGrid810'))return;
+ const block=document.createElement('div');
+ block.className='at-row810';
+ block.innerHTML='<label><input id="atGridCheck810" type="checkbox"> Координатная сетка</label><label><input id="atNightCheck810" type="checkbox"> Ночь</label>';
+ base.append(block);
+ const ns='http://www.w3.org/2000/svg';
+ const grid=document.createElementNS(ns,'svg');grid.setAttribute('id','atlasGrid810');
+ map.getContainer().append(grid);
+ const path=document.createElementNS(ns,'path');grid.append(path);
+ const gridCheck=document.getElementById('atGridCheck810'),nightCheck=document.getElementById('atNightCheck810');
+ const get=(k)=>{try{return localStorage.getItem(k)==='1'}catch(e){return false}};
+ const set=(k,v)=>{try{localStorage.setItem(k,v?'1':'0')}catch(e){}};
+ gridCheck.checked=get('atlas-grid-810');nightCheck.checked=get('atlas-night-810');
+ function render(){
+   document.documentElement.classList.toggle('atlas-night810',nightCheck.checked);
+   grid.style.display=gridCheck.checked?'block':'none';
+   if(!gridCheck.checked)return;
+   const dim=map.getSize(),zoom=map.getZoom(),bounds=map.getBounds();
+   grid.setAttribute('viewBox',`0 0 ${dim.x} ${dim.y}`);
+   // Screen-space geodetic grid, density adapts to zoom.
+   const intervals=[30,10,5,2,1,.5,.2,.1,.05,.02,.01,.005,.002,.001,.0005];
+   const lonSpan=Math.max(.000001,bounds.getEast()-bounds.getWest());
+   const latSpan=Math.max(.000001,bounds.getNorth()-bounds.getSouth());
+   const span=Math.max(lonSpan,latSpan);
+   const interval=intervals.find(v=>span/v<=12)||.0005;
+   let d='',count=0;
+   const west=Math.ceil(bounds.getWest()/interval)*interval,east=bounds.getEast();
+   for(let lon=west;lon<=east && count<60;lon+=interval,count++){
+     const top=map.latLngToContainerPoint([bounds.getNorth(),lon]);
+     const bottom=map.latLngToContainerPoint([bounds.getSouth(),lon]);
+     d+=`M${top.x.toFixed(1)} ${top.y.toFixed(1)}L${bottom.x.toFixed(1)} ${bottom.y.toFixed(1)}`;
+   }
+   count=0;
+   const south=Math.ceil(bounds.getSouth()/interval)*interval,north=bounds.getNorth();
+   for(let lat=south;lat<=north && count<60;lat+=interval,count++){
+     const a=map.latLngToContainerPoint([lat,bounds.getWest()]);
+     const b=map.latLngToContainerPoint([lat,bounds.getEast()]);
+     d+=`M${a.x.toFixed(1)} ${a.y.toFixed(1)}L${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+   }
+   path.setAttribute('d',d);
+ }
+ gridCheck.onchange=()=>{set('atlas-grid-810',gridCheck.checked);render()};
+ nightCheck.onchange=()=>{set('atlas-night-810',nightCheck.checked);render()};
+ map.on('move zoom resize viewreset',render);
+ render();
+})();
+</script>
+</body></html>
