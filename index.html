@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View 0791 — Slow Smoke Drift</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS View 0808 — Combat FX Controls</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -306,6 +306,34 @@ body.atlas-frontline-0760 #frontlineStatus0760{display:block;}
 @keyframes afRing779{0%{transform:scale(.14);opacity:0}8%{opacity:calc(var(--strength)*.82)}56%{opacity:0}100%{transform:scale(2.3);opacity:0}}
 @keyframes afMark779{0%,15%{opacity:0}35%,100%{opacity:calc(var(--strength)*.68)}}
 @keyframes afFlash779{0%{opacity:calc(var(--strength)*.92);transform:scale(.22)}10%{opacity:.35;transform:scale(1.08)}100%{opacity:0;transform:scale(1.42)}}
+</style><style id="atlasBurning0796">
+/* 0796: longer-lived, more opaque smoke from burning sites. */
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume0,
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume1,
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume2{
+ display:block;top:12%;width:61%;height:75%;filter:blur(6px);
+ background:radial-gradient(ellipse at 50% 74%,rgba(30,33,35,.96) 0%,rgba(49,53,55,.89) 28%,rgba(75,78,78,.72) 49%,rgba(112,110,106,.37) 70%,transparent 86%);
+ animation:atlasBurnPlume796 5.8s ease-in-out infinite;
+}
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume0{left:20%}
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume1{left:15%;animation-delay:-1.94s}
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume2{left:27%;animation-delay:-3.88s}
+.atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-glow{
+ background:radial-gradient(ellipse,rgba(255,145,62,.61),rgba(205,85,35,.31) 40%,transparent 75%);
+ filter:blur(6px);
+}
+@keyframes atlasBurnPlume796{
+ 0%{opacity:0;transform:translate(0,14%) scale(.36,.5) rotate(-5deg)}
+ 15%{opacity:.86;transform:translate(-3%,-8%) scale(.72,1.0) rotate(2deg)}
+ 45%{opacity:.92;transform:translate(7%,-52%) scale(1.0,1.55) rotate(-3deg)}
+ 75%{opacity:.66;transform:translate(-8%,-100%) scale(1.38,2.05) rotate(5deg)}
+ 100%{opacity:0;transform:translate(11%,-155%) scale(1.72,2.48) rotate(-4deg)}
+}
+@media(prefers-reduced-motion:reduce){
+ .atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume0{animation:none;opacity:.84;transform:translateY(-35%) scale(1.1,1.5)}
+ .atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume1,
+ .atlas-blast-marker781 .atlas-af779[data-preset="burning"] .af-plume2{display:none}
+}
 </style></head><body>
 <header><button type="button" id="glassMenuToggle" aria-label="Открыть или скрыть меню" aria-expanded="true">☰ Меню</button><strong>ATLAS <span style="color:#5dcdbe;font-size:18px">VIEW</span></strong><span>0.8 BETA · V0741 · Military Information</span><span id="liveLabel" style="margin-left:auto">LOCAL</span><div id="themeSwitcher723" role="group" aria-label="Тема интерфейса"><button type="button" data-theme="dark" aria-pressed="true">☾ Тёмная</button><button type="button" data-theme="light" aria-pressed="false">☀ Светлая</button></div><button type="button" id="viewSettingsToggle725" aria-haspopup="dialog" aria-controls="viewSettings725">⚙ Настройки</button></header>
 <div class="layout"><aside><h3>Проект</h3><button class="primary" id="sync">Обновить из Editor</button><button id="load">Открыть файл</button><button id="atlasPublish732" title="Создать HTML с встроенной картой для отправки зрителям">📤 Опубликовать карту (HTML)</button><input hidden type="file" id="file" accept=".atlas,.json,application/json"><div class="status" id="status">Загружаю карту…</div><div class="hint">Синхронизация между вкладками работает только при общем хранилище браузера. Для отдельных HTML используйте .atlas.</div>
@@ -319,7 +347,7 @@ body.atlas-frontline-0760 #frontlineStatus0760{display:block;}
 <div id="atlasSearch727" hidden><input id="atlasSearchInput727" type="search" placeholder="Название государства…" aria-label="Поиск государства"><div id="atlasSearchResults727"></div></div>
 <section id="atlasCountryCard727" hidden aria-label="Карточка государства"><button type="button" class="card-close727" id="atlasCountryClose727" aria-label="Закрыть">✕</button><div class="card-title727" id="atlasCountryTitle727"></div><div id="atlasCardTabs731" role="tablist" aria-label="Данные кланонизации"><button type="button" data-tab="overview" aria-selected="true">Обзор</button><button type="button" data-tab="regions" aria-selected="false">Территории</button><button type="button" data-tab="history" aria-selected="false">История</button></div><div id="atlasCardContents731"></div><div hidden class="card-description727" id="atlasCountryDesc727"></div><div hidden class="card-regions727" id="atlasCountryRegions727"></div><div class="card-action727"><button type="button" id="atlasCountryFocus727">◎ Показать на карте</button></div></section>
 <section id="atlasArmyCard741" hidden role="region" aria-label="Информация о военной зоне"><button type="button" id="atlasArmyClose741" aria-label="Закрыть карточку">✕</button><div class="army-head741"><i id="atlasArmyDot741" class="army-dot741"></i><strong id="atlasArmyTitle741"></strong></div><div class="army-row741"><span>Тип</span><b id="atlasArmyType741"></b></div><div class="army-row741"><span>Название</span><b id="atlasArmyName741"></b></div><div class="army-row741"><span>Кланонизация</span><b id="atlasArmyClan741"></b></div><div class="army-row741"><span>Дата карты</span><b id="atlasArmyDate741"></b></div><div class="army-row741" id="atlasArmyDescriptionRow741" hidden><span>Описание</span><b id="atlasArmyDescription741"></b></div></section>
-<div id="viewSettings725" hidden role="presentation"><section class="view-settings-card725" role="dialog" aria-modal="true" aria-labelledby="settingsTitle725"><div class="view-settings-top725"><h2 id="settingsTitle725">⚙ Настройки ATLAS View</h2><button id="viewSettingsClose725" type="button">✕ Закрыть</button></div><div id="settingsLayers725" class="view-settings-section725"><h3>Слои и подписи</h3></div><div class="view-settings-section725"><h3>Интерфейс</h3><label><input type="checkbox" id="motionEnabled725" checked> Плавные анимации панелей</label><label><input type="checkbox" id="glassEnabled725" checked> Прозрачные панели с размытием</label><div class="settings-note725">Настройки оформления сохраняются в этом браузере. При снижении производительности отключи анимации или размытие.</div></div><div id="atlasSettings731" class="view-settings-section725"><h3>Тема и воспроизведение</h3><div class="atlas-row731"><label for="atlasPreset731">Оформление</label><select id="atlasPreset731"><option value="default">Стандартная</option><option value="midnight">Midnight</option><option value="ocean">Ocean</option><option value="graphite">Graphite</option></select></div><div class="atlas-row731"><label for="atlasPlayback731">Скорость истории</label><select id="atlasPlayback731"><option value="2800">0,5×</option><option value="1400" selected>1×</option><option value="700">2×</option></select></div><button type="button" id="atlasCinematicButton731">◩ Режим Cinematic</button></div><div id="atlasMilitarySettings740" class="view-settings-section725"><h3>Военная карта · Оформление</h3><div class="settings-note725">Параметры изменяют только отображение карты; исходная геометрия и проект не меняются.</div><div class="mil-range740"><div><span>Видимость оккупации</span><output id="atlasOccOut740">62%</output></div><input id="atlasOcc740" type="range" min="0" max="100" step="5" value="62"></div><div class="mil-range740"><div><span>Видимость освобождения</span><output id="atlasLibOut740">62%</output></div><input id="atlasLib740" type="range" min="0" max="100" step="5" value="62"></div><div class="mil-range740"><div><span>Толщина линий фронта</span><output id="atlasFrontOut740">100%</output></div><input id="atlasFront740" type="range" min="50" max="250" step="10" value="100"></div><label><input id="atlasGray740" type="checkbox" checked> Показывать серую зону</label><button type="button" id="atlasMilReset740">Сбросить военные настройки</button></div><div id="atlasVisualSettings727" class="view-settings-section725"><h3>Glass и анимации</h3><div class="viz-setting727">Непрозрачность панели: <output id="atlasOpacityOut727">76%</output><input type="range" id="atlasOpacity727" min="25" max="100" value="76"></div><div class="viz-setting727">Размытие: <output id="atlasBlurOut727">16 px</output><input type="range" id="atlasBlur727" min="0" max="30" value="16"></div><div class="viz-setting727">Скорость анимации: <output id="atlasSpeedOut727">260 мс</output><input type="range" id="atlasSpeed727" min="0" max="650" value="260" step="10"></div></div><div id="settingsActions725" class="view-settings-section725"><h3>Управление подписями</h3></div></section></div>
+<div id="viewSettings725" hidden role="presentation"><section class="view-settings-card725" role="dialog" aria-modal="true" aria-labelledby="settingsTitle725"><div class="view-settings-top725"><h2 id="settingsTitle725">⚙ Настройки ATLAS View</h2><button id="viewSettingsClose725" type="button">✕ Закрыть</button></div><div id="settingsLayers725" class="view-settings-section725"><h3>Слои и подписи</h3></div><div class="view-settings-section725"><h3>Интерфейс</h3><label><input type="checkbox" id="motionEnabled725" checked> Плавные анимации панелей</label><label><input type="checkbox" id="glassEnabled725" checked> Прозрачные панели с размытием</label><div class="settings-note725">Настройки оформления сохраняются в этом браузере. При снижении производительности отключи анимации или размытие.</div></div><div id="atlasSettings731" class="view-settings-section725"><h3>Тема и воспроизведение</h3><div class="atlas-row731"><label for="atlasPreset731">Оформление</label><select id="atlasPreset731"><option value="default">Стандартная</option><option value="midnight">Midnight</option><option value="ocean">Ocean</option><option value="graphite">Graphite</option></select></div><div class="atlas-row731"><label for="atlasPlayback731">Скорость истории</label><select id="atlasPlayback731"><option value="2800">0,5×</option><option value="1400" selected>1×</option><option value="700">2×</option></select></div><button type="button" id="atlasCinematicButton731">◩ Режим Cinematic</button></div><div id="atlasMilitarySettings740" class="view-settings-section725"><h3>Военная карта · Оформление</h3><div class="settings-note725">Параметры изменяют только отображение карты; исходная геометрия и проект не меняются.</div><div class="mil-range740"><div><span>Видимость оккупации</span><output id="atlasOccOut740">62%</output></div><input id="atlasOcc740" type="range" min="0" max="100" step="5" value="62"></div><div class="mil-range740"><div><span>Видимость освобождения</span><output id="atlasLibOut740">62%</output></div><input id="atlasLib740" type="range" min="0" max="100" step="5" value="62"></div><div class="mil-range740"><div><span>Толщина линий фронта</span><output id="atlasFrontOut740">100%</output></div><input id="atlasFront740" type="range" min="50" max="250" step="10" value="100"></div><label><input id="atlasGray740" type="checkbox" checked> Показывать серую зону</label><div class="settings-note725">Когда серые зоны скрыты, территория под ними показывается без серой полосы. Данные проекта не изменяются.</div><button type="button" id="atlasMilReset740">Сбросить военные настройки</button></div><div id="atlasVisualSettings727" class="view-settings-section725"><h3>Glass и анимации</h3><div class="viz-setting727">Непрозрачность панели: <output id="atlasOpacityOut727">76%</output><input type="range" id="atlasOpacity727" min="25" max="100" value="76"></div><div class="viz-setting727">Размытие: <output id="atlasBlurOut727">16 px</output><input type="range" id="atlasBlur727" min="0" max="30" value="16"></div><div class="viz-setting727">Скорость анимации: <output id="atlasSpeedOut727">260 мс</output><input type="range" id="atlasSpeed727" min="0" max="650" value="260" step="10"></div></div><div id="settingsActions725" class="view-settings-section725"><h3>Управление подписями</h3></div></section></div>
 <script id="atlasEmbeddedProject732" type="application/json">null</script>
 <script>
 (()=>{
@@ -359,7 +387,7 @@ body.atlas-frontline-0760 #frontlineStatus0760{display:block;}
 <div id="atlasToastArea731" role="status" aria-live="polite"></div><div id="atlasCinematic731">ATLAS · <span id="atlasCinematicDate731">ТЕКУЩАЯ КАРТА</span></div><button id="atlasCinematicExit731" type="button">Выход из Cinematic · Esc</button>
 <script>
 (()=>{'use strict';const $=id=>document.getElementById(id);if(typeof L==='undefined'){$('status').textContent='Не загрузилась библиотека Leaflet. Требуется интернет.';return}
-const map=L.map('map',{preferCanvas:false}).setView([49.0,31.0],6);let tile=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}).addTo(map);let project=null,layers=[],timer=null,current=null;
+const map=L.map('map',{preferCanvas:false}).setView([49.0,31.0],6);window.atlasEffectsMap0785=map;let tile=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}).addTo(map);let project=null,layers=[],timer=null,current=null;
 
 // ATLAS 0773 fictional animation overlay, read-only.
 const motionOverlay773=L.layerGroup().addTo(map);let motionCurrent773=[],motionProgress773=0;
@@ -576,7 +604,13 @@ function militaryFeatures750(){
  const cache=armySyncCache750.get(source);
  if(cache&&cache.gray===militaryPrefs740.gray&&cache.width===settings752.width&&cache.organic===settings752.organic&&cache.strength===settings752.strength)return cache.features;
  const isZone=f=>f?.properties?.isArmy&&['occupation','liberation'].includes(f.properties.armyMode)&&['Polygon','MultiPolygon'].includes(f.geometry?.type);
- const colors=original.filter(isZone),manual=original.filter(f=>f?.properties?.isArmy&&f.properties.armyMode==='contested'&&['Polygon','MultiPolygon'].includes(f.geometry?.type));
+ const rawColors0794=original.filter(isZone),manual=original.filter(f=>f?.properties?.isArmy&&f.properties.armyMode==='contested'&&['Polygon','MultiPolygon'].includes(f.geometry?.type));
+ // 0794: newest territory wins, regardless of gray-band visibility.
+ // Clip older opposing zones BEFORE merging by color; gray areas are display-only.
+ const colors=rawColors0794.flatMap((f,i)=>{
+   const later=rawColors0794.slice(i+1).filter(next=>next.properties.armyMode!==f.properties.armyMode);
+   return armySubtract750([f],later);
+ });
  // Calculate a corridor only where the two visible armies have real contact.
  let strips=[];const width=settings752.width;
  if(militaryPrefs740.gray){
@@ -1093,6 +1127,90 @@ refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
 .atlas-blast-marker781.atlas-type-artillery789 .smoke-shadow789{width:78%;height:26%}
 .atlas-blast-marker781.atlas-type-rocket789 .smoke-shadow789{width:42%;height:19%}
 
+/* 0799: advanced combat visuals — volumetric smoke, rolling dust, random profiles, residual burning, and debris. */
+.atlas-fx799{position:absolute;inset:0;pointer-events:none;isolation:isolate;--life799:8s}
+.atlas-fx799 .smoke-veil799,.atlas-fx799 .smoke-cap799,.atlas-fx799 .dust-sheet799,.atlas-fx799 .dust-roll799,.atlas-fx799 .debris799,.atlas-fx799 .burn-glow799,.atlas-fx799 .burn-smoke799{position:absolute;left:50%;top:50%;pointer-events:none}
+.atlas-fx799 .smoke-veil799{width:var(--veilw799,44%);height:var(--veilh799,52%);border-radius:48% 52% 44% 56% / 42% 46% 54% 58%;opacity:0;
+ background:radial-gradient(ellipse at 48% 64%,rgba(36,37,41,.72) 0%,rgba(58,59,61,.60) 22%,rgba(87,85,80,.42) 48%,rgba(136,128,117,.18) 72%,transparent 88%);
+ filter:blur(var(--veilblur799,12px));transform-origin:50% 70%;animation:atlasVeil799 var(--life799) cubic-bezier(.15,.37,.31,1) var(--delay799,0s) both;z-index:1}
+.atlas-fx799 .smoke-cap799{width:var(--capw799,28%);height:var(--caph799,20%);border-radius:50%;opacity:0;
+ background:radial-gradient(ellipse at 50% 55%,rgba(50,50,54,.74),rgba(82,79,74,.42) 46%,transparent 80%);filter:blur(var(--capblur799,8px));
+ animation:atlasCap799 var(--life799) ease-out var(--delay799,.22s) both;z-index:3}
+.atlas-fx799 .dust-sheet799{width:var(--dustw799,72%);height:var(--dusth799,24%);border-radius:50%;opacity:0;
+ background:radial-gradient(ellipse,rgba(121,103,83,.56),rgba(146,129,105,.35) 42%,rgba(168,152,129,.14) 68%,transparent 84%);
+ filter:blur(var(--dustblur799,7px));transform-origin:50% 50%;animation:atlasDustSheet799 calc(var(--life799) * .72) ease-out var(--delay799,0s) both;z-index:0}
+.atlas-fx799 .dust-roll799{width:var(--rollw799,18%);height:var(--rollh799,9%);border-radius:46% 54% 50% 50%;opacity:0;
+ background:radial-gradient(ellipse at 50% 52%,rgba(125,108,89,.58),rgba(154,137,111,.28) 52%,transparent 84%);filter:blur(var(--rollblur799,4px));
+ animation:atlasDustRoll799 calc(var(--life799) * .7) cubic-bezier(.17,.36,.28,1) var(--delay799,0s) both;z-index:0}
+.atlas-fx799 .debris799{width:var(--dsize799,3px);height:var(--dsize799,3px);margin-left:calc(var(--dsize799,3px) * -.5);margin-top:calc(var(--dsize799,3px) * -.5);border-radius:50%;opacity:0;
+ background:radial-gradient(circle,rgba(57,49,42,.92) 0%,rgba(96,81,63,.78) 48%,rgba(255,188,116,.44) 76%,transparent 100%);
+ box-shadow:0 0 2px rgba(255,177,104,.18);animation:atlasDebris799 var(--dtime799,1.2s) ease-out var(--delay799,0s) both;z-index:4}
+.atlas-fx799 .burn-glow799{width:var(--burnw799,18%);height:var(--burnh799,11%);margin-left:calc(var(--burnw799,18%) * -.5);margin-top:calc(var(--burnh799,11%) * -.5 + 10%);border-radius:50%;opacity:0;
+ background:radial-gradient(ellipse,rgba(255,213,132,.80) 0%,rgba(255,160,73,.56) 28%,rgba(209,94,27,.28) 54%,transparent 78%);filter:blur(6px);
+ animation:atlasBurnGlow799 var(--burnlife799,7s) ease-out var(--delay799,.16s) both;z-index:2}
+.atlas-fx799 .burn-smoke799{width:var(--burnsmokew799,12%);height:var(--burnsmokeh799,20%);margin-left:calc(var(--burnsmokew799,12%) * -.5);border-radius:46% 54% 42% 58% / 44% 41% 59% 56%;opacity:0;
+ background:radial-gradient(ellipse at 50% 66%,rgba(42,43,45,.74),rgba(73,72,69,.44) 44%,rgba(133,126,116,.14) 74%,transparent 88%);filter:blur(6px);
+ animation:atlasBurnSmoke799 var(--burnlife799,7s) cubic-bezier(.18,.38,.29,1) var(--delay799,.22s) both;z-index:2}
+.atlas-fx799 .smoke-puff789{z-index:2}
+.atlas-fx799 .smoke-puff789.fxback799{z-index:1;opacity:.92;filter:blur(calc(var(--blur789,5px) + 1.5px))}
+.atlas-fx799 .smoke-puff789.fxfront799{z-index:3;filter:blur(calc(var(--blur789,5px) - .4px)) contrast(1.02)}
+@keyframes atlasVeil799{
+ 0%{opacity:0;transform:translate(-50%,12%) rotate(var(--veilrot799,0deg)) scale(.24,.20)}
+ 14%{opacity:.36}
+ 40%{opacity:.52;transform:translate(calc(-50% + var(--veilx1799,0px)),calc(-6% + var(--veily1799,-8px))) rotate(var(--veilrot799,0deg)) scale(.86,.90)}
+ 76%{opacity:.34;transform:translate(calc(-50% + var(--veilx2799,0px)),calc(-42% + var(--veily2799,-22px))) rotate(var(--veilrot799,0deg)) scale(1.34,1.42)}
+ 100%{opacity:0;transform:translate(calc(-50% + var(--veilx3799,0px)),calc(-78% + var(--veily3799,-34px))) rotate(var(--veilrot799,0deg)) scale(1.84,1.96)}
+}
+@keyframes atlasCap799{
+ 0%{opacity:0;transform:translate(-50%,5%) scale(.2,.18)}
+ 22%{opacity:.42;transform:translate(calc(-50% + var(--capx1799,0px)),calc(-18% + var(--capy1799,-10px))) scale(.72,.76)}
+ 64%{opacity:.28;transform:translate(calc(-50% + var(--capx2799,0px)),calc(-56% + var(--capy2799,-24px))) scale(1.16,1.10)}
+ 100%{opacity:0;transform:translate(calc(-50% + var(--capx3799,0px)),calc(-92% + var(--capy3799,-38px))) scale(1.54,1.24)}
+}
+@keyframes atlasDustSheet799{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.24,.16)}
+ 10%{opacity:.74}
+ 42%{opacity:.48;transform:translate(calc(-50% + var(--dustx1799,0px)),calc(-50% + var(--dusty1799,0px))) scale(1.04,.62)}
+ 100%{opacity:0;transform:translate(calc(-50% + var(--dustx2799,0px)),calc(-50% + var(--dusty2799,0px))) scale(1.92,.88)}
+}
+@keyframes atlasDustRoll799{
+ 0%{opacity:0;transform:translate(var(--rollx0799,0px),var(--rolly0799,0px)) scale(.22,.14)}
+ 16%{opacity:.68}
+ 58%{opacity:.34;transform:translate(calc(var(--rollx0799,0px) + var(--rolldx1799,0px)),calc(var(--rolly0799,0px) + var(--rolldy1799,0px))) scale(1.10,.70)}
+ 100%{opacity:0;transform:translate(calc(var(--rollx0799,0px) + var(--rolldx2799,0px)),calc(var(--rolly0799,0px) + var(--rolldy2799,0px))) scale(1.88,.96)}
+}
+@keyframes atlasDebris799{
+ 0%{opacity:0;transform:translate(var(--dbx0799,0px),var(--dby0799,0px)) scale(.4)}
+ 12%{opacity:.92}
+ 46%{opacity:.72}
+ 100%{opacity:0;transform:translate(calc(var(--dbx0799,0px) + var(--dbdx799,0px)),calc(var(--dby0799,0px) + var(--dbdy799,0px))) scale(.16)}
+}
+@keyframes atlasBurnGlow799{
+ 0%{opacity:0;transform:translate(0,0) scale(.3)}
+ 8%{opacity:.68;transform:translate(0,0) scale(1.0)}
+ 54%{opacity:.42;transform:translate(calc(var(--burnx1799,0px)),calc(var(--burny1799,0px))) scale(1.22)}
+ 100%{opacity:0;transform:translate(calc(var(--burnx2799,0px)),calc(var(--burny2799,0px))) scale(1.48)}
+}
+@keyframes atlasBurnSmoke799{
+ 0%{opacity:0;transform:translate(0,10%) scale(.24,.20)}
+ 18%{opacity:.44}
+ 64%{opacity:.30;transform:translate(calc(var(--burnsx1799,0px)),calc(var(--burnsy1799,-22px))) scale(1.10,1.24)}
+ 100%{opacity:0;transform:translate(calc(var(--burnsx2799,0px)),calc(var(--burnsy2799,-44px))) scale(1.54,1.82)}
+}
+.atlas-blast-marker781.atlas-type-airburst789 .atlas-fx799 .dust-sheet799,.atlas-blast-marker781.atlas-type-airburst789 .atlas-fx799 .dust-roll799,.atlas-blast-marker781.atlas-type-airburst789 .atlas-fx799 .burn-glow799{display:none}
+.atlas-blast-marker781.atlas-quality-low787 .atlas-fx799 .debris799:nth-of-type(n+8){display:none}
+.atlas-blast-marker781.atlas-quality-low787 .atlas-fx799 .smoke-cap799:nth-of-type(n+2){display:none}
+@media(prefers-reduced-motion:reduce){.atlas-fx799{display:none!important}}
+
+/* ATLAS 0800 visual styles, isolated to click effects. */
+.atlas-cinema800 .burst-core787{filter:blur(4px) brightness(1.42)!important}
+.atlas-cinema800 .smoke-puff789{filter:blur(var(--blur789,5px)) contrast(1.16) saturate(1.12)}
+.atlas-cinema800 .smoke-veil799{filter:blur(var(--veilblur799,12px)) contrast(1.15)}
+.atlas-cinema800 .burn-glow799{filter:blur(7px) brightness(1.6)}
+.atlas-cinema800 .debris799{box-shadow:0 0 5px rgba(255,182,93,.55)}
+
+
+
 
 
  `;document.head.append(css);
@@ -1109,8 +1227,37 @@ refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
  <label style="display:flex;align-items:center;gap:7px"><input type="checkbox" id="atlasBlastWave789"> Показать ударную волну</label>
  <label style="display:flex;align-items:center;gap:7px"><input type="checkbox" id="atlasBlastShadow789" checked> Тень от столба дыма</label>
  <small style="color:#a8c0d1">Направление рассеивания дыма выбирается случайно при каждом клике.</small>
+ 
+ <div style="padding:9px;margin:8px 0;border:1px solid #4c677a;border-radius:8px;background:#172a3c">
+ <strong style="display:block;margin-bottom:7px">🔊 Звуки эффектов</strong>
+ <label style="display:flex;align-items:center;gap:7px"><input type="checkbox" id="atlasSoundOn797"> Включить звуки (по умолчанию выкл.)</label>
+ <label>Громкость: <output id="atlasSoundValue797">35</output>%<input type="range" id="atlasSoundVolume797" min="0" max="100" value="35" style="width:100%"></label>
+ <label style="display:flex;align-items:center;gap:7px"><input type="checkbox" id="atlasSoundEcho797" checked> Эхо</label>
+ <div id="atlasCustomSounds798" style="border:1px solid #557489;border-radius:8px;margin-top:9px;padding:9px;background:#1b3144">
+ <b style="display:block;margin-bottom:7px">🎵 Свои звуки</b>
+ <label>Для какого эффекта<select id="atlasSoundSlot798" style="width:100%;margin:4px 0 8px;background:#253d52;color:#fff">
+ <option value="artillery">Артиллерийский взрыв</option><option value="rocket">Ракетный взрыв</option>
+ <option value="small">Малый взрыв</option><option value="airburst">Воздушный взрыв</option>
+ <option value="tracers">Трассеры</option><option value="flashes">Вспышки боя</option>
+ <option value="battle">Комбинированный бой</option><option value="burning">Дым горения</option>
+ </select></label>
+ <input id="atlasSoundFile798" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.webm" style="width:100%;font-size:11px;margin:3px 0 7px">
+ <div id="atlasSoundFileStatus798" style="font-size:11px;color:#a9c8db;margin:4px 0 8px">Для этого эффекта используется встроенный звук.</div>
+ <div style="display:flex;gap:5px"><button type="button" id="atlasSoundPreview798" style="flex:1;padding:6px">▶ Прослушать</button><button type="button" id="atlasSoundRemove798" style="flex:1;padding:6px">✕ Удалить</button></div>
+ <small style="color:#a9c8db;display:block;margin-top:7px">MP3, WAV, OGG и другие форматы, поддерживаемые браузером. Максимум 15 МБ на файл. Только для текущего открытия страницы; в .atlas не записываются.</small>
+ </div>
+ <small style="color:#9ab5c7">Звук создаётся браузером после клика по карте. Не сохраняется в .atlas.</small>
+ </div>
  <label>Длительность: <output id="atlasBlastTimeOut781">6</output> с<input id="atlasBlastTime781" type="range" min="2" max="20" value="6" style="width:100%"></label>
  <label>Размер: <output id="atlasBlastSizeOut781">150</output> px<input id="atlasBlastSize781" type="range" min="60" max="300" value="150" style="width:100%"></label>
+ <div style="padding:9px;margin:9px 0;border:1px solid #4c677a;border-radius:8px;background:#182c3d">
+ <b style="display:block;margin-bottom:7px">Атмосфера эффектов 0800</b>
+ <label>Стиль визуализации<select id="atlasFxStyle800" style="width:100%;margin:4px 0 8px;background:#253d52;color:white"><option value="real">Реалистичный</option><option value="cinema">Кинематографичный</option></select></label>
+ <label>Сила ветра: <output id="atlasWindOut800">100</output>%<input id="atlasWind800" type="range" min="0" max="200" step="10" value="100" style="width:100%"></label>
+ <label>Плотность дыма: <output id="atlasSmokeOut800">100</output>%<input id="atlasSmoke800" type="range" min="20" max="200" step="10" value="100" style="width:100%"></label>
+ <label>Количество обломков: <output id="atlasDebrisOut800">100</output>%<input id="atlasDebris800" type="range" min="0" max="200" step="10" value="100" style="width:100%"></label>
+ <small style="color:#aac3d3">Настройки применяются к новым кликам. Для снижения нагрузки используй низкое качество.</small>
+ </div>
  <label>Качество анимации<select id="atlasBlastQuality787" style="width:100%;margin:4px 0 8px;background:#253d52;color:white"><option value="medium">Среднее · баланс</option><option value="low">Низкое · быстрее</option><option value="high">Высокое · детальнее</option></select></label>
 
  <div id="atlasCombatOptions782" style="display:none;border:1px solid #50667a;border-radius:8px;padding:8px;margin:6px 0">
@@ -1124,15 +1271,151 @@ refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
  <button type="button" id="atlasBlastClear781" style="width:100%;padding:5px">Очистить временные эффекты</button></div>`;
  document.body.append(container);
  const $=id=>document.getElementById(id),layers=L.layerGroup().addTo(map),active=new Map();let enabled=false;
+ // 0806: screen-pixel effects anchored to geographic coordinates, never inside Leaflet's zoom-scaled panes.
+ // 0807: draw effects in a viewport-fixed layer OUTSIDE Leaflet and all transformed map ancestors.
+ const effectRoot0806=map.getContainer();
+ const effectOverlay0806=document.createElement('div');effectOverlay0806.className='atlas-pixel-effects0806';
+ effectOverlay0806.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:770;pointer-events:none;overflow:hidden;transform:none!important;zoom:1!important;contain:layout style;isolation:isolate;';
+ document.documentElement.append(effectOverlay0806);
+ // 0808: freeze all nested CSS effect keyframes (including burning smoke) only during map zoom.
+ const zoomStyle0808=document.createElement('style');
+ zoomStyle0808.textContent='.atlas-smoke-zoomlock0808 *, .atlas-smoke-zoomlock0808 *::before, .atlas-smoke-zoomlock0808 *::after{animation-play-state:paused!important;transition:none!important}';
+ document.head.append(zoomStyle0808);
+ const pixelEffects0806=new Set();
+ function repositionPixelEffects0806(){
+   if(!pixelEffects0806.size)return;
+   const rect=effectRoot0806.getBoundingClientRect();
+   for(const item of pixelEffects0806){
+     const p=map.latLngToContainerPoint(item.location);
+     item.element.style.left=(rect.left+p.x)+'px';item.element.style.top=(rect.top+p.y)+'px';
+     item.element.style.visibility=(p.x>=-item.size&&p.y>=-item.size&&p.x<=rect.width+item.size&&p.y<=rect.height+item.size)?'visible':'hidden';
+   }
+ }
+ map.on('move zoom zoomanim zoomend moveend resize viewreset',repositionPixelEffects0806);
+ window.addEventListener('resize',repositionPixelEffects0806,{passive:true});
+ window.addEventListener('scroll',repositionPixelEffects0806,{passive:true,capture:true});
+ let pixelFollow0807=false;
+ function followPixelZoom0807(){
+   if(!pixelFollow0807)return;
+   repositionPixelEffects0806();requestAnimationFrame(followPixelZoom0807);
+ }
+ // 0808: during Leaflet zoom, freeze animation frames, so apparent size never changes because time passes during zoom.
+ let zoomLock0808=false;
+ function setZoomLock0808(on){zoomLock0808=!!on;effectOverlay0806.classList.toggle('atlas-smoke-zoomlock0808',zoomLock0808);}
+ map.on('zoomstart',()=>setZoomLock0808(true));
+ map.on('zoomend',()=>{setZoomLock0808(false);repositionPixelEffects0806()});
+ map.on('zoomstart movestart',()=>{if(!pixelFollow0807){pixelFollow0807=true;requestAnimationFrame(followPixelZoom0807)}});
+ map.on('zoomend moveend',()=>{pixelFollow0807=false;repositionPixelEffects0806()});
+ function createPixelEffect0806(location,html,size,cls){
+   const el=document.createElement('div');el.className=cls;
+   el.style.cssText='position:absolute;pointer-events:none;width:'+size+'px;height:'+size+'px;transform:translate(-50%,-50%);transform-origin:center center;zoom:1!important;';
+   el.innerHTML=html;effectOverlay0806.append(el);
+   const obj={element:el,size,location:L.latLng(location),remove(){pixelEffects0806.delete(obj);el.remove();}};
+   pixelEffects0806.add(obj);repositionPixelEffects0806();return obj;
+ }
+
  const button=$('atlasBlastToggle781'),settings=$('atlasBlastSettings781'),presetSelect=$('atlasBlastPreset781');
+
+ // 0797: opt-in procedural sound engine; no external audio files or autoplay.
+ const soundToggle=$('atlasSoundOn797'),soundVolume=$('atlasSoundVolume797'),soundEcho=$('atlasSoundEcho797');
+ soundVolume.oninput=()=>{$('atlasSoundValue797').textContent=soundVolume.value;};
+
+ // 0798: custom sounds are kept in memory, not in .atlas, localStorage or site exports.
+ const customSounds798=new Map();
+ const slot798=$('atlasSoundSlot798'),upload798=$('atlasSoundFile798'),status798=$('atlasSoundFileStatus798');
+ let preview798=null;
+ function stopPreview798(){if(preview798){preview798.pause();preview798.currentTime=0;preview798=null;}}
+ function soundSlot798(preset){return preset==='burning'||preset==='tracers'||preset==='flashes'||preset==='battle'?preset:$('atlasBlastType789').value;}
+ function updateSoundStatus798(){const item=customSounds798.get(slot798.value);status798.textContent=item?'Свой звук: '+item.name:'Для этого эффекта используется встроенный звук.';}
+ slot798.onchange=()=>{stopPreview798();upload798.value='';updateSoundStatus798();};
+ upload798.onchange=()=>{
+  const file=upload798.files&&upload798.files[0];if(!file)return;
+  if(file.size>15*1024*1024){status798.textContent='Файл слишком большой (максимум 15 МБ).';upload798.value='';return;}
+  if(!(file.type.startsWith('audio/')||/\.(mp3|wav|ogg|m4a|webm|aac|flac)$/i.test(file.name))){status798.textContent='Выберите аудиофайл.';upload798.value='';return;}
+  stopPreview798();const old=customSounds798.get(slot798.value);if(old)URL.revokeObjectURL(old.url);
+  customSounds798.set(slot798.value,{url:URL.createObjectURL(file),name:file.name});updateSoundStatus798();upload798.value='';
+ };
+ $('atlasSoundRemove798').onclick=()=>{stopPreview798();const item=customSounds798.get(slot798.value);if(item)URL.revokeObjectURL(item.url);customSounds798.delete(slot798.value);updateSoundStatus798();};
+ $('atlasSoundPreview798').onclick=()=>{
+  stopPreview798();const item=customSounds798.get(slot798.value);
+  if(!item){status798.textContent='Загрузите файл для прослушивания.';return;}
+  const audio=new Audio(item.url);audio.volume=Math.min(1,+soundVolume.value/100)*.65;preview798=audio;
+  audio.play().catch(()=>{status798.textContent='Не удалось воспроизвести файл: проверьте формат.';});
+ };
+ window.addEventListener('pagehide',()=>{stopPreview798();for(const item of customSounds798.values())URL.revokeObjectURL(item.url);customSounds798.clear();},{once:true});
+ function playCustom798(preset){
+  const item=customSounds798.get(soundSlot798(preset));if(!item)return false;
+  try{const a=new Audio(item.url);a.volume=Math.min(1,+soundVolume.value/100)*.65;a.play().catch(e=>console.warn('ATLAS custom audio:',e));return true;}
+  catch(e){console.warn('ATLAS custom audio:',e);return false;}
+ }
+
+ let audioCtx797=null,noise797=null,lastSound797=0;
+ const playing797=[];
+ function getAudio797(){
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return null;
+  if(!audioCtx797){
+   audioCtx797=new AC();
+   const count=Math.round(audioCtx797.sampleRate*2);
+   noise797=audioCtx797.createBuffer(1,count,audioCtx797.sampleRate);
+   const arr=noise797.getChannelData(0);
+   for(let i=0;i<count;i++)arr[i]=Math.random()*2-1;
+  }
+  if(audioCtx797.state==='suspended')audioCtx797.resume().catch(()=>{});
+  return audioCtx797;
+ }
+ function soundAt797(preset){
+  if(!soundToggle.checked || +soundVolume.value===0)return;
+  const nowMs=performance.now();if(nowMs-lastSound797<95)return;lastSound797=nowMs;
+  if(playCustom798(preset))return;
+  try{
+   const ac=getAudio797();if(!ac)return;
+   while(playing797.length && playing797[0]<ac.currentTime)playing797.shift();
+   if(playing797.length>=5)return;
+   const type=$('atlasBlastType789').value,vol=(+soundVolume.value/100)*.30;
+   const t=ac.currentTime+.012;
+   const desc={artillery:[.75,105,.68],rocket:[1.25,68,.83],small:[.32,155,.43],airburst:[.58,190,.46]};
+   const [duration,freq,weight]=preset==='burning'?[2.4,84,.17]:
+      (preset==='tracers'||preset==='flashes'||preset==='battle')?[.19,240,.20]:(desc[type]||desc.artillery);
+   const master=ac.createGain(); master.gain.value=vol;
+   master.connect(ac.destination);
+   const noiseSource=ac.createBufferSource();noiseSource.buffer=noise797;
+   const filter=ac.createBiquadFilter();filter.type='lowpass';filter.frequency.setValueAtTime(preset==='rocket'?550:1050,t);
+   filter.frequency.exponentialRampToValueAtTime(Math.max(110,freq*1.45),t+duration);
+   const env=ac.createGain();env.gain.setValueAtTime(.0001,t);
+   env.gain.exponentialRampToValueAtTime(Math.max(.001,weight),t+.015);
+   env.gain.exponentialRampToValueAtTime(.0001,t+duration);
+   noiseSource.connect(filter);filter.connect(env);env.connect(master);
+   noiseSource.start(t);noiseSource.stop(t+duration+.02);
+   const osc=ac.createOscillator(),tone=ac.createGain();
+   osc.type='sine';osc.frequency.setValueAtTime(Math.max(45,freq*1.8),t);
+   osc.frequency.exponentialRampToValueAtTime(Math.max(38,freq*.48),t+Math.min(.48,duration));
+   tone.gain.setValueAtTime(.0001,t);tone.gain.exponentialRampToValueAtTime(.26,t+.014);
+   tone.gain.exponentialRampToValueAtTime(.0001,t+Math.min(duration,.85));
+   osc.connect(tone);tone.connect(master);osc.start(t);osc.stop(t+Math.min(duration,.85)+.025);
+   if(soundEcho.checked && preset!=='burning'){
+    const delay=ac.createDelay(.8),feedback=ac.createGain(),wet=ac.createGain();
+    delay.delayTime.value=.24;feedback.gain.value=.20;wet.gain.value=.27;
+    env.connect(delay);delay.connect(feedback);feedback.connect(delay);delay.connect(wet);wet.connect(master);
+    setTimeout(()=>{try{feedback.disconnect();delay.disconnect();wet.disconnect();}catch(e){}},3500);
+   }
+   playing797.push(t+duration);
+   setTimeout(()=>{try{master.disconnect();}catch(e){}},Math.ceil((duration+2)*1000));
+  }catch(e){console.warn('ATLAS sound unavailable:',e);}
+ }
+
  $('atlasBlastOpen783').onclick=()=>{const visible=settings.style.display!=='none';settings.style.display=visible?'none':'block';$('atlasBlastOpen783').textContent='✦ Клик-взрывы '+(visible?'▸':'▾');};
- button.onclick=()=>{enabled=!enabled;button.textContent='✦ Клик-взрывы: '+(enabled?'включены':'выключены');button.style.background=enabled?'#31765f':'#27445b';map.getContainer().style.cursor=enabled?'crosshair':'';};
+ button.onclick=()=>{enabled=!enabled;button.textContent='✦ Клик-взрывы: '+(enabled?'включены':'выключены');button.style.background=enabled?'#31765f':'#27445b';if(!window.atlasSuppressBlast0804)map.getContainer().style.cursor=enabled?'crosshair':'';};
  const combatModes=new Set(['tracers','flashes','battle']);
  presetSelect.onchange=()=>{$('atlasCombatOptions782').style.display=combatModes.has(presetSelect.value)?'block':'none'};
  for(const [input,out] of [['atlasBlastTime781','atlasBlastTimeOut781'],['atlasBlastSize781','atlasBlastSizeOut781'],['atlasCombatDensity782','atlasCombatDensityOut782'],['atlasCombatSpeed782','atlasCombatSpeedOut782'],['atlasCombatAngle782','atlasCombatAngleOut782'],['atlasCombatSpread782','atlasCombatSpreadOut782']])$(input).oninput=()=>$(out).textContent=$(input).value;
- function remove(id){const item=active.get(id);if(!item)return;clearTimeout(item.timer);layers.removeLayer(item.layer);active.delete(id)}
+ function remove(id){const item=active.get(id);if(!item)return;clearTimeout(item.timer);if(item.layer?.remove)item.layer.remove();else layers.removeLayer(item.layer);active.delete(id)}
  $('atlasBlastClear781').onclick=()=>{for(const id of [...active.keys()])remove(id)};
  const random=(a,b)=>a+Math.random()*(b-a);
+ for(const [control,output] of [['atlasWind800','atlasWindOut800'],['atlasSmoke800','atlasSmokeOut800'],['atlasDebris800','atlasDebrisOut800']]){
+   $(control).addEventListener('input',()=>{$(output).textContent=$(control).value});
+ }
+ 
  function combatHTML(preset,size,duration){
   const density=Number($('atlasCombatDensity782').value),speed=Number($('atlasCombatSpeed782').value),angle=Number($('atlasCombatAngle782').value),spread=Number($('atlasCombatSpread782').value);
   const glow=({gold:'#ffb15a',red:'#ff6c58',white:'#d8e2ee',green:'#a7e4ae'})[$('atlasCombatColor782').value]||'#ffb15a';
@@ -1160,61 +1443,132 @@ refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
  function enhanceBlast787(html,preset,size,duration){
   if(preset==='burning'||preset==='mark')return html;
   const q=$('atlasBlastQuality787').value,type=$('atlasBlastType789').value;
-  const wrap=document.createElement('div');wrap.style.cssText='position:relative;width:100%;height:100%;pointer-events:none';wrap.innerHTML=html;
+  const windLevel=Number($('atlasWind800').value)/100, smokeLevel=Number($('atlasSmoke800').value)/100, debrisLevel=Number($('atlasDebris800').value)/100, cinematic=$('atlasFxStyle800').value==='cinema';
+  const wrap=document.createElement('div');wrap.style.cssText='position:relative;width:100%;height:100%;pointer-events:none';wrap.innerHTML=html;wrap.className=cinematic?'atlas-cinema800':'atlas-realstyle800';
   const rand=(a,b)=>a+Math.random()*(b-a);
-  const burst=document.createElement('div');burst.className='atlas-burst787';burst.style.setProperty('--burst-time',duration+'s');
-  const node=(parent,cls,vars={})=>{const n=document.createElement('i');n.className=cls;for(const [k,v] of Object.entries(vars))n.style.setProperty(k,v);parent.append(n)};
-  node(burst,'burst-core787');if($('atlasBlastWave789').checked)node(burst,'burst-wave787');
-  const amount=q==='low'?3:q==='high'?14:8;
-  for(let i=0;i<amount;i++){
-   const a=rand(0,Math.PI*2),r=size*rand(.09,type==='rocket'?.38:.26);
-   node(burst,'burst-ember787',{'--dx':(Math.cos(a)*r).toFixed(0)+'px','--dy':(Math.sin(a)*r).toFixed(0)+'px','--ember-size':rand(1.8,3.3).toFixed(1)+'px'});
+  const choose=arr=>arr[Math.floor(rand(0,arr.length))];
+  const profiles={
+    artillery:[
+      {label:'broad',smokeMul:1.12,dustMul:1.25,coreInset:'35%',rise:.34,spread:.32,burn:.55,debris:.95,veil:1.10},
+      {label:'dusty',smokeMul:.96,dustMul:1.44,coreInset:'33%',rise:.28,spread:.36,burn:.42,debris:1.05,veil:1.00},
+      {label:'smoky',smokeMul:1.26,dustMul:1.08,coreInset:'34%',rise:.42,spread:.28,burn:.68,debris:.90,veil:1.24}
+    ],
+    rocket:[
+      {label:'pillar',smokeMul:1.30,dustMul:.82,coreInset:'20%',rise:.88,spread:.12,burn:.86,debris:1.08,veil:1.20},
+      {label:'fireball',smokeMul:1.16,dustMul:.92,coreInset:'18%',rise:.76,spread:.15,burn:.94,debris:1.18,veil:1.05},
+      {label:'dirty',smokeMul:1.38,dustMul:1.05,coreInset:'21%',rise:.94,spread:.14,burn:.90,debris:1.00,veil:1.28}
+    ],
+    small:[
+      {label:'compact',smokeMul:.72,dustMul:.72,coreInset:'30%',rise:.20,spread:.14,burn:.28,debris:.66,veil:.72},
+      {label:'dust-pop',smokeMul:.64,dustMul:.92,coreInset:'29%',rise:.16,spread:.18,burn:.18,debris:.74,veil:.65},
+      {label:'dirty-pop',smokeMul:.82,dustMul:.66,coreInset:'30%',rise:.24,spread:.12,burn:.34,debris:.80,veil:.76}
+    ],
+    airburst:[
+      {label:'cloud',smokeMul:.86,dustMul:0,coreInset:'23%',rise:.56,spread:.16,burn:.12,debris:.82,veil:.92},
+      {label:'sphere',smokeMul:.94,dustMul:0,coreInset:'22%',rise:.62,spread:.12,burn:.08,debris:.94,veil:1.00},
+      {label:'shrapnel',smokeMul:.84,dustMul:0,coreInset:'24%',rise:.52,spread:.18,burn:.10,debris:1.12,veil:.88}
+    ]
+  };
+  const profile=choose(profiles[type]||profiles.small);
+  wrap.dataset.atlasVariant799=profile.label;
+  const burst=document.createElement('div');burst.className='atlas-burst787'+(cinematic?' atlas-cinema800':'');burst.style.setProperty('--burst-time',duration+'s');
+  const node=(parent,cls,vars={})=>{const n=document.createElement('i');n.className=cls;for(const [k,v] of Object.entries(vars))n.style.setProperty(k,v);parent.append(n);return n};
+  node(burst,'burst-core787',{'inset':profile.coreInset});
+  if($('atlasBlastWave789').checked)node(burst,'burst-wave787');
+  if(type!=='airburst' && profile.dustMul>0)node(burst,'burst-dust788',{'--delay':'40ms'});
+  const emberBase=q==='low'?3:q==='high'?16:9;
+  const emberCount=Math.max(0,Math.min(42,Math.round(emberBase*(type==='rocket'?1.18:type==='small'?.72:1)*profile.debris*debrisLevel)));
+  for(let i=0;i<emberCount;i++){
+    const a=rand(0,Math.PI*2),r=size*rand(.08,type==='rocket'?.42:type==='airburst'?.34:.28);
+    node(burst,'burst-ember787',{'--dx':(Math.cos(a)*r).toFixed(0)+'px','--dy':(Math.sin(a)*r).toFixed(0)+'px','--ember-size':rand(1.7,3.4).toFixed(1)+'px'});
   }
   wrap.append(burst);
-  const smoke=document.createElement('div');smoke.className='atlas-real789';const smokeLife=(duration*1.42);smoke.style.setProperty('--life789',smokeLife.toFixed(2)+'s');
-  const theta=rand(0,Math.PI*2),w=rand(size*.34,size*.66),wx=Math.cos(theta)*w,wy=Math.sin(theta)*w*.26;
-  const windVars={'--windx789':wx+'px','--windy789':wy+'px','--wind25x789':wx*.25+'px','--wind71x789':wx*.71+'px','--wind38x789':wx*.38+'px','--wind70x789':wx*.7+'px','--wind100x791':wx+'px','--wind45y789':wy*.45+'px'};
+
+  const smoke=document.createElement('div');smoke.className='atlas-real789 atlas-fx799'+(cinematic?' atlas-cinema800':'');
+  const smokeLife=(duration*(type==='rocket'?1.86:type==='artillery'?1.72:type==='airburst'?1.58:1.5));
+  smoke.style.setProperty('--life789',smokeLife.toFixed(2)+'s');
+  smoke.style.setProperty('--life799',smokeLife.toFixed(2)+'s');
+  const theta=rand(0,Math.PI*2),windMag=rand(size*.30,size*.74),wx=Math.cos(theta)*windMag,wy=Math.sin(theta)*windMag*.24;
+  const windVars={'--windx789':wx.toFixed(1)+'px','--windy789':wy.toFixed(1)+'px','--wind25x789':(wx*.25).toFixed(1)+'px','--wind71x789':(wx*.71).toFixed(1)+'px','--wind38x789':(wx*.38).toFixed(1)+'px','--wind70x789':(wx*.7).toFixed(1)+'px','--wind100x791':wx.toFixed(1)+'px','--wind45y789':(wy*.45).toFixed(1)+'px'};
   Object.entries(windVars).forEach(([k,v])=>smoke.style.setProperty(k,v));
   if($('atlasBlastShadow789').checked)node(smoke,'smoke-shadow789');
-  if(type!=='airburst')node(smoke,'smoke-ground789');
-  const count=q==='low'?5:q==='high'?19:11;
-  const rocket=type==='rocket',art=type==='artillery',air=type==='airburst',small=type==='small';
-  const sizeFactor=small?.54:air?.82:rocket?1.18:1;
-  const rise=(rocket?-size*.88:art?-size*.32:air?-size*.58:-size*.21)*rand(.86,1.17);
-  const baseWidth=rocket?[19,36]:art?[38,69]:small?[16,30]:[23,42];
-  for(let i=0;i<count;i++){
-   const t=i/Math.max(1,count-1),spread=(art?size*.29:rocket?size*.12:size*.15);
-   const puff=rand(baseWidth[0],baseWidth[1])*sizeFactor;
-   const localx=rand(-spread,spread)+(rocket?Math.sin(t*3.2)*size*.06:0);
-   const starty=(art?size*.06:rocket?-size*.05:air?-size*.17:0)+rand(-size*.06,size*.08);
-   const riseOffset=rise*(rocket?.55+t*.7:art?.38+t*.38:.5+t*.5);
-   const gustStrength=rand(1.05,2.05),gustPhase=rand(-size*.24,size*.24),gust=wx*gustStrength;
-   const g1=gust*.22,g2=gust*.64+gustPhase*.42,g3=gust*.98+gustPhase*1.08,g4=gust*1.34+gustPhase*.92,g5=gust*1.62+gustPhase*1.15;
-   const style={'--puffsize789':puff.toFixed(1)+'%','--puffheight790':(puff*(rocket?rand(1.22,1.57):art?rand(.65,.95):rand(.84,1.25))).toFixed(1)+'%',
-     '--blur789':(q==='low'?5:rand(3.2,7.5)).toFixed(1)+'px','--delay789':(t*(rocket?.22:art?.13:.2)).toFixed(2)+'s',
-     '--localx789':localx.toFixed(1)+'px','--starty790':starty.toFixed(1)+'px','--rotation790':rand(-21,21).toFixed(1)+'deg',
-     '--shape790':`${rand(36,54).toFixed(0)}% ${rand(45,64).toFixed(0)}% ${rand(40,62).toFixed(0)}% ${rand(35,56).toFixed(0)}% / ${rand(39,61).toFixed(0)}% ${rand(36,65).toFixed(0)}% ${rand(38,59).toFixed(0)}% ${rand(40,62).toFixed(0)}%`,
-     '--peak790':rand(.64,.96).toFixed(2),'--shade-x790':rand(36,64).toFixed(0)+'%',
-     '--gust1x790':g1.toFixed(1)+'px','--gust2x790':g2.toFixed(1)+'px','--gust3x790':g3.toFixed(1)+'px','--gust4x790':g4.toFixed(1)+'px','--gust5x790':g5.toFixed(1)+'px',
-     '--rise1y790':(riseOffset*.18+wy*.08).toFixed(1)+'px','--rise2y790':(riseOffset*.52+wy*.22).toFixed(1)+'px',
-     '--rise3y790':(riseOffset*.86+wy*.48).toFixed(1)+'px','--rise4y790':(riseOffset*1.18+wy*.78).toFixed(1)+'px','--rise5y790':(riseOffset*1.52+wy*1.08).toFixed(1)+'px'};
-   node(smoke,'smoke-puff789',style);
+  const art=type==='artillery',rocket=type==='rocket',air=type==='airburst',small=type==='small';
+  const spreadBase=size*(rocket?0.12:art?0.30:air?0.18:0.14)*profile.spread/Math.max(profile.spread,.001);
+  if(!air){
+    node(smoke,'smoke-ground789',{'--groundwidth790':(art?88:rocket?48:56)+'%','--groundheight790':(art?30:rocket?15:18)+'%'});
+    node(smoke,'dust-sheet799',{'--dustw799':(art?Math.round(78*profile.dustMul):rocket?Math.round(56*profile.dustMul):Math.round(60*profile.dustMul))+'%','--dusth799':(art?26:rocket?17:16)+'%','--dustblur799':(art?9:6)+'px','--dustx1799':(wx*.10).toFixed(1)+'px','--dustx2799':(wx*.20).toFixed(1)+'px','--dusty2799':(wy*.10).toFixed(1)+'px'});
+    const rollCount=Math.max(1,Math.min(18,Math.round((q==='low'?2:q==='high'?(art?8:5):(art?5:3))*smokeLevel)));
+    for(let i=0;i<rollCount;i++){
+      const side=rand(-1,1)||1,rx=rand(-size*.18,size*.18),ry=rand(size*.02,size*.12),travel=rand(size*.14,size*.34)*(art?1.12:0.78)*side;
+      node(smoke,'dust-roll799',{'--rollw799':rand(12,art?22:16).toFixed(1)+'%','--rollh799':rand(7,art?12:9).toFixed(1)+'%','--rollblur799':rand(3.5,6.4).toFixed(1)+'px','--delay799':(rand(.02,.18)).toFixed(2)+'s','--rollx0799':rx.toFixed(1)+'px','--rolly0799':ry.toFixed(1)+'px','--rolldx1799':(travel*.58).toFixed(1)+'px','--rolldy1799':(wy*.08-rand(0,4)).toFixed(1)+'px','--rolldx2799':travel.toFixed(1)+'px','--rolldy2799':(wy*.16-rand(2,7)).toFixed(1)+'px'});
+    }
   }
+  if(smokeLevel>=.35)node(smoke,'smoke-veil799',{'--veilw799':(rocket?36:art?52:air?42:34*profile.veil)+'%','--veilh799':(rocket?56:art?46:air?42:30*profile.veil)+'%','--veilblur799':(rocket?14:11)+'px','--veilrot799':rand(-12,12).toFixed(1)+'deg','--veilx1799':(wx*.10).toFixed(1)+'px','--veily1799':(wy*.08-rand(4,12)).toFixed(1)+'px','--veilx2799':(wx*.34).toFixed(1)+'px','--veily2799':(wy*.20-rand(16,28)).toFixed(1)+'px','--veilx3799':(wx*.64).toFixed(1)+'px','--veily3799':(wy*.34-rand(28,44)).toFixed(1)+'px'});
+  if(q!=='low' && smokeLevel>=.7)node(smoke,'smoke-cap799',{'--capw799':(rocket?26:art?34:air?28:20)+'%','--caph799':(rocket?18:art?20:air?18:15)+'%','--capx1799':(wx*.14).toFixed(1)+'px','--capy1799':(wy*.06-rand(10,18)).toFixed(1)+'px','--capx2799':(wx*.38).toFixed(1)+'px','--capy2799':(wy*.18-rand(26,36)).toFixed(1)+'px','--capx3799':(wx*.72).toFixed(1)+'px','--capy3799':(wy*.28-rand(40,56)).toFixed(1)+'px'});
+
+  const puffBase=q==='low'?5:q==='high'?15:9;
+  const puffCount=Math.max(2,Math.min(42,Math.round(puffBase*profile.smokeMul*(rocket?1.18:art?1.08:air?.92:.84)*smokeLevel)));
+  const sizeFactor=small?.55:air?.84:rocket?1.18:1.02;
+  const baseRise=(rocket?-size*.94:art?-size*.40:air?-size*.60:-size*.24)*profile.rise*(rocket?1.12:1.0);
+  const baseWidth=rocket?[17,31]:art?[32,60]:small?[14,25]:[20,36];
+  for(let i=0;i<puffCount;i++){
+    const t=i/Math.max(1,puffCount-1),localSpread=spreadBase*(rocket?.54:art?1.0:0.72),puff=rand(baseWidth[0],baseWidth[1])*sizeFactor*(t<.4?1.0:rand(.92,1.14));
+    const localx=rand(-localSpread,localSpread)+(rocket?Math.sin(t*3.6+rand(-.8,.8))*size*.05:0);
+    const starty=(art?size*.07:rocket?-size*.06:air?-size*.16:0)+rand(-size*.06,size*.09);
+    const riseOffset=baseRise*(rocket?.48+t*.86:art?.26+t*.44:.44+t*.54);
+    const gustStrength=rand(.96,2.16),gustPhase=rand(-size*.28,size*.28),gust=wx*gustStrength;
+    const g1=gust*.18,g2=gust*.46+gustPhase*.28,g3=gust*.78+gustPhase*.86,g4=gust*1.08+gustPhase*.72,g5=gust*1.38+gustPhase*1.06;
+    const style={'--puffsize789':puff.toFixed(1)+'%','--puffheight790':(puff*(rocket?rand(1.26,1.64):art?rand(.72,1.06):rand(.86,1.28))).toFixed(1)+'%',
+      '--blur789':(q==='low'?5:rand(3.4,7.8)).toFixed(1)+'px','--delay789':(t*(rocket?.26:art?.16:.22)).toFixed(2)+'s',
+      '--localx789':localx.toFixed(1)+'px','--starty790':starty.toFixed(1)+'px','--rotation790':rand(-24,24).toFixed(1)+'deg',
+      '--shape790':`${rand(34,56).toFixed(0)}% ${rand(44,66).toFixed(0)}% ${rand(38,64).toFixed(0)}% ${rand(34,58).toFixed(0)}% / ${rand(38,62).toFixed(0)}% ${rand(34,66).toFixed(0)}% ${rand(38,61).toFixed(0)}% ${rand(38,64).toFixed(0)}%`,
+      '--peak790':rand(.60,.96).toFixed(2),'--shade-x790':rand(34,66).toFixed(0)+'%',
+      '--gust1x790':g1.toFixed(1)+'px','--gust2x790':g2.toFixed(1)+'px','--gust3x790':g3.toFixed(1)+'px','--gust4x790':g4.toFixed(1)+'px','--gust5x790':g5.toFixed(1)+'px',
+      '--rise1y790':(riseOffset*.14+wy*.06).toFixed(1)+'px','--rise2y790':(riseOffset*.46+wy*.18).toFixed(1)+'px','--rise3y790':(riseOffset*.78+wy*.42).toFixed(1)+'px','--rise4y790':(riseOffset*1.06+wy*.70).toFixed(1)+'px','--rise5y790':(riseOffset*1.34+wy*1.02).toFixed(1)+'px'};
+    const cls='smoke-puff789 '+(i%4===0?'fxback799':i%3===0?'fxfront799':'');
+    node(smoke,cls,style);
+  }
+
+  const debrisBase=q==='low'?5:q==='high'?18:10;
+  const debrisCount=Math.max(0,Math.min(52,Math.round(debrisBase*profile.debris*(rocket?1.15:small?.75:1)*debrisLevel)));
+  for(let i=0;i<debrisCount;i++){
+    const a=rand(-Math.PI*.9,Math.PI*.9),d=rand(size*.10,size*(rocket?.46:art?.32:.24));
+    node(smoke,'debris799',{'--dsize799':rand(1.4,3.6).toFixed(1)+'px','--delay799':(rand(0,.10)).toFixed(2)+'s','--dtime799':rand(.72,1.34).toFixed(2)+'s','--dbx0799':rand(-size*.08,size*.08).toFixed(1)+'px','--dby0799':rand(-size*.04,size*.03).toFixed(1)+'px','--dbdx799':(Math.cos(a)*d).toFixed(1)+'px','--dbdy799':(Math.sin(a)*d-rand(3,22)).toFixed(1)+'px'});
+  }
+
+  if(Math.random()<profile.burn && !air){
+    const burnLife=Math.max(3.8,smokeLife*(rocket?0.66:art?0.52:0.44));
+    node(smoke,'burn-glow799',{'--burnlife799':burnLife.toFixed(2)+'s','--burnw799':(rocket?20:art?18:14)+'%','--burnh799':(rocket?12:art?11:9)+'%','--burnx1799':(wx*.10).toFixed(1)+'px','--burny1799':(wy*.05).toFixed(1)+'px','--burnx2799':(wx*.22).toFixed(1)+'px','--burny2799':(wy*.10).toFixed(1)+'px'});
+    const burnCount=q==='high'?(rocket?4:3):(rocket?3:2);
+    for(let i=0;i<burnCount;i++){
+      node(smoke,'burn-smoke799',{'--burnlife799':burnLife.toFixed(2)+'s','--delay799':(0.18+i*.18+rand(0,.08)).toFixed(2)+'s','--burnsmokew799':rand(9,rocket?17:13).toFixed(1)+'%','--burnsmokeh799':rand(17,rocket?28:22).toFixed(1)+'%','--burnsx1799':(wx*.10+rand(-6,6)).toFixed(1)+'px','--burnsy1799':(-rand(16,26)+wy*.10).toFixed(1)+'px','--burnsx2799':(wx*.24+rand(-12,12)).toFixed(1)+'px','--burnsy2799':(-rand(34,52)+wy*.22).toFixed(1)+'px'});
+    }
+  }
+
   wrap.append(smoke);return wrap.innerHTML;
  }
 
  let n=0;
+ function spawnBlast0804(location,opts={}){
+  const duration=Number(opts.duration ?? $('atlasBlastTime781').value),size=Number(opts.size ?? $('atlasBlastSize781').value),preset=String(opts.preset || presetSelect.value);
+  const effectDuration=preset==='burning'?Math.max(24,duration*2.5):duration;
+  if(active.size>=24)remove(active.keys().next().value);
+  if(opts.sound!==false)soundAt797(preset);
+  const aftermathFactory=atlasAftermathHTML779;
+  const html=combatModes.has(preset)?combatHTML(preset,size,duration):enhanceBlast787(aftermathFactory({afPreset:preset,afDuration:effectDuration,afIntensity:.75,afRepeat:false,afMark:false,afSize:size}),preset,size,duration);
+  const layer=createPixelEffect0806(location,html,size,'atlas-blast-marker781 atlas-quality-'+$('atlasBlastQuality787').value+'787 atlas-type-'+$('atlasBlastType789').value+'789'+($('atlasBlastWave789').checked?' atlas-wave-on789':''));
+  const lifeMultiplier=combatModes.has(preset)?1:(preset==='burning'?1:1.72); const id=++n,timer=setTimeout(()=>remove(id),effectDuration*1000*lifeMultiplier);
+  active.set(id,{layer,timer});
+  return id;
+ }
+ window.atlasSpawnBlast0804=spawnBlast0804;
+ window.atlasBlastClear0804=()=>{for(const id of [...active.keys()])remove(id)};
  map.getContainer().addEventListener('click',ev=>{
-  if(!enabled)return;
+  if(!enabled||window.atlasSuppressBlast0804)return;
   if(ev.target instanceof Element && ev.target.closest('.leaflet-control, .leaflet-popup, button, input, select, label'))return;
   ev.preventDefault();ev.stopImmediatePropagation();
   const location=map.containerPointToLatLng(map.mouseEventToContainerPoint(ev));
-  const duration=Number($('atlasBlastTime781').value),size=Number($('atlasBlastSize781').value),preset=presetSelect.value;
-  if(active.size>=24)remove(active.keys().next().value);
-  const html=combatModes.has(preset)?combatHTML(preset,size,duration):enhanceBlast787(atlasAftermathHTML779({afPreset:preset,afDuration:duration,afIntensity:.75,afRepeat:false,afMark:false,afSize:size}),preset,size,duration);
-  const layer=L.marker(location,{interactive:false,keyboard:false,icon:L.divIcon({className:'atlas-blast-marker781 atlas-quality-'+$('atlasBlastQuality787').value+'787 atlas-type-'+$('atlasBlastType789').value+'789'+($('atlasBlastWave789').checked?' atlas-wave-on789':''),html,iconSize:[size,size],iconAnchor:[size/2,size/2]})}).addTo(layers);
-  const lifeMultiplier=combatModes.has(preset)?1:1.42; const id=++n,timer=setTimeout(()=>remove(id),duration*1000*lifeMultiplier);
-  active.set(id,{layer,timer});
+  spawnBlast0804(location);
  },true);
 })();
 
@@ -1224,4 +1578,152 @@ refreshMainEvents0770();setInterval(refreshMainEvents0770,30000);
 
 
 </script>
-</body></html>
+<style id="atlasNoGrayStyles0793">#atlasNoGrayBtn0793{position:fixed;right:16px;bottom:99px;z-index:1125;width:auto;max-width:180px;min-height:33px;padding:7px 10px;border-radius:9px;border:1px solid var(--ui-outline,#567);background:var(--ui-panel-heavy,#172335);color:var(--ui-text,#fff);font-size:11px;box-shadow:0 4px 16px #0005}#atlasNoGrayBtn0793[aria-pressed="true"]{border-color:#80d6cc;background:#22544f;color:white}@media(max-width:700px){#atlasNoGrayBtn0793{right:9px;bottom:83px;max-width:146px;font-size:10px;padding:5px}}body.atlas-cinematic731 #atlasNoGrayBtn0793,body.atlas-presentation727 #atlasNoGrayBtn0793{display:none!important}</style><button type="button" id="atlasNoGrayBtn0793" aria-pressed="false">◫ Без серых зон</button><script id="atlasGrayMode0793">(function(){const btn=document.getElementById('atlasNoGrayBtn0793'),box=document.getElementById('atlasGray740');if(!btn||!box)return;function sync(){const on=!box.checked;btn.textContent='◫ Без серых зон: '+(on?'вкл.':'выкл.');btn.setAttribute('aria-pressed',String(on))}btn.addEventListener('click',()=>{box.checked=!box.checked;box.dispatchEvent(new Event('change',{bubbles:true}));sync()});box.addEventListener('change',sync);sync()})();</script><script id="atlasFlightVisual0801">
+(function(){
+'use strict';
+const map=window.atlasEffectsMap0785 || (function(){try{return typeof L!=='undefined'&&document.querySelector('#map')?Object.values(window).find(x=>x&&typeof x.latLngToContainerPoint==='function'&&x.getContainer&&x.getContainer().id==='map'):null}catch(e){return null}})();
+if(!map||!map.getContainer||document.getElementById('atlasFlightPanel801'))return;
+const style=document.createElement('style');style.id='atlasFlightStyle801';style.textContent=`
+#atlasFlightPanel801{position:fixed;z-index:7950;left:clamp(12px,25vw,338px);top:154px;width:246px;max-height:min(68dvh,560px);overflow:auto;border:1px solid #668ba0;border-radius:10px;background:#112339ed;color:#eef7ff;box-shadow:0 8px 22px #0008;padding:9px;font:12px system-ui,sans-serif}
+body.atlas-flight-view801 #atlasFlightPanel801{left:14px;top:auto;bottom:112px}
+#atlasFlightPanel801 button,#atlasFlightPanel801 select,#atlasFlightPanel801 input{font:inherit;background:#233f54;color:#fff;border:1px solid #5d788d;border-radius:6px;padding:7px;cursor:pointer}
+#atlasFlightPanel801 button{width:100%;margin:2px 0}#atlasFlightPanel801 select{width:100%;margin:4px 0 9px}#atlasFlightPanel801 input[type=range]{width:100%;accent-color:#6bc6cc}
+#atlasFlightPanel801 .flrow801{display:flex;gap:5px}#atlasFlightPanel801 .flrow801 button{flex:1;min-width:0}
+#atlasFlightPanel801 .flhint801{font-size:11px;line-height:1.5;color:#b6cbd8;margin:6px 0}
+.atlas-flight-layer801{position:absolute;inset:0;z-index:760;pointer-events:none;overflow:hidden}
+.atlas-flight-dot801{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:32px;height:32px;will-change:left,top,transform;filter:drop-shadow(0 1px 4px rgba(3,13,21,.95)) drop-shadow(0 0 7px rgba(122,223,247,.22))}
+.atlas-flight-dot801 svg{width:100%;height:100%;overflow:visible}
+.atlas-flight-dot801[data-type=quad]{width:34px;height:34px}
+.atlas-flight-dot801[data-type=wing]{width:36px;height:36px}
+.atlas-flight-dot801[data-type=delta]{width:34px;height:34px}
+.atlas-flight-dot801[data-type=marker]{width:26px;height:26px}
+.atlas-flight-dot801 .flt-body801{fill:#d7edf5;stroke:#0b1f2d;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.atlas-flight-dot801 .flt-accent801{fill:#7adff7;stroke:#0b1f2d;stroke-width:2}
+.atlas-flight-dot801 .flt-dark801{fill:#9ab6c1;stroke:#0b1f2d;stroke-width:2}
+.atlas-flight-dot801[data-ghost='1']{opacity:.7;filter:drop-shadow(0 0 4px rgba(173,243,255,.35))}
+.atlas-flight-line801{position:absolute;height:1px;transform-origin:0 50%;border-top:1px dashed rgba(147,216,231,.6);opacity:.7}
+.atlas-flight-end801{position:absolute;width:8px;height:8px;border:1px solid #adf3ff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 6px #49b0c9}
+.atlas-flight-dot801[data-type=rocket]{width:38px;height:38px}
+.atlas-impact803{position:absolute;width:100px;height:100px;pointer-events:none;transform:translate(-50%,-50%);z-index:5}
+.atlas-impact803 .fi-flash803{position:absolute;inset:23%;border-radius:50%;background:radial-gradient(circle,#fff9dc 0%,#ffc26e 25%,rgba(218,106,40,.55) 48%,transparent 72%);animation:fiFlash803 1.2s ease-out both}
+.atlas-impact803 .fi-smoke803{position:absolute;inset:22%;border-radius:50%;background:radial-gradient(ellipse,rgba(53,56,60,.75),rgba(105,103,96,.48) 45%,transparent 76%);filter:blur(6px);animation:fiSmoke803 3.8s ease-out both}
+.atlas-impact803 .fi-dust803{position:absolute;inset:29% 8%;border-radius:50%;background:radial-gradient(ellipse,rgba(142,117,90,.54),transparent 73%);filter:blur(5px);animation:fiDust803 2.3s ease-out both}
+@keyframes fiFlash803{0%{opacity:0;transform:scale(.2)}8%{opacity:1;transform:scale(1.15)}30%{opacity:.35}65%,100%{opacity:0;transform:scale(1.9)}}
+@keyframes fiSmoke803{0%,6%{opacity:0;transform:translate(0,12%) scale(.2)}24%{opacity:.85}65%{opacity:.55;transform:translate(10%,-29%) scale(1.35)}100%{opacity:0;transform:translate(19%,-55%) scale(2)}}
+@keyframes fiDust803{0%{opacity:0;transform:scale(.2,.2)}20%{opacity:.7}100%{opacity:0;transform:scale(2.4,.9)}}
+@media(prefers-reduced-motion:reduce){.atlas-impact803{display:none}}
+
+@media(max-width:750px){#atlasFlightPanel801{left:8px!important;top:auto!important;bottom:100px!important;width:min(235px,calc(100vw - 20px));max-height:47dvh}}
+`;document.head.append(style);
+const panel=document.createElement('section');panel.id='atlasFlightPanel801';
+panel.innerHTML=`<button type="button" id="flightOpen801">🛸 Маршруты БПЛА ▸</button><div id="flightBody801" hidden>
+<div class="flhint801">Декоративная анимация маршрутов и взрывов. Для ручного взрыва включи кнопку ниже, для полёта выбери две точки.</div><div id="flightQuickBlast0805"></div>
+<label>Текстура БПЛА<select id="flightType801"><option value="quad">Квадрокоптер · вид сверху</option><option value="wing">БПЛА самолётного типа · вид сверху</option><option value="delta">Дельта / барражирующий · вид сверху</option><option value="rocket">Ракета · вид сверху</option><option value="marker">Минималистичный маркер</option></select></label>
+<label>Скорость: <output id="flightSpeedText801">90</output> пикс./с<input id="flightSpeed801" type="range" min="20" max="240" step="10" value="90"></label>
+<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightLine801" checked> Показывать линию маршрута</label>
+<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightArrivalBlast801" checked> Взрыв по прибытии</label>
+<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="flightArrivalAll801"> Взрыв для всех объектов, не только для ракеты</label>
+<button type="button" id="flightPick801">Указать две точки на карте</button>
+<div class="flrow801"><button type="button" id="flightPause801">Пауза</button><button type="button" id="flightReplay801">Повторить</button></div>
+<button type="button" id="flightClear801">Очистить маршруты</button>
+<div style="margin-top:9px;padding-top:8px;border-top:1px solid #3b5568">
+  <div style="font-weight:700;margin-bottom:6px;color:#d7e8f4">✦ Комбинированные клик-взрывы</div>
+  <div class="flhint801">Эта секция использует те же настройки эффектов. При выборе точек маршрута клик-взрывы временно блокируются.</div>
+  <div id="flightBlastMount801"></div>
+</div>
+<div class="flhint801" id="flightStatus801" role="status">Готово. До 12 одновременных маршрутов.</div></div>`;
+document.body.append(panel);
+const $=id=>document.getElementById(id);
+const body=$('flightBody801'),status=$('flightStatus801');
+$('flightOpen801').onclick=()=>{body.hidden=!body.hidden;$('flightOpen801').textContent='🛸 Маршруты БПЛА '+(body.hidden?'▸':'▾')};
+const blastPanel=document.getElementById('atlasBlastPanel781'),blastToggle=document.getElementById('atlasBlastToggle781'),blastSettings=document.getElementById('atlasBlastSettings781'),blastOpen=document.getElementById('atlasBlastOpen783'),blastMount=$('flightBlastMount801');
+if(blastPanel&&blastToggle&&blastSettings&&blastMount){
+  blastPanel.style.display='none';
+  if(blastOpen)blastOpen.remove();
+  blastSettings.style.display='block';
+  blastSettings.style.marginTop='6px';
+  $('flightQuickBlast0805').append(blastToggle);blastMount.append(blastSettings);
+  blastToggle.style.marginBottom='8px';
+  blastToggle.textContent='✦ Клик-взрывы: выключены (нажми для включения)';
+}
+$('flightSpeed801').oninput=()=>{$('flightSpeedText801').textContent=$('flightSpeed801').value};
+const root=map.getContainer();if(getComputedStyle(root).position==='static')root.style.position='relative';
+const overlay=document.createElement('div');overlay.className='atlas-flight-layer801';root.append(overlay);
+let routes=[],pending=null,picking=false,paused=false,last=0,seq=0;
+const impacts803=new Set();
+function arrivalImpact803(route){
+ if(route.impacted)return;
+ const explode=$('flightArrivalBlast801')?.checked!==false;
+ const allTypes=$('flightArrivalAll801')?.checked===true;
+ const shouldExplode=explode && (route.type==='rocket' || allTypes);
+ route.impacted=true;
+ if(shouldExplode){
+   route.dot.style.display='none';
+   if(typeof window.atlasSpawnBlast0804==='function'){
+     try{window.atlasSpawnBlast0804(route.end,{sound:true});return;}catch(err){console.error('ATLAS blast on arrival:',err);setStatus('Основной эффект недоступен, показываю запасной взрыв.');}
+   }
+ }
+ if(!shouldExplode)return;
+ route.dot.style.display='none';
+ const p=point(route.end),fx=document.createElement('div');
+ fx.className='atlas-impact803';
+ fx.innerHTML='<i class="fi-dust803"></i><i class="fi-flash803"></i><i class="fi-smoke803"></i>';
+ fx.style.left=p.x+'px';fx.style.top=p.y+'px';overlay.append(fx);
+ const impact={fx,latlng:route.end,timer:null};
+ impacts803.add(impact);
+ impact.timer=setTimeout(()=>{fx.remove();impacts803.delete(impact)},4000);
+}
+function clearImpacts803(){
+ for(const i of impacts803){clearTimeout(i.timer);i.fx.remove()}
+ impacts803.clear();
+}
+
+function setStatus(s){status.textContent=s}
+function point(ll){const p=map.latLngToContainerPoint(ll);return {x:p.x,y:p.y}}
+function update(){
+for(const item of routes){const a=point(item.start),b=point(item.end),x=a.x+(b.x-a.x)*item.progress,y=a.y+(b.y-a.y)*item.progress;
+ const ang=Math.atan2(b.y-a.y,b.x-a.x);
+ item.dot.style.display=item.impacted?'none':'';item.dot.style.left=x+'px';item.dot.style.top=y+'px';item.dot.style.transform='translate(-50%,-50%) rotate('+ang+'rad)';
+ if(item.line){const dx=b.x-a.x,dy=b.y-a.y;item.line.style.left=a.x+'px';item.line.style.top=a.y+'px';item.line.style.width=Math.hypot(dx,dy)+'px';item.line.style.transform='rotate('+Math.atan2(dy,dx)+'rad)';}
+ item.endDot.style.left=b.x+'px';item.endDot.style.top=b.y+'px';
+ }
+ for(const imp of impacts803){const ip=point(imp.latlng);imp.fx.style.left=ip.x+'px';imp.fx.style.top=ip.y+'px';}
+ if(pending){const p=point(pending.ll);pending.el.style.left=p.x+'px';pending.el.style.top=p.y+'px';pending.el.style.transform='translate(-50%,-50%)';}
+}
+function textureSVG801(type){
+ const svgs={
+  quad:`<svg viewBox="0 0 64 64" aria-hidden="true"><g class="flt-body801"><path d="M32 18 L38 24 L38 40 L32 46 L26 40 L26 24 Z"/><path d="M32 24 L16 16"/><path d="M32 24 L48 16"/><path d="M32 40 L16 48"/><path d="M32 40 L48 48"/></g><g class="flt-accent801"><circle cx="14" cy="14" r="8"/><circle cx="50" cy="14" r="8"/><circle cx="14" cy="50" r="8"/><circle cx="50" cy="50" r="8"/></g><path class="flt-dark801" d="M32 11 L36 18 L28 18 Z"/></svg>`,
+  wing:`<svg viewBox="0 0 64 64" aria-hidden="true"><path class="flt-body801" d="M11 32 L25 26 L31 10 L36 10 L39 24 L53 28 L53 36 L39 40 L36 54 L31 54 L25 38 L11 32 Z"/><path class="flt-accent801" d="M31 10 L36 10 L35 28 L29 28 Z"/><path class="flt-dark801" d="M17 32 L27 29 L27 35 Z M47 32 L37 29 L37 35 Z"/></svg>`,
+  delta:`<svg viewBox="0 0 64 64" aria-hidden="true"><path class="flt-body801" d="M10 33 L35 13 L54 33 L40 38 L35 52 L30 38 Z"/><path class="flt-accent801" d="M35 13 L39 31 L31 31 Z"/><path class="flt-dark801" d="M24 35 L35 33 L46 35 L35 41 Z"/></svg>`,
+  rocket:`<svg viewBox="0 0 64 64" aria-hidden="true"><path class="flt-body801" d="M54 32 L43 25 L16 25 Q7 32 16 39 L43 39 Z"/><path class="flt-accent801" d="M43 25 L56 32 L43 39 Z"/><path class="flt-dark801" d="M22 25 L13 15 L25 19 L31 25 Z M22 39 L13 49 L25 45 L31 39 Z"/><path fill="#80cbd9" d="M12 29 L4 32 L12 35 Z"/></svg>`,
+  marker:`<svg viewBox="0 0 64 64" aria-hidden="true"><path class="flt-accent801" d="M32 10 L50 32 L32 54 L14 32 Z"/><circle class="flt-body801" cx="32" cy="32" r="6"/></svg>`
+ };
+ return svgs[type]||svgs.quad;
+ }
+ function addDot(type,ghost=false){const el=document.createElement('div');el.className='atlas-flight-dot801';el.dataset.type=type;el.dataset.ghost=ghost?'1':'0';el.innerHTML=textureSVG801(type);overlay.append(el);return el}
+function addRoute(start,end){
+if(routes.length>=12){const old=routes.shift();old.dot.remove();old.line?.remove();old.endDot.remove()}
+const type=$('flightType801').value,speed=Number($('flightSpeed801').value),line=$('flightLine801').checked?document.createElement('div'):null;
+if(line){line.className='atlas-flight-line801';overlay.append(line)}
+const endDot=document.createElement('div');endDot.className='atlas-flight-end801';overlay.append(endDot);
+const item={id:++seq,start,end,speed,type,progress:0,dot:addDot(type),line,endDot};routes.push(item);update();setStatus('Маршрут добавлен. БПЛА на карте: '+routes.length)}
+function setPicking(on){picking=on;window.atlasSuppressBlast0804=!!on;if(!on&&pending){pending.el.remove();pending=null;}root.style.cursor=on?'crosshair':(document.getElementById('atlasBlastToggle781')?.textContent.includes('включены')?'crosshair':'');$('flightPick801').textContent=on?'Отменить выбор точек':'Указать две точки на карте';if(on)setStatus('Выбери начальную точку.');else setStatus('Выбор точек завершён.');}
+$('flightPick801').onclick=()=>setPicking(!picking);
+root.addEventListener('click',function(ev){if(!picking)return;
+if(ev.target instanceof Element&&ev.target.closest('.leaflet-control,.leaflet-popup,button,input,label,select'))return;
+ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();
+const ll=map.containerPointToLatLng(map.mouseEventToContainerPoint(ev));
+if(!pending){pending={ll,el:addDot('marker',true)};setStatus('Теперь выбери конечную точку.');update();}
+else{addRoute(pending.ll,ll);pending.el.remove();pending=null;setPicking(false);}
+},true);
+$('flightPause801').onclick=()=>{paused=!paused;$('flightPause801').textContent=paused?'Продолжить':'Пауза'};
+$('flightReplay801').onclick=()=>{clearImpacts803();routes.forEach(x=>{x.progress=0;x.impacted=false;x.dot.style.display='';});paused=false;$('flightPause801').textContent='Пауза';update();setStatus('Движение запущено заново.')};
+$('flightClear801').onclick=()=>{for(const x of routes){x.dot.remove();x.line?.remove();x.endDot.remove()}routes=[];clearImpacts803();if(typeof window.atlasBlastClear0804==='function')window.atlasBlastClear0804();setPicking(false);setStatus('Маршруты и временные взрывы очищены.')};
+map.on('zoom move resize viewreset',update);
+function tick(now){const dt=last?Math.min(.09,(now-last)/1000):0;last=now;
+if(!paused){for(const x of routes){if(x.progress>=1)continue;const a=point(x.start),b=point(x.end);const distance=Math.max(1,Math.hypot(b.x-a.x,b.y-a.y));x.progress=Math.min(1,x.progress+dt*x.speed/distance);if(x.progress>=1)arrivalImpact803(x)}update()}
+requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+if(!window.atlasEffectsMap0785)document.body.classList.add('atlas-flight-view801');
+})();
+</script></body></html>
