@@ -884,6 +884,32 @@ $('clearNames').onclick=()=>{if(!customLabels.length){status('Добавленн
 renderNames();
 let lastProjectSignature='',manualFileMode=false,syncUpdateTimer=null;
 
+
+function atlasFrontBuild0818(data,step){
+ if(!data||!Array.isArray(data.base)||!Array.isArray(data.steps))return null;
+ const n=Math.max(0,Math.min(data.steps.length,Number(step)||0));
+ const byId=new Map();
+ for(const feature of data.base)if(feature?.properties?.id)byId.set(feature.properties.id,feature);
+ for(let i=0;i<n;i++){
+  const patch=data.steps[i];
+  for(const id of patch.removed||[])byId.delete(id);
+  for(const f of patch.changed||[])if(f?.properties?.id)byId.set(f.properties.id,f);
+ }
+ return [...byId.values()];
+}
+function atlasFrontKeys0818(data){
+ if(!data?.steps?.length)return [];
+ const keys=['Начало · до первой закраски'];
+ for(let i=0;i<data.steps.length;i++){
+  const step=data.steps[i];
+  const dt=new Date(step.time);
+  const stamp=Number.isNaN(dt.getTime())?'':dt.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  keys.push('Шаг '+String(i+1).padStart(5,'0')+' · '+(step.label||'Изменение фронта')+(stamp?' · '+stamp:''));
+ }
+ return keys;
+}
+
+let frontViewing0818=-1;
 // ATLAS 0812: read-only history playback bridge; shares existing date selector and paint().
 window.atlasHistoryBridge0812={
  isEditor:false,
@@ -894,6 +920,30 @@ window.atlasHistoryBridge0812={
    const index=Math.max(0,Math.min(keys.length-1,i));$('date').value=keys[index];$('date').onchange()},
  exit:()=>{if(timer){clearInterval(timer);timer=null}$('date').value='';$('date').onchange()}
 };
+// 0818: inspect every automatic brush stroke from a published .atlas project.
+const atlasDateBridge0818={...window.atlasHistoryBridge0812};
+Object.assign(window.atlasHistoryBridge0812,{
+ keys:()=>project?.frontHistory0818?.steps?.length?atlasFrontKeys0818(project.frontHistory0818):atlasDateBridge0818.keys(),
+ snapshot:key=>{
+  if(!project?.frontHistory0818?.steps?.length)return atlasDateBridge0818.snapshot(key);
+  const index=atlasFrontKeys0818(project.frontHistory0818).indexOf(key);
+  if(index<0)return [];
+  return (project.features||[]).filter(f=>!f?.properties?.isArmy).concat(atlasFrontBuild0818(project.frontHistory0818,index)||[]);
+ },
+ current:()=>project?.frontHistory0818?.steps?.length?frontViewing0818:atlasDateBridge0818.current(),
+ step:i=>{
+  if(!project?.frontHistory0818?.steps?.length){atlasDateBridge0818.step(i);return}
+  if(timer){clearInterval(timer);timer=null}
+  const n=Math.max(0,Math.min(project.frontHistory0818.steps.length,Number(i)||0));
+  frontViewing0818=n;
+  current=(project.features||[]).filter(f=>!f?.properties?.isArmy).concat(atlasFrontBuild0818(project.frontHistory0818,n)||[]);
+  paint();
+ },
+ exit:()=>{
+  frontViewing0818=-1;
+  atlasDateBridge0818.exit();
+ }
+});
 
 function setup(options={}){
  if(!project)return;
@@ -922,7 +972,7 @@ function setup(options={}){
 }
 function apply(data,origin,options={}){
  if(!valid(data)){status('Файл не похож на проект ATLAS (.atlas)');return false}
- project=data;setup(options);motionRender773();$('liveLabel').textContent=origin;return true;
+ project=data;frontViewing0818=-1;setup(options);motionRender773();$('liveLabel').textContent=origin;return true;
 }
 async function readSharedEditor(){
  // 0715: the canonical Editor document is in IndexedDB; localStorage may be a stale mirror.
@@ -2342,4 +2392,20 @@ html.atlas-night810 #map {background:#0b1925}
 })();
 </script>
 
+
+<script id="atlasFrontUi0818">
+(()=>{
+ const panel=document.getElementById('atlasHistory812');
+ const bridge=window.atlasHistoryBridge0812;
+ if(!panel||!bridge)return;
+ const header=panel.querySelector('.hi-head812 b'),mute=panel.querySelector('.hi-body812>.hi-mute812');
+ const upd=()=>{
+  const keys=bridge.keys();
+  const detailed=keys.length>0&&keys[0].startsWith('Начало ·');
+  if(header)header.textContent=detailed?'◷ История каждого изменения':'◷ История продвижений';
+  if(mute)mute.textContent=detailed?'Один шаг = одна завершённая закраска или стирание фронта.':'Пошаговый просмотр снимков.';
+ };
+ upd();setInterval(upd,1600);
+})();
+</script>
 </body></html>
