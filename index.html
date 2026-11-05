@@ -893,36 +893,50 @@ function atlasFrontRuntimeGet0819(data){
  if(!data||!Array.isArray(data.base)||!Array.isArray(data.steps))return null;
  let c=atlasFrontRuntime0819.get(data);
  if(c&&c.base===data.base&&c.steps===data.steps&&c.length===data.steps.length)return c;
- const live=new Map();
- for(const f of data.base)if(f?.properties?.id)live.set(f.properties.id,f);
+ const live=new Map();for(const f of data.base)if(f?.properties?.id)live.set(f.properties.id,f);
  const isZone=f=>!!(f?.properties?.isArmy&&['occupation','liberation','contested'].includes(f.properties.armyMode));
  let zoneCount=0;for(const f of live.values())if(isZone(f))zoneCount++;
- const reverse=[],counts=[zoneCount];
- for(const step of data.steps){
-  const prior=new Map();
-  for(const id of step.removed||[]){if(!prior.has(id))prior.set(id,live.has(id)?live.get(id):null);const old=live.get(id);if(isZone(old))zoneCount--;live.delete(id)}
-  for(const f of step.changed||[]){const id=f?.properties?.id;if(!id)continue;
-   if(!prior.has(id))prior.set(id,live.has(id)?live.get(id):null);
-   const old=live.get(id);if(isZone(old))zoneCount--;if(isZone(f))zoneCount++;live.set(id,f);
-  }
-  reverse.push(prior);counts.push(zoneCount);
- }
- c={base:data.base,steps:data.steps,length:data.steps.length,reverse,counts,
-   index:data.steps.length,state:live,labels:null};
+ // Initialise just the baseline: do not process the entire history on menu open.
+ c={base:data.base,steps:data.steps,length:data.steps.length,state:live,index:0,reverse:[],counts:[zoneCount],computed:0,zoneCount,labels:null};
  atlasFrontRuntime0819.set(data,c);return c;
 }
+function atlasFrontEnsure0819(data,n){
+ const c=atlasFrontRuntimeGet0819(data);if(!c)return null;
+ const target=Math.max(0,Math.min(c.length,Number(n)||0));
+ const extending=target>c.computed;
+ const isZone=f=>!!(f?.properties?.isArmy&&['occupation','liberation','contested'].includes(f.properties.armyMode));
+ // Resume the previously calculated end state before extending the cache.
+ if(target>c.computed && c.index<c.computed){
+  for(let j=c.index;j<c.computed;j++){
+   const patch=data.steps[j];
+   for(const id of patch.removed||[])c.state.delete(id);
+   for(const f of patch.changed||[])if(f?.properties?.id)c.state.set(f.properties.id,f);
+  }
+  c.index=c.computed;
+ }
+ // Process each event once. Keep reversible deltas for cheap backward navigation.
+ for(let j=c.computed;j<target;j++){
+  const patch=data.steps[j],prior=new Map();
+  for(const id of patch.removed||[]){if(!prior.has(id))prior.set(id,c.state.get(id)??null);const old=c.state.get(id);if(isZone(old))c.zoneCount--;c.state.delete(id)}
+  for(const f of patch.changed||[]){const id=f?.properties?.id;if(!id)continue;if(!prior.has(id))prior.set(id,c.state.get(id)??null);const old=c.state.get(id);if(isZone(old))c.zoneCount--;if(isZone(f))c.zoneCount++;c.state.set(id,f)}
+  c.reverse.push(prior);c.counts.push(c.zoneCount);c.computed=j+1;
+ }
+ if(extending)c.index=c.computed;
+ return c;
+}
 function atlasFrontAt0819(data,step){
- const c=atlasFrontRuntimeGet0819(data);if(!c)return [];
+ const c=atlasFrontEnsure0819(data,step);if(!c)return [];
  const n=Math.max(0,Math.min(c.length,Number(step)||0));
- if(n>c.index){for(let j=c.index;j<n;j++){
-  const patch=data.steps[j];for(const id of patch.removed||[])c.state.delete(id);
-  for(const f of patch.changed||[])if(f?.properties?.id)c.state.set(f.properties.id,f);
- }}else if(n<c.index){for(let j=c.index-1;j>=n;j--){
-  for(const [id,old] of c.reverse[j]){if(old===null)c.state.delete(id);else c.state.set(id,old)}
- }}
+ if(n<c.index){for(let j=c.index-1;j>=n;j--){for(const [id,old] of c.reverse[j]){if(old===null)c.state.delete(id);else c.state.set(id,old)}}}
+ else if(n>c.index){for(let j=c.index;j<n;j++){const p=data.steps[j];for(const id of p.removed||[])c.state.delete(id);for(const f of p.changed||[])if(f?.properties?.id)c.state.set(f.properties.id,f)}}
  c.index=n;return [...c.state.values()];
 }
-function atlasFrontCount0819(data,n){const c=atlasFrontRuntimeGet0819(data);return c?.counts[Math.max(0,Math.min(c.length,Number(n)||0))]??0}
+function atlasFrontCount0819(data,n){
+ const c=atlasFrontRuntimeGet0819(data);if(!c)return 0;
+ const idx=Math.max(0,Math.min(c.length,Number(n)||0));
+ // Calling the count should not rebuild the map; counts are populated as steps are visited.
+ return c.counts[idx]??null;
+}
 
 function atlasFrontBuild0818(data,step){return atlasFrontAt0819(data,step)}
 function atlasFrontKeys0818(data){
@@ -968,7 +982,10 @@ Object.assign(window.atlasHistoryBridge0812,{
   const n=Math.max(0,Math.min(project.frontHistory0818.steps.length,Number(i)||0));
   frontViewing0818=n;
   current=(project.features||[]).filter(f=>!f?.properties?.isArmy).concat(atlasFrontBuild0818(project.frontHistory0818,n)||[]);
-  paint();
+  // Fast history draws on the existing canvas instead of rebuilding every Leaflet layer.
+  if(atlasFastView0816 && atlasMode739!=='political' && $('army').checked){
+   const canvas=atlasCanvasView0816();canvas.style.display='block';atlasCanvasQueueView0816();
+  }else paint();
  },
  exit:()=>{
   frontViewing0818=-1;
@@ -2202,14 +2219,17 @@ html.atlas-night810 #map {background:#0b1925}
   $('hiAuto812').disabled=all.length===0;
   $('hiExit812').disabled=chosen<0;
   if(chosen<0){$('hiSummary812').textContent=all.length?`Сохранено этапов: ${all.length}. Выбери первый или используй ▶.`:'Нет исторических снимков. Сохрани первый этап в редакторе.';return}
-  const now=featureCount(all[chosen],chosen),before=chosen>0?featureCount(all[chosen-1],chosen-1):0;
-  $('hiSummary812').textContent=`Военных зон в снимке: ${now}`+(chosen>0?` · на предыдущем этапе: ${before}`:' · первый этап')+'. Это количество объектов, не площадь продвижения.';
+  const now=featureCount(all[chosen],chosen),before=chosen>0?bridge.countAt?.(chosen-1):0;
+  $('hiSummary812').textContent=`Военных зон в снимке: ${now}`+(chosen>0&&Number.isFinite(before)?` · ранее: ${before}`:'')+'.';
  }
  function show(i){const all=keys();if(!all.length)return;chosen=Math.max(0,Math.min(all.length-1,i));bridge.step(chosen);update()}
  $('hiExpand812').onclick=()=>{open=!open;panel.setAttribute('aria-expanded',String(open));$('hiExpand812').textContent=open?'Свернуть ▴':'Открыть ▾';if(open){chosen=bridge.current();update() }else stop()};
  $('hiPrev812').onclick=()=>{stop();show(chosen<0?0:chosen-1)};
  $('hiNext812').onclick=()=>{stop();show(chosen<0?0:chosen+1)};
- let pendingSlide812=null,slideRaf812=0; $('hiRange812').oninput=e=>{stop();pendingSlide812=Number(e.target.value);if(slideRaf812)return;slideRaf812=requestAnimationFrame(()=>{slideRaf812=0;if(pendingSlide812!==null){const i=pendingSlide812;pendingSlide812=null;show(i)}})};
+ let pendingSlide812=null,slideTimer0823=0;
+ const commitSlide0823=()=>{clearTimeout(slideTimer0823);slideTimer0823=0;if(pendingSlide812!==null){const n=pendingSlide812;pendingSlide812=null;show(n)}};
+ $('hiRange812').oninput=e=>{stop();pendingSlide812=Number(e.target.value);const all=keys();$('hiDate812').textContent=all[pendingSlide812]||'Шаг '+pendingSlide812;$('hiCount812').textContent=(pendingSlide812+1)+'/'+all.length;clearTimeout(slideTimer0823);slideTimer0823=setTimeout(commitSlide0823,140)};
+ $('hiRange812').onchange=commitSlide0823;
  $('hiExit812').onclick=()=>{stop();chosen=-1;bridge.exit();update()};
  $('hiAuto812').onclick=()=>{if(playing){stop();return}const all=keys();if(!all.length)return;if(chosen<0||chosen>=all.length-1)show(0);
    $('hiAuto812').textContent='⏸ Пауза';playing=setInterval(()=>{if(chosen>=keys().length-1){stop();return}show(chosen+1)},1600)};
