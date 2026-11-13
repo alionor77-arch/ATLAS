@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS 0822 View 0817 — Combat FX Controls</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS 0831 View — Country Boundaries Sync</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -448,6 +448,21 @@ syncMilitaryUI740();
 
 try{const saved=localStorage.getItem('atlas-view-country-names-v0726');if(saved!==null)$('countryNames726').checked=saved==='1'}catch{};$('countryNames726').addEventListener('change',()=>{try{localStorage.setItem('atlas-view-country-names-v0726',$('countryNames726').checked?'1':'0')}catch{}});try{const s=localStorage.getItem('atlas-view-flags-visible-v0713');if(s!==null)$('showFlags713').checked=s==='1'}catch{};$('showFlags713').addEventListener('change',()=>{try{localStorage.setItem('atlas-view-flags-visible-v0713',$('showFlags713').checked?'1':'0')}catch{}});const labelsKey='atlas-view-custom-labels-v0703';let customLabels=[];try{const v=JSON.parse(localStorage.getItem(labelsKey)||'[]');if(Array.isArray(v))customLabels=v.filter(x=>Number.isFinite(x.lat)&&Number.isFinite(x.lng)&&typeof x.text==='string').slice(0,500)}catch{}
 const labelsOverlay=L.layerGroup().addTo(map);map.createPane('atlasReferenceLabels');map.getPane('atlasReferenceLabels').style.zIndex=650;map.getPane('atlasReferenceLabels').style.pointerEvents='none';const placeLabels=L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{pane:'atlasReferenceLabels',maxZoom:19,opacity:1,attribution:'Labels © Esri',crossOrigin:true}).addTo(map);let addingName=false;const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const clone=o=>JSON.parse(JSON.stringify(o));const safeFeatures=fs=>Array.isArray(fs)?fs.filter(f=>f&&f.type==='Feature'&&f.geometry&&f.properties):[];
+const atlasViewSaveBtn0826=document.createElement('button');
+atlasViewSaveBtn0826.type='button';atlasViewSaveBtn0826.id='atlasViewSaveBtn0826';
+atlasViewSaveBtn0826.textContent='⬇ Сохранить .atlas';
+atlasViewSaveBtn0826.addEventListener('click',()=>atlasViewDownloadProject0826());
+const atlasViewLoadBtn0826=document.getElementById('load');
+if(atlasViewLoadBtn0826)atlasViewLoadBtn0826.after(atlasViewSaveBtn0826);
+function atlasViewDownloadProject0826(){
+ if(!valid(project)){status('Сначала загрузите проект .atlas или дождитесь синхронизации');return}
+ try{
+  const blob=new Blob([JSON.stringify(project)],{type:'application/json'}),url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='ATLAS-view-project.atlas';a.style.display='none';
+  document.body.append(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},60000);
+  status('Запрошено скачивание ATLAS-view-project.atlas · проверьте «Загрузки»');
+ }catch(e){status('Ошибка экспорта проекта: '+e.message)}
+}
 function status(s){$('status').textContent=s}function valid(data){return data&&data.format==='ATLAS'&&Array.isArray(data.features)&&Array.isArray(data.groups)}
 function groups(){return project?.groups||[]}
 // V0772: fast, conservative bounding-box rejection before Turf boolean operations.
@@ -1020,7 +1035,7 @@ function setup(options={}){
 }
 function apply(data,origin,options={}){
  if(!valid(data)){status('Файл не похож на проект ATLAS (.atlas)');return false}
- project=data;frontViewing0818=-1;setup(options);motionRender773();$('liveLabel').textContent=origin;return true;
+ project=data;frontViewing0818=-1;setup(options);motionRender773();$('liveLabel').textContent=origin;window.atlasLastLoadedProject0831={origin,features:data.features.length,groups:data.groups.length,loadedAt:Date.now()};return true;
 }
 async function readSharedEditor(){
  // 0715: the canonical Editor document is in IndexedDB; localStorage may be a stale mirror.
@@ -2579,4 +2594,271 @@ html.atlas-night810 #map {background:#0b1925}
  const head=panel.querySelector('.hi-head812');if(head)head.hidden=true;
 })();
 </script>
+<style id="atlasMobileStyle0824">
+
+/* ATLAS 0824: touch-friendly mobile layout; desktop unchanged. */
+#atlasMobileShade824,#atlasMobileTools824,#atlasMobileDrawerTop824,#atlasMobileDrawerProject824,#atlasMobileMenu824{display:none}
+@media (max-width:800px){
+ html{height:100%;overflow:hidden}
+ body{height:100dvh;overflow:hidden;overscroll-behavior:none}
+ #atlasMobileShade824{position:fixed;inset:0;z-index:10090;background:rgba(3,11,20,.68);backdrop-filter:blur(3px)}
+ body.atlas-mobile-drawer-open824 #atlasMobileShade824{display:block}
+ #atlasMobileDrawerTop824{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 6px 10px;border-bottom:1px solid #3b576a;color:#f0f7fc;flex-shrink:0}
+ #atlasMobileDrawerTop824 strong{font-size:14px}
+ #atlasMobileDrawerTop824 button{width:auto!important;min-height:40px;min-width:40px;margin:0!important;padding:7px 10px!important}
+ #atlasMobileTools824{display:flex;position:fixed;z-index:10030;right:10px;bottom:calc(153px + env(safe-area-inset-bottom,0px));min-height:42px;align-items:center;justify-content:center;gap:6px;padding:8px 12px;background:#17344a;border:1px solid #6b93a5;color:#eaf6fc;border-radius:12px;box-shadow:0 7px 25px #0009;font:600 12px system-ui}
+ #atlasMobileTools824[aria-expanded=true]{background:#26657a;border-color:#b0e4e8}
+ #atlasUtilityDock814{display:none!important;position:fixed!important;z-index:10035!important;right:8px!important;bottom:calc(205px + env(safe-area-inset-bottom,0px))!important;max-height:45dvh;overflow:auto;width:min(255px,calc(100vw - 16px))!important;box-shadow:0 12px 34px #000b;border-radius:12px}
+ body.atlas-mobile-utilities-open824 #atlasUtilityDock814{display:flex!important}
+ #atlasUtilityDock814 #atlasThemePanel809{padding:8px!important}
+ #atlasUtilityDock814 #atlasThemePanel809 .at-row810{gap:7px!important}
+ #atlasUnifiedHistoryDock0820{position:fixed!important;left:8px!important;right:8px!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;transform:none!important;width:calc(100vw - 16px)!important;max-width:none!important;min-width:0!important;z-index:9020!important}
+ #atlasUnifiedHistoryDock0820 #atlasHistory812,#glassTimeline #atlasHistory812{width:100%!important;min-width:0!important;max-width:none!important}
+ #atlasHistory812 .hi-body812{max-height:42dvh;overflow:auto}
+ #atlasHistory812 .hi-nav812 button{min-width:42px!important;min-height:42px!important;touch-action:manipulation}
+ #atlasHistory812 #hiRange812{min-height:27px;touch-action:pan-x}
+ #atlasHistory812 .hi-foot812 button{min-height:38px!important}
+ #atlasFlightPanel801{position:fixed!important;z-index:9050!important;left:9px!important;right:auto!important;top:72px!important;bottom:auto!important;width:min(235px,calc(100vw - 20px))!important;max-height:55dvh!important;overflow:auto!important}
+ #atlasFlightPanel801 button,#atlasFlightPanel801 select{min-height:39px}
+ .leaflet-control-zoom a{width:38px!important;height:38px!important;line-height:38px!important}
+ button,select,input[type=checkbox],input[type=range]{touch-action:manipulation}
+ input[type=checkbox]{min-width:17px;min-height:17px}
+ #atlasMobileDrawerProject824{display:block;flex-shrink:0;margin:6px 4px;border:1px solid #354e62;border-radius:10px;padding:8px;background:#101f30}
+ #atlasMobileDrawerProject824 summary{font-size:12px;font-weight:700;cursor:pointer;color:#cae5f2;list-style-position:inside}
+ #atlasMobileDrawerProject824 #atlasSaveBar,#atlasMobileDrawerProject824 #betaToolbar{position:static!important;width:100%!important;max-width:none!important;box-sizing:border-box;border:none!important;padding:8px 3px!important;background:none!important;display:flex;align-items:stretch;flex-wrap:wrap;gap:5px}
+ #atlasMobileDrawerProject824 #atlasSaveBar button,#atlasMobileDrawerProject824 #betaToolbar button{flex:1 1 45%;white-space:normal;min-height:38px}
+ body.atlas-cinematic731 #atlasMobileTools824,body.atlas-presentation727 #atlasMobileTools824{display:none!important}
+}
+@media(max-width:800px) and (orientation:landscape) and (max-height:500px){
+ #atlasMobileTools824{bottom:calc(95px + env(safe-area-inset-bottom,0px))}
+ #atlasUtilityDock814{bottom:calc(146px + env(safe-area-inset-bottom,0px))!important;max-height:53dvh}
+ #atlasHistory812 .hi-body812{max-height:28dvh}
+ #atlasFlightPanel801{max-height:53dvh!important}
+}
+
+@media(max-width:800px){
+ header{position:fixed!important;z-index:10020!important;top:0!important;left:0!important;right:0!important;height:54px!important;display:flex!important;align-items:center;gap:7px;padding:5px 8px!important}
+ header strong{font-size:15px!important;white-space:nowrap}
+ header strong span{font-size:15px!important}
+ header>span:not(#liveLabel),#liveLabel{display:none!important}
+ #glassMenuToggle{min-width:43px;width:43px!important;height:40px;min-height:40px;padding:0!important;font-size:0!important;margin:0!important;flex:none}
+ #glassMenuToggle:before{content:'☰';font-size:23px;line-height:1}
+ #themeSwitcher723{display:none!important}
+ #viewSettingsToggle725{margin-left:auto!important;min-width:42px;max-width:104px;white-space:nowrap;padding:7px 6px!important;height:40px}
+ .layout{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;display:block!important;overflow:hidden!important}
+ .layout>div:last-child{position:absolute!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:0!important}
+ .layout>aside{display:block!important;position:fixed!important;z-index:10100!important;top:0!important;left:0!important;bottom:0!important;width:min(350px,90vw)!important;max-width:90vw!important;height:100dvh!important;max-height:100dvh!important;overflow:auto!important;padding:8px 12px 20px!important;border:0!important;border-right:1px solid #46657b!important;background:#101b29f5!important;box-shadow:14px 0 38px #000b!important;transform:translateX(-106%)!important;transition:transform .2s ease;overscroll-behavior:contain}
+ body.atlas-mobile-drawer-open824 .layout>aside{transform:translateX(0)!important}
+ body.glass-sidebar-hidden .layout>aside{display:block!important}
+ #map{height:100dvh!important;min-height:0!important;width:100vw!important}
+ .maphead{display:none!important}
+ .layout>aside button,.layout>aside select{min-height:42px}
+ #dualMode739{display:flex;gap:4px}
+ #dualMode739 button{flex:1;min-width:0;font-size:11px;padding:8px 3px}
+ #frontlineStatus0760{top:70px!important;right:9px!important;left:auto!important;max-width:170px!important;padding:7px!important;font-size:10px!important}
+ #atlasTools727{right:8px!important;top:210px!important}
+ #glassTimeline{display:none!important}
+ #atlasUnifiedHistoryDock0820{display:block!important}
+ #viewSettings725{z-index:10150!important;max-height:85dvh!important;overflow:auto!important}
+}
+@media(max-width:800px) and (prefers-reduced-motion:reduce){.layout>aside{transition:none}}
+</style>
+
+<script id="atlasMobileUI0824">
+(()=>{
+ 'use strict';
+ if(document.getElementById('atlasMobileShade824'))return;
+ const query=window.matchMedia('(max-width:800px)');
+ const isEditor=!!document.querySelector('main > aside');
+ const drawer=document.querySelector(isEditor?'main > aside':'.layout > aside');
+ if(!drawer)return;
+ const shade=document.createElement('div');shade.id='atlasMobileShade824';shade.setAttribute('aria-hidden','true');document.body.append(shade);
+ const title=document.createElement('div');title.id='atlasMobileDrawerTop824';
+ title.innerHTML='<strong>ATLAS · Панель</strong><button type="button" id="atlasMobileClose824" aria-label="Закрыть меню">✕</button>';
+ drawer.insertBefore(title,drawer.firstChild);
+ const utility=document.createElement('button');utility.id='atlasMobileTools824';utility.type='button';utility.textContent='⚙ Слои и стиль';utility.setAttribute('aria-expanded','false');document.body.append(utility);
+ let menu;
+ if(isEditor){
+   menu=document.createElement('button');menu.id='atlasMobileMenu824';menu.type='button';menu.textContent='☰';menu.setAttribute('aria-label','Открыть инструменты редактора');menu.setAttribute('aria-expanded','false');document.body.append(menu);
+ }else menu=document.getElementById('glassMenuToggle');
+ let projectBox=null;let originNodes=[];
+ if(isEditor){
+   projectBox=document.createElement('details');projectBox.id='atlasMobileDrawerProject824';
+   const summary=document.createElement('summary');summary.textContent='Проект, сохранение и инструменты';projectBox.append(summary);
+   const place=document.createElement('div');place.style.cssText='display:flex;flex-direction:column;gap:4px';projectBox.append(place);
+   const nav=drawer.querySelector('.atlas-tabs');
+   if(nav)nav.after(projectBox);else drawer.append(projectBox);
+   for(const id of ['atlasSaveBar','betaToolbar']){
+     const el=document.getElementById(id);if(!el)continue;
+     const marker=document.createComment('atlas-mobile-original-'+id);el.parentNode.insertBefore(marker,el);originNodes.push([el,marker]);
+   }
+ }
+ function updateSize(){const map=window.atlasEffectsMap0785||window.atlasMap||window.map;try{map?.invalidateSize?.({pan:false})}catch{}
+   window.dispatchEvent(new Event('resize'));
+ }
+ function drawerState(on){
+   const active=!!on&&query.matches;
+   document.body.classList.toggle('atlas-mobile-drawer-open824',active);
+   if(menu)menu.setAttribute('aria-expanded',String(active));
+   drawer.setAttribute('aria-hidden',active?'false':'true');
+   if(!active && menu?.id==='glassMenuToggle')menu.textContent='☰ Меню';
+   window.requestAnimationFrame(updateSize);
+ }
+ function utilityState(on){document.body.classList.toggle('atlas-mobile-utilities-open824',!!on&&query.matches);utility.setAttribute('aria-expanded',String(!!on&&query.matches));utility.textContent=on&&query.matches?'✕ Закрыть настройки':'⚙ Слои и стиль'}
+ function applyMobile(){
+   if(isEditor){
+     for(const [el,marker] of originNodes){if(query.matches){projectBox?.lastElementChild?.append(el)}else if(marker.parentNode){marker.after(el)}}
+   }
+   if(!query.matches){drawerState(false);utilityState(false);drawer.removeAttribute('aria-hidden')}
+   else drawer.setAttribute('aria-hidden',document.body.classList.contains('atlas-mobile-drawer-open824')?'false':'true');
+   window.requestAnimationFrame(updateSize);
+ }
+ // View already has a desktop menu handler. Intercept only on phones.
+ if(!isEditor&&menu){menu.addEventListener('click',event=>{if(!query.matches)return;event.preventDefault();event.stopImmediatePropagation();drawerState(!document.body.classList.contains('atlas-mobile-drawer-open824'))},true)}
+ if(isEditor&&menu)menu.addEventListener('click',()=>drawerState(!document.body.classList.contains('atlas-mobile-drawer-open824')));
+ document.getElementById('atlasMobileClose824').addEventListener('click',()=>drawerState(false));
+ shade.addEventListener('click',()=>drawerState(false));
+ utility.addEventListener('click',()=>utilityState(!document.body.classList.contains('atlas-mobile-utilities-open824')));
+ document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&query.matches){drawerState(false);utilityState(false)}});
+ drawer.querySelectorAll('[data-tab],#dualMode739 button').forEach(btn=>btn.addEventListener('click',()=>{if(query.matches)drawerState(false)}));
+ query.addEventListener?.('change',applyMobile);
+ window.addEventListener('orientationchange',()=>window.setTimeout(updateSize,120));
+ applyMobile();
+})();
+</script>
+<style id="atlasMobileCompact0825">
+@media(max-width:800px){
+ html,body{font-size:13px!important}
+ body>header{height:50px!important;min-height:50px!important;padding:5px 10px 5px 57px!important}
+ body>header strong{font-size:15px!important}
+ #atlasMobileMenu824{top:6px!important;width:39px!important;height:38px!important;font-size:20px!important}
+ #atlasMobileTools824{right:9px!important;bottom:calc(80px + env(safe-area-inset-bottom,0px))!important;top:auto!important;min-height:34px!important;max-width:140px!important;padding:6px 9px!important;font-size:11px!important;border-radius:9px!important;box-shadow:0 3px 14px #0008!important}
+ #atlasUtilityDock814{right:8px!important;bottom:calc(120px + env(safe-area-inset-bottom,0px))!important;width:min(225px,calc(100vw - 16px))!important;max-height:45dvh!important}
+ #atlasUnifiedHistoryDock0820{left:6px!important;right:6px!important;bottom:calc(5px + env(safe-area-inset-bottom,0px))!important;width:calc(100vw - 12px)!important;max-width:calc(100vw - 12px)!important;min-width:0!important;z-index:9020!important}
+ #atlasHistory812{width:100%!important;max-width:100%!important;min-width:0!important;border-radius:11px!important}
+ #atlasHistory812 .hi-body812{padding:6px!important;max-height:min(53dvh,360px)!important;overflow:auto!important}
+ #atlasHistory812 .atlasTimelineLine0820{display:flex!important;flex-wrap:wrap!important;gap:4px!important;align-items:center!important;justify-content:space-between!important}
+ #atlasHistory812 .hi-nav812{display:flex!important;grid-column:auto!important;flex:1 1 auto!important;min-width:0!important;gap:4px!important;align-items:center!important}
+ #atlasHistory812 .hi-nav812 button{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:3px!important;font-size:13px!important;border-radius:7px!important}
+ #atlasHistory812 .hi-date812{min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:11px!important}
+ #atlasHistory812 #hiRange812{grid-column:auto!important;flex:1 1 100%!important;min-height:20px!important;height:20px!important;margin:0!important}
+ #atlasHistory812 .hi-foot812{grid-column:auto!important;flex:1 1 100%!important;min-width:0!important;gap:4px!important;display:flex!important;justify-content:space-between!important}
+ #atlasHistory812 .hi-foot812 button{font-size:10px!important;padding:4px 7px!important;min-height:30px!important;height:30px!important}
+ #atlasHistory812 .hi-foot812 #hiCount812{font-size:10px!important}
+ #atlasHistory812 .hi-summary-compact813,#atlasHistory812 #hiSummary812,#atlasHistory812 .hi-save812{font-size:10px!important}
+ #atlasHistory812 #atlasMobileHistoryToggle825{display:flex!important;align-items:center;justify-content:center;flex:none!important;width:31px!important;height:32px!important;min-width:31px!important;padding:2px!important;border-radius:7px!important;font-size:15px!important}
+ #atlasHistory812 .atlasTimelineTitle0820{display:none!important}
+ #atlasHistory812.atlas-mobile-history-small825 .hi-foot812,
+ #atlasHistory812.atlas-mobile-history-small825 #hiRange812,
+ #atlasHistory812.atlas-mobile-history-small825 .hi-save812,
+ #atlasHistory812.atlas-mobile-history-small825 #hiSummary812{display:none!important}
+ #atlasHistory812.atlas-mobile-history-small825 .hi-body812{max-height:none!important;overflow:hidden!important}
+ #atlasHistory812.atlas-mobile-history-small825 .atlasTimelineLine0820{flex-wrap:nowrap!important}
+ #atlasHistory812.atlas-mobile-history-small825 .hi-nav812{flex:1!important}
+ #atlasMobileDrawerProject824{display:block!important}
+ #atlasMobileProject825{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap;padding:9px;background:#193044;border:1px solid #47687c;border-radius:10px;margin:7px 4px;color:#e1f0f7;font:12px system-ui}
+ #atlasMobileProject825 button{width:auto!important;min-width:112px;min-height:36px!important;padding:6px 9px!important;margin:0!important;background:#2b566a}
+ #atlasFlightPanel801{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%!important;max-width:none!important;max-height:none!important;overflow:visible!important;margin:8px 0!important;box-shadow:none!important;border:1px solid #42677d!important;border-radius:10px!important;padding:5px!important}
+ #atlasFlightPanel801 #flightOpen801{min-height:37px!important;padding:6px 8px!important;font-size:12px!important}
+ #atlasFlightPanel801 #flightBody801{max-height:46dvh;overflow:auto;padding:5px}
+ #dualMap0737.atlas-mobile-inline825{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;margin:8px 0!important;padding:5px!important;display:flex!important;flex-wrap:wrap!important;gap:4px!important}
+ #dualMap0737.atlas-mobile-inline825 button{flex:1 1 30%;width:auto!important;min-width:0!important;font-size:11px!important;padding:7px 3px!important;min-height:35px!important}
+ #dualMap0737.atlas-mobile-inline825 span{display:none!important}
+ #atlasMobileEffectsWrap825{margin:8px 0}
+ #atlasMobileEffectsWrap825>button{width:100%!important;position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;font-size:12px!important;min-height:36px!important;padding:7px!important}
+ #atlasMobileEffectsWrap825>div{position:fixed!important;z-index:10200!important;left:8px!important;right:8px!important;top:58px!important;bottom:calc(66px + env(safe-area-inset-bottom,0px))!important;width:auto!important;max-height:none!important;overflow:auto!important;padding:12px!important}
+ #atlasMobileTools824, #atlasHistory812, #atlasFlightPanel801{font-family:system-ui,sans-serif!important}
+ #atlasCloudStatus756{left:8px!important;bottom:calc(116px + env(safe-area-inset-bottom,0px))!important;max-width:min(215px,calc(100vw - 22px))!important;font-size:10px!important;padding:5px 7px!important;opacity:.90}
+ #atlasCloudToast758{top:60px!important}
+ #frontlineStatus0760{display:none!important}
+ #atlasEventsToggle0770{right:9px!important;top:60px!important;font-size:11px!important;padding:6px 8px!important;max-width:145px!important}
+ #atlasEvents0770{right:9px!important;top:100px!important;width:min(280px,calc(100vw - 20px))!important}
+ #atlasTools727{right:7px!important;top:102px!important;transform:scale(.8);transform-origin:top right}
+ #cityOpen{right:8px!important;top:74px!important;bottom:auto!important;font-size:11px!important;padding:6px!important;max-width:128px!important}
+ #atlasNoGrayBtn0793{font-size:11px!important}
+ .topbar{top:55px!important;left:8px!important;right:8px!important;max-width:none!important;font-size:10px!important;line-height:1.2!important;padding:4px 7px!important}
+}
+@media(max-width:800px) and (max-height:560px){
+ #atlasMobileTools824{bottom:calc(67px + env(safe-area-inset-bottom,0px))!important}
+ #atlasHistory812 .hi-body812{max-height:53dvh!important}
+}
+@media(min-width:801px){#atlasMobileHistoryToggle825,#atlasMobileProject825{display:none!important}}
+</style>
+<script id="atlasMobileCompactLogic0825">
+(()=>{
+ 'use strict';
+ const mq=matchMedia('(max-width:800px)');
+ const isEditor=!!document.querySelector('main > aside');
+ const drawer=document.querySelector(isEditor?'main > aside':'.layout > aside');
+ if(!drawer)return;
+ const moved=[];
+ function move(el,destination){
+  if(!el||!destination)return;
+  let entry=moved.find(item=>item.el===el);
+  if(!entry){const marker=document.createComment('atlas-mobile-0825-origin');el.before(marker);entry={el,marker};moved.push(entry)}
+  destination.append(el);
+ }
+ const hist=document.getElementById('atlasHistory812');
+ const line=hist?.querySelector('.atlasTimelineLine0820');
+ let expandBtn=null;
+ if(line){
+  expandBtn=document.createElement('button');expandBtn.type='button';expandBtn.id='atlasMobileHistoryToggle825';expandBtn.title='Развернуть или свернуть историю';expandBtn.setAttribute('aria-label','Развернуть или свернуть историю');
+  expandBtn.onclick=()=>{hist.classList.toggle('atlas-mobile-history-small825');syncHistory()};
+  line.append(expandBtn);
+ }
+ const syncHistory=()=>{if(expandBtn){const small=hist.classList.contains('atlas-mobile-history-small825');expandBtn.textContent=small?'⌃':'⌄';expandBtn.setAttribute('aria-expanded',String(!small))}};
+ const project=document.createElement('div');project.id='atlasMobileProject825';
+ const info=document.createElement('span');info.textContent=isEditor?'Основная карта и проект':'Нет территорий? Загрузите проект .atlas';
+ const importBtn=document.createElement('button');importBtn.type='button';importBtn.textContent='Загрузить .atlas';
+ importBtn.onclick=()=>{
+  const target=document.getElementById(isEditor?'projectInput':'file');
+  if(target){target.click();return}
+  if(isEditor){const u=document.getElementById('projectUpload');if(u){u.click();return}}
+  alert('Открой раздел «Проект» и выбери «Восстановить проект».');
+ };
+ const saveBtn=document.createElement('button');saveBtn.type='button';saveBtn.id='atlasMobileSaveProject826';
+ saveBtn.textContent='⬇ Сохранить .atlas';saveBtn.onclick=()=>document.getElementById('atlasViewSaveBtn0826')?.click();
+ project.append(info,saveBtn,importBtn);
+ const holder=isEditor?document.getElementById('atlasMobileDrawerProject824'):drawer;
+ if(holder){if(isEditor)holder.before(project);else drawer.insertBefore(project,document.getElementById('atlasMobileDrawerTop824')?.nextSibling||drawer.firstChild)}
+ const flight=document.getElementById('atlasFlightPanel801');
+ const dual=document.getElementById('dualMap0737');
+ const effectsButton=isEditor?[...document.body.querySelectorAll('button')].find(b=>b.textContent.trim()==='✦ Эффекты'):null;
+ let effectsWrap=null;
+ if(effectsButton){effectsWrap=document.createElement('div');effectsWrap.id='atlasMobileEffectsWrap825';drawer.append(effectsWrap);}
+ function apply(){
+  if(mq.matches){
+   if(hist&&!hist.dataset.atlasMobileInitialized825){hist.classList.add('atlas-mobile-history-small825');hist.dataset.atlasMobileInitialized825='yes'}
+   if(flight)move(flight,isEditor?(document.getElementById('atlasMobileDrawerProject824')||drawer):drawer);
+   if(!isEditor&&hist&&hist.closest('#glassTimeline')){
+     let hd=document.getElementById('atlasUnifiedHistoryDock0820');
+     if(!hd){hd=document.createElement('div');hd.id='atlasUnifiedHistoryDock0820';document.body.append(hd)}
+     move(hist,hd);
+   }
+   if(isEditor&&dual){dual.classList.add('atlas-mobile-inline825');move(dual,drawer.querySelector('.tab-scroller')||drawer)}
+   if(isEditor&&effectsButton&&effectsWrap){move(effectsButton,effectsWrap);const p=effectsButton.nextElementSibling;if(p&&p.tagName==='DIV'&&p!==effectsWrap)move(p,effectsWrap)}
+  }else{
+   hist?.classList.remove('atlas-mobile-history-small825');
+   for(const {el,marker} of moved){if(marker.parentNode)marker.after(el)}
+   dual?.classList.remove('atlas-mobile-inline825');
+  }
+  syncHistory();
+  requestAnimationFrame(()=>{const m=window.atlasEffectsMap0785||window.atlasMap||window.map;try{m?.invalidateSize?.({pan:false})}catch{}});
+ }
+ mq.addEventListener?.('change',apply);
+ apply();
+})();
+</script>
+<style id="atlasMobileSave826Css">
+@media(max-width:800px){
+ #atlasMobileProject825{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;align-items:stretch!important}
+ #atlasMobileProject825>span{grid-column:1/-1;color:#d6e6ee;font-size:11px}
+ #atlasMobileProject825 button{min-width:0!important;width:100%!important;box-sizing:border-box!important;font-size:11px!important;font-weight:650;min-height:42px!important;margin:0!important;padding:7px 5px!important}
+ #atlasMobileSaveProject826{background:#26576c!important;border-color:#75b6ce!important;color:#f3fbff!important}
+ #atlasMobileDrawerProject824 #atlasSaveBar{display:flex!important;flex-wrap:wrap;max-width:100%!important;gap:5px!important}
+ #atlasMobileDrawerProject824 #atlasSaveBar button{flex:1 1 44%!important;font-size:11px!important;padding:6px!important;min-width:0!important}
+ #atlasViewSaveBtn0826{display:none!important}
+}
+@media(min-width:801px){#atlasMobileSaveProject826{display:none!important}}
+</style>
 </body></html>
