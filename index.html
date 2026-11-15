@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS 0831 View — Country Boundaries Sync</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATLAS 0843 View — Country Boundaries Sync</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#0d1726;color:#e9f2fc;font:14px system-ui,Arial}header{height:58px;background:#111f31;display:flex;align-items:center;gap:16px;padding:0 19px;border-bottom:1px solid #31485f}header strong{letter-spacing:1px;font-size:18px}header span{font-size:11px;color:#a9b9cd}.layout{height:calc(100% - 58px);display:grid;grid-template-columns:270px minmax(0,1fr)}aside{padding:16px;overflow:auto;border-right:1px solid #32485e;background:#142236}#map{height:100%;width:100%;background:#152b37}button,select,input{font:inherit}button,select{background:#233b52;color:#e7f2fa;border:1px solid #456075;border-radius:8px;padding:9px;cursor:pointer}button:hover{background:#31506b}button{width:100%;margin:4px 0}button.primary{background:#176f6e}h3{font-size:12px;color:#9dd8d6;text-transform:uppercase;margin:20px 0 9px}label{display:block;color:#bbcbda;font-size:12px;margin:8px 0}select,input[type=file],input[type=range]{width:100%}.note{font-size:12px;line-height:1.55;color:#9cacc1}.list{max-height:190px;overflow:auto}.entry{padding:8px 9px;border-bottom:1px solid #2c445c;font-size:12px;cursor:pointer}.entry:hover{background:#2b4259}.color{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px}.maphead{position:absolute;z-index:800;top:12px;right:12px;padding:8px 12px;border-radius:9px;background:#101e2ce8;border:1px solid #36586b;pointer-events:none}.status{margin:8px 0;padding:9px;background:#21394d;color:#c8e7f0;border-radius:7px;font-size:12px;line-height:1.4}.hint{margin-top:8px;font-size:11px;color:#8dacc0}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#15293c;color:#f4f7ff}@media(max-width:710px){header{height:48px;padding:0 12px}.layout{height:calc(100% - 48px);grid-template-columns:1fr;grid-template-rows:auto minmax(320px,1fr)}aside{max-height:245px;border-right:0;border-bottom:1px solid #31485f}#map{min-height:55vh}}
 /* ATLAS View Dark UI v0702 */
@@ -1035,7 +1035,7 @@ function setup(options={}){
 }
 function apply(data,origin,options={}){
  if(!valid(data)){status('Файл не похож на проект ATLAS (.atlas)');return false}
- project=data;frontViewing0818=-1;setup(options);motionRender773();$('liveLabel').textContent=origin;window.atlasLastLoadedProject0831={origin,features:data.features.length,groups:data.groups.length,loadedAt:Date.now()};return true;
+ project=data;window.atlasSetMapImages0837?.(data.mapImages0837||[]);frontViewing0818=-1;setup(options);motionRender773();$('liveLabel').textContent=origin;window.atlasLastLoadedProject0831={origin,features:data.features.length,groups:data.groups.length,loadedAt:Date.now()};return true;
 }
 async function readSharedEditor(){
  // 0715: the canonical Editor document is in IndexedDB; localStorage may be a stale mirror.
@@ -2861,4 +2861,217 @@ html.atlas-night810 #map {background:#0b1925}
 }
 @media(min-width:801px){#atlasMobileSaveProject826{display:none!important}}
 </style>
+<style id="atlasUnifiedUi0835">
+
+/* ATLAS 0835 • Unified Interface Skin
+   Presentation-only overrides: no map / data / history / canvas logic changed. */
+:root{
+ color-scheme:dark;
+ --atlas-ui-bg:#0b1725;
+ --atlas-ui-surface:#122337;
+ --atlas-ui-surface-raised:#192e44;
+ --atlas-ui-surface-hover:#24415a;
+ --atlas-ui-border:#36546b;
+ --atlas-ui-border-strong:#568199;
+ --atlas-ui-text:#eaf4fa;
+ --atlas-ui-muted:#aac0d0;
+ --atlas-ui-accent:#4ec3bb;
+ --atlas-ui-accent-soft:#194e55;
+ --atlas-ui-ring:#79e1da;
+ --atlas-ui-shadow:0 12px 32px rgba(0,5,15,.38);
+ --atlas-ui-radius:12px;
+}
+html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--atlas-ui-text)}
+/* Scope to application UI; keep interactive map/canvas, tile imagery and map labels untouched. */
+button,select,input,textarea{font-family:inherit}
+button:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out){
+ border-radius:9px;
+ transition:background-color .12s ease,border-color .12s ease,box-shadow .12s ease;
+}
+button:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out):hover:not(:disabled){border-color:var(--atlas-ui-border-strong)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{
+ outline:2px solid var(--atlas-ui-ring);outline-offset:2px;
+}
+button:disabled{cursor:not-allowed;opacity:.5}
+input[type=checkbox],input[type=radio],input[type=range]{accent-color:var(--atlas-ui-accent)}
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea{
+ background-color:var(--atlas-ui-bg);color:var(--atlas-ui-text);
+ border-color:var(--atlas-ui-border);
+ border-radius:9px;
+}
+::placeholder{color:#8da7ba;opacity:1}
+:where(aside,.tab-scroller,.atlas-army-body,.atlas-prop-modal,#flightBody801,#atlasMobileDrawerProject824,#atlasHistory812){scrollbar-width:thin;scrollbar-color:#46687d transparent}
+:where(aside,.tab-scroller,.atlas-army-body,.atlas-prop-modal) :where(h2,h3){letter-spacing:.055em}
+:where(.status,.hint,.mini,.note,.atlas-help,.flhint801){line-height:1.5}
+/* Consistent compact glass panels */
+#atlasHistory812,#atlasFlightPanel801,#atlasThemePanel809,
+#atlasUtilityDock814 #atlasThemePanel809,#atlasSyncPanel09,
+#countryDrawingDock827,.city-popover,.atlas-prop-modal,
+.atlas-army-dock,.view-settings-card725,#viewSettings725,
+#atlasCountryCard727,#atlasSearch727{
+ border-color:var(--atlas-ui-border)!important;
+ background-color:rgba(18,35,55,.96)!important;
+ color:var(--atlas-ui-text)!important;
+ box-shadow:var(--atlas-ui-shadow)!important;
+ border-radius:var(--atlas-ui-radius)!important;
+}
+#atlasHistory812 button,#atlasFlightPanel801 button,#atlasThemePanel809 button,
+#atlasSyncPanel09 button,#countryDrawingDock827 button,
+.atlas-army-dock button,.atlas-prop-modal button,
+#viewSettings725 button,.view-settings-card725 button{
+ border:1px solid var(--atlas-ui-border)!important;
+ background-color:var(--atlas-ui-surface-raised)!important;
+ color:var(--atlas-ui-text)!important;border-radius:9px!important;
+}
+#atlasHistory812 button:hover:not(:disabled),#atlasFlightPanel801 button:hover:not(:disabled),
+#atlasThemePanel809 button:hover:not(:disabled),#atlasSyncPanel09 button:hover:not(:disabled),
+.atlas-army-dock button:hover:not(:disabled),.atlas-prop-modal button:hover:not(:disabled){
+ background-color:var(--atlas-ui-surface-hover)!important;
+}
+#atlasThemePanel809 button[aria-pressed=true],#atlasHistory812 button[aria-pressed=true],
+#atlasFlightPanel801 button[aria-pressed=true],
+.atlas-army-dock button.active,.atlas-prop-modal button.active,
+#countryDrawingDock827 button.primary,
+button.active:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out){
+ border-color:#71cfc9!important;background-color:var(--atlas-ui-accent-soft)!important;color:#edfffd!important;
+}
+#atlasHistory812 .hi-head812,.atlas-army-head,.atlas-prop-modal .mhead{
+ border-bottom-color:rgba(96,132,151,.4)!important;
+}
+#atlasHistory812 .hi-mute812,#atlasFlightPanel801 .flhint801,
+#countryDrawingHint827,.atlas-prop-modal .hint{color:var(--atlas-ui-muted)!important}
+/* Consolidate action areas without changing positions / desktop docking behavior */
+#atlasUtilityDock814{gap:7px!important}
+#atlasUtilityDock814 #atlasNoGrayBtn0793,
+#atlasUtilityDock814 .atlasMotionSwitch814{
+ border:1px solid var(--atlas-ui-border)!important;
+ border-radius:10px!important;background:rgba(18,35,55,.96)!important;color:var(--atlas-ui-text)!important;
+ box-shadow:var(--atlas-ui-shadow)!important;
+}
+#atlasHistory812 .hi-body812{gap:8px!important}
+#atlasHistory812 .hi-nav812 button{border-radius:9px!important}
+#atlasHistory812 .hi-slider812{accent-color:var(--atlas-ui-accent)}
+#atlasHistory812 .hi-foot812{gap:6px!important}
+#atlasFlightPanel801 label{color:var(--atlas-ui-muted)}
+#atlasFlightPanel801 select{background:var(--atlas-ui-bg)!important}
+#atlasFlightPanel801 input[type=range]{accent-color:var(--atlas-ui-accent)}
+/* Avoid excessive animation overhead on map-heavy pages */
+@media (prefers-reduced-motion:reduce){
+ button,select,input,textarea{transition:none!important}
+}
+
+
+/* Viewer workspace */
+header{background:rgba(16,32,53,.96)!important;border-color:var(--atlas-ui-border)!important;color:var(--atlas-ui-text)!important}
+aside{background:rgba(12,27,43,.96)!important;border-color:var(--atlas-ui-border)!important}
+#glassTimeline{background:rgba(18,35,55,.96)!important;border-color:var(--atlas-ui-border)!important;border-radius:14px!important;box-shadow:var(--atlas-ui-shadow)!important}
+#glassTimeline .timeline-caption{color:#86d7cf}
+#glassMenuToggle,#viewSettingsToggle725{border-color:var(--atlas-ui-border-strong)!important;background:var(--atlas-ui-surface-raised)!important;color:var(--atlas-ui-text)!important}
+#glassTimeline select,#glassTimeline button{background:var(--atlas-ui-surface-raised);border-color:var(--atlas-ui-border)}
+.entry{border-bottom-color:#2a475c}.entry:hover{background:var(--atlas-ui-surface-hover)}
+.status{border:1px solid var(--atlas-ui-border);background:var(--atlas-ui-surface);color:var(--atlas-ui-muted);border-radius:9px}
+.maphead{background:rgba(18,35,55,.9);border-color:var(--atlas-ui-border);border-radius:9px}
+#viewSettings725{max-width:calc(100vw - 18px)}
+@media(max-width:800px){
+ header{background:rgba(16,32,53,.97)!important}
+ .layout>aside{background:rgba(12,27,43,.98)!important;border-right-color:var(--atlas-ui-border)!important}
+ #glassMenuToggle,#viewSettingsToggle725,#atlasMobileTools824{background:var(--atlas-ui-surface-raised)!important;border-color:var(--atlas-ui-border-strong)!important}
+ #atlasHistory812 .hi-head812{min-height:40px}
+ #atlasFlightPanel801{max-width:calc(100vw - 20px)!important}
+}
+
+</style>
+
+<script id="atlasMapImages0837">
+(()=>{
+'use strict';
+const map=window.atlasEffectsMap0785;
+if(!map||!window.L)return;
+const editor=!!document.getElementById('projectDownload');
+const key='atlas-map-images-0837';
+const valid=x=>x&&typeof x.id==='string'&&typeof x.src==='string'&&/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(x.src)&&x.src.length<650000&&Array.isArray(x.bounds)&&x.bounds.length===2&&x.bounds.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite));
+const clean=items=>(Array.isArray(items)?items:[]).filter(valid).slice(0,24).map(x=>({id:x.id,name:String(x.name||'Изображение').slice(0,80),src:x.src,bounds:x.bounds,ratio:Math.max(.1,Math.min(10,Number(x.ratio)||1)),opacity:Math.max(0,Math.min(1,Number.isFinite(Number(x.opacity))?Number(x.opacity):1))}));
+let items=[];
+if(editor){try{items=clean(JSON.parse(localStorage.getItem(key)||'[]'))}catch{}}
+const layer=L.layerGroup().addTo(map),active=new Map();
+let chosen='',mode='',draft='',draftRatio=1;
+const by=id=>document.getElementById(id);
+const persist=()=>{
+ window.atlasMapImages0837=items;
+ if(editor){try{localStorage.setItem(key,JSON.stringify(items));if(by('miStatus0837'))by('miStatus0837').textContent='Изменения записаны. Для переноса карты экспортируй .atlas.'}catch{if(by('miStatus0837'))by('miStatus0837').textContent='Недостаточно памяти браузера. Экспортируй .atlas сейчас.'}}
+};
+window.atlasMapImages0837=items;
+const setData=input=>{items=clean(input);chosen='';mode='';draw();persist();updatePanel()};
+window.atlasSetMapImages0837=setData;
+function draw(){
+  const wanted=new Set(items.map(x=>x.id));
+  for(const [id,li] of active)if(!wanted.has(id)){layer.removeLayer(li);active.delete(id)}
+  for(const x of items){
+    let li=active.get(x.id);
+    if(!li){li=L.imageOverlay(x.src,x.bounds,{opacity:x.opacity,interactive:editor,className:'atlas-map-pic0837'}).addTo(layer);active.set(x.id,li);
+      if(editor)li.on('click',e=>{L.DomEvent.stop(e);chosen=x.id;mode='';updatePanel()});
+    }else{li.setBounds(x.bounds);li.setOpacity(x.opacity)}
+  }
+}
+function updatePanel(){if(!editor)return;const sel=items.find(x=>x.id===chosen);const status=by('miSelected0837');const list=by('miList0837');
+ if(status)status.textContent=sel?sel.name:'Изображение не выбрано';
+ for(const id of ['miOpacity0837','miSize0837','miMove0837','miDelete0837'])if(by(id))by(id).disabled=!sel;
+ if(sel){by('miOpacity0837').value=Math.round(sel.opacity*100);by('miOpacityText0837').textContent=Math.round(sel.opacity*100)+'%';}
+ if(list){list.replaceChildren();for(const item of items){const b=document.createElement('button');b.type='button';b.textContent=(chosen===item.id?'● ':'○ ')+item.name;b.className=chosen===item.id?'selected0837':'';b.onclick=()=>{chosen=item.id;mode='';updatePanel()};list.append(b)}}
+ if(by('miMode0837'))by('miMode0837').textContent=mode==='place'?'Нажми на карту, чтобы вставить изображение':mode==='move'?'Нажми на новое место для изображения':'Нажми на изображение, чтобы изменить его';
+}
+function adjustBounds(center,px,ratio=1){const p=map.latLngToContainerPoint(center),half=px/2,halfY=half/Math.max(.1,ratio);const southWest=map.containerPointToLatLng([p.x-half,p.y+halfY]);const northEast=map.containerPointToLatLng([p.x+half,p.y-halfY]);return [[southWest.lat,southWest.lng],[northEast.lat,northEast.lng]]}
+function centerOf(bounds){return [(bounds[0][0]+bounds[1][0])/2,(bounds[0][1]+bounds[1][1])/2]}
+function widthPixels(bounds){const a=map.latLngToContainerPoint(bounds[0]),b=map.latLngToContainerPoint(bounds[1]);return Math.max(24,Math.abs(a.x-b.x))}
+if(editor){
+ const style=document.createElement('style');style.id='atlasImageStyle0837';style.textContent=`
+#miToggle0837{position:fixed;right:14px;top:244px;z-index:8200;border:1px solid #527389;background:#192e44;color:#e9f5ff;border-radius:10px;padding:9px 12px;box-shadow:0 6px 22px #0006;cursor:pointer;font:12px system-ui}
+#miPanel0837{position:fixed;right:14px;top:290px;z-index:8201;width:min(295px,calc(100vw - 28px));max-height:calc(100dvh - 320px);overflow:auto;padding:12px;background:#122337f5;border:1px solid #527389;border-radius:12px;box-shadow:0 12px 30px #0009;color:#eaf4fa;font:12px system-ui}
+#miPanel0837[hidden]{display:none!important}#miPanel0837 button,#miPanel0837 input{font:inherit}#miPanel0837 button{background:#233f54;color:#f1f8ff;border:1px solid #5c8498;border-radius:8px;padding:8px;cursor:pointer}#miPanel0837 button:disabled{opacity:.45}#miPanel0837 button.selected0837{border-color:#49c9c0;background:#245c63}#miPanel0837 input[type=range]{width:100%;accent-color:#49c9c0}#miPanel0837 .mirow0837{display:flex;gap:6px;margin:7px 0}#miPanel0837 .mirow0837 button{flex:1;min-width:0}#miList0837{display:grid;gap:4px;max-height:132px;overflow:auto}#miStatus0837,#miMode0837{font-size:11px;color:#aecbd9;line-height:1.4;margin:7px 0}
+@media(max-width:800px){#miToggle0837{top:auto;bottom:130px;right:8px;padding:8px 10px}#miPanel0837{top:auto;bottom:174px;right:8px;max-height:min(57dvh,420px);width:min(290px,calc(100vw - 16px))}}
+body.atlas-cinematic731 #miToggle0837,body.atlas-presentation727 #miToggle0837{display:none!important}`;document.head.append(style);
+ const toggle=document.createElement('button');toggle.id='miToggle0837';toggle.type='button';toggle.textContent='▧ Изображения';
+ const panel=document.createElement('section');panel.id='miPanel0837';panel.hidden=true;
+ panel.innerHTML=`<div class="mirow0837" style="justify-content:space-between;align-items:center"><b>▧ Изображения на карте</b><button id="miClose0837" type="button">✕</button></div>
+<label>Добавить PNG / JPG / WebP <input id="miUpload0837" type="file" accept="image/png,image/jpeg,image/webp" style="display:block;width:100%;margin:6px 0"></label>
+<div id="miMode0837">Загрузи изображение и нажми на карту</div>
+<div id="miList0837"></div><div class="mirow0837" style="margin-top:10px"><span id="miSelected0837">Изображение не выбрано</span></div>
+<label>Прозрачность: <b id="miOpacityText0837">100%</b><input id="miOpacity0837" type="range" min="0" max="100" value="100"></label>
+<div class="mirow0837"><button id="miSize0837" type="button">Размер − / +</button><button id="miMove0837" type="button">Переместить</button></div>
+<div class="mirow0837"><button id="miDelete0837" type="button">Удалить</button><button id="miCancel0837" type="button">Отменить действие</button></div>
+<div id="miStatus0837">Изображения сохраняются в проект .atlas</div>`;
+ document.body.append(toggle,panel);
+ toggle.onclick=()=>{panel.hidden=!panel.hidden;updatePanel()};by('miClose0837').onclick=()=>{panel.hidden=true;mode=''};
+ by('miUpload0837').onchange=async ev=>{
+ const file=ev.target.files?.[0];if(!file)return;
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>8*1024*1024){by('miStatus0837').textContent='Допустимы PNG/JPG/WebP до 8 МБ';return}
+ if(items.length>=24){by('miStatus0837').textContent='Достигнут лимит 24 изображений';return}
+ try{const im=await createImageBitmap(file),scale=Math.min(1,900/Math.max(im.width,im.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(im.width*scale));canvas.height=Math.max(1,Math.round(im.height*scale));canvas.getContext('2d').drawImage(im,0,0,canvas.width,canvas.height);im.close?.();const data=canvas.toDataURL('image/webp',.72);if(data.length>=650000)throw Error('Изображение слишком большое после сжатия');draft=data;draftRatio=canvas.width/canvas.height;mode='place';by('miMode0837').textContent='Нажми на карту, чтобы разместить изображение';by('miStatus0837').textContent='Изображение готово. Нажми на карту.';}catch(e){by('miStatus0837').textContent='Ошибка: '+e.message}finally{ev.target.value=''}
+ };
+ by('miOpacity0837').oninput=()=>{const x=items.find(v=>v.id===chosen);if(!x)return;x.opacity=Number(by('miOpacity0837').value)/100;const li=active.get(x.id);if(li)li.setOpacity(x.opacity);by('miOpacityText0837').textContent=Math.round(x.opacity*100)+'%';persist()};
+ by('miSize0837').onclick=()=>{const x=items.find(v=>v.id===chosen);if(!x)return;const size=widthPixels(x.bounds);const val=prompt('Новая ширина в пикселях при текущем масштабе карты:',String(Math.round(size)));if(val===null)return;const px=Number(val);if(!Number.isFinite(px)||px<16||px>1600){by('miStatus0837').textContent='Размер должен быть от 16 до 1600 пикселей';return}x.bounds=adjustBounds(centerOf(x.bounds),px,x.ratio);draw();persist()};
+ by('miMove0837').onclick=()=>{if(!items.some(x=>x.id===chosen))return;mode='move';updatePanel()};
+ by('miDelete0837').onclick=()=>{if(!chosen)return;items=items.filter(x=>x.id!==chosen);chosen='';mode='';draw();persist();updatePanel()};
+ by('miCancel0837').onclick=()=>{mode='';draft='';updatePanel()};
+ // Capture only placement clicks, preventing the normal drawing tools from creating territories.
+ map.getContainer().addEventListener('click',event=>{
+  if(mode!=='place'&&mode!=='move')return;
+  if(event.target.closest('.leaflet-control'))return;
+  event.stopImmediatePropagation();event.preventDefault();
+  const coords=map.mouseEventToContainerPoint(event),ll=map.containerPointToLatLng(coords);
+  if(mode==='place'&&draft){
+   const id='pic-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+   items.push({id,name:'Изображение '+(items.length+1),src:draft,opacity:1,ratio:draftRatio,bounds:adjustBounds(ll,160,draftRatio)});chosen=id;draft='';
+  }else if(mode==='move'){
+   const x=items.find(v=>v.id===chosen);if(x)x.bounds=adjustBounds(ll,widthPixels(x.bounds),x.ratio);
+  }
+  mode='';draw();persist();updatePanel();
+ },true);
+ window.addEventListener('keydown',e=>{if(e.key==='Escape'&&mode){mode='';draft='';updatePanel()}});
+ updatePanel();
+}
+draw();
+})();
+</script>
+
 </body></html>
